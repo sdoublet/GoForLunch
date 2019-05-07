@@ -8,6 +8,7 @@
     app:tabSelectedTextColor="#000000"
     app:tabTextColor="#ffffff"
     app:tabIndicatorColor="#000000"
+    app:tabIndicatorGravity="top"
     app:tabPaddingStart="-1dp"
     app:tabPaddingEnd="-1dp"
     >

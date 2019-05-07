@@ -17,14 +17,24 @@
         <include
             layout="@layout/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="wrap_content"
+            />
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
-        <include
-            layout="@layout/tab_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
-        <include
-            layout="@layout/view_pager"/>
+    <include
+        layout="@layout/view_pager"/>
+
+
+    <include
+        layout="@layout/tab_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"/>
+
+</RelativeLayout>
+
 
 
 

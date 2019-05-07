@@ -20,15 +20,7 @@
         android:textColor="@color/colorPrimary"
         android:textSize="50sp" />
 
-    <Button
-        android:id="@+id/button_connection_main_activity"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/button_radius_connection"
-        android:layout_margin="80dp"
-        android:layout_gravity="bottom"
-        android:text="@string/connection"
-        android:textSize="20sp"/>
+
 
 
 </LinearLayout>
