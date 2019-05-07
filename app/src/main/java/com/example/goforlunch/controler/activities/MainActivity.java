@@ -1,43 +1,42 @@
 package com.example.goforlunch.controler.activities;
 
 
+import android.content.Intent;
+import android.os.Bundle;
+import android.widget.TableLayout;
 
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.viewpager.widget.ViewPager;
 
 import com.example.goforlunch.R;
-import com.firebase.ui.auth.AuthUI;
+import com.example.goforlunch.views.viewPager.PageAdapter;
+import com.google.android.material.tabs.TabLayout;
 
-import java.util.Arrays;
+public class MainActivity extends AppCompatActivity {
 
-import butterknife.OnClick;
-
-
-public class MainActivity extends BaseActivity {
-
-    private static final int RC_SIGN_IN = 123;
-
-
-
-    private void startSignInActivity(){
-        startActivityForResult(AuthUI.getInstance()
-        .createSignInIntentBuilder()
-        .setTheme(R.style.LoginTheme)
-        .setAvailableProviders(
-                Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(),
-                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                        new AuthUI.IdpConfig.FacebookBuilder().build())
-        )
-                .setLogo(R.drawable.avatar2)
-        .setIsSmartLockEnabled(false, true)
-        .build(),
-                RC_SIGN_IN);
-    }
-
+private Toolbar toolbar;
     @Override
-    public int getFragmentLayout() {
-        return R.layout.activity_main;
+    protected void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+//        Intent intent = new Intent(this, LoginActivity.class);
+//        startActivity(intent);
+        this.configureViewPager();
+        this.configureToolbar();
     }
-    @OnClick(R.id.button_connection_main_activity)
-    public void onClickButtonConnection(){
-        startSignInActivity();
+
+    private void configureViewPager(){
+        ViewPager viewPager = findViewById(R.id.view_pager);
+        viewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
+        TabLayout tabLayout = findViewById(R.id.tab_layout);
+        tabLayout.setupWithViewPager(viewPager);
+        tabLayout.setTabMode(TabLayout.MODE_FIXED);
+    }
+
+    private void configureToolbar(){
+        this.toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
     }
 }

@@ -6,4 +6,8 @@
     <!-- FACEBOOK PURPOSE -->
     <string name="facebook_application_id" translatable="false">1356920871131768</string>
     <string name="facebook_login_protocol_scheme" translatable="false" tools:ignore="UnusedResources">fb1356920871131768</string>
+    <string name="your_lunch">Your Lunch</string>
+    <string name="setting">Setting</string>
+    <string name="log_out">Log Out</string>
+    <string name="nav_header_desk">nav_header_desk</string>
 </resources>
