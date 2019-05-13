@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:weightSum="10">
+
+ <LinearLayout
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
+     android:orientation="vertical"
+     android:layout_weight="7">
+
+     <TextView
+         android:id="@+id/resto_name"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Name"
+         android:textSize="20sp"
+         android:textStyle="bold"
+         android:layout_margin="5dp"/>
+
+     <LinearLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:orientation="horizontal">
+
+         <TextView
+             android:id="@+id/resto_kind"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="Type -"
+             android:layout_margin="5dp"/>
+
+         <TextView
+             android:id="@+id/resto_address"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:text="this is my address"
+             android:layout_margin="5dp"/>
+     </LinearLayout>
+
+     <TextView
+         android:id="@+id/resto_opening_time"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="Open until 7pm"
+         android:layout_marginStart="5dp"/>
+
+
+ </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/resto_distance"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="120m"
+            android:layout_marginTop="10dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/person"/>
+
+            <TextView
+                android:id="@+id/person_selected"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="(2)"
+                android:layout_margin="2dp"
+                />
+        </LinearLayout>
+
+        <RatingBar
+            android:id="@+id/rating"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:numStars="3"
+            android:rating="1"
+            android:scaleX="0.5"
+            android:scaleY="0.5"
+            android:transformPivotX="0dp"
+            android:transformPivotY="0dp"/>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_weight="2">
+        <ImageView
+            android:id="@+id/resto_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/avatar2"
+            android:layout_margin="5dp"/>
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
