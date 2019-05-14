@@ -10,4 +10,10 @@
     <string name="setting">Setting</string>
     <string name="log_out">Log Out</string>
     <string name="nav_header_desk">nav_header_desk</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="map_icon">Map </string>
+    <string name="list_icon">List View</string>
+    <string name="workmates_icon">workmates</string>
+    <string name="chat_icon">Chat</string>
 </resources>

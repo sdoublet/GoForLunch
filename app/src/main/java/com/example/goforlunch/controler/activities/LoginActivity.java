@@ -1,10 +1,14 @@
 package com.example.goforlunch.controler.activities;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.goforlunch.R;
@@ -16,9 +20,12 @@ import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 public class LoginActivity extends AppCompatActivity {
+
 
 
     @Override
@@ -27,11 +34,11 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         if (isCurrentUserLogged()){
-            Intent intent = new Intent(this, MainActivity.class);
-            startActivity(intent);
+            launchMainActivity();
         }else {
             this.startSignInActivity();
         }
+
     }
 
     private static final int RC_SIGN_IN = 123;
@@ -72,6 +79,7 @@ public class LoginActivity extends AppCompatActivity {
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Authentification réussie", Toast.LENGTH_LONG).show();
+                launchMainActivity();
                 // TODO: 07/05/2019   mettre intent vers mainactivity
             } else if (response == null) {
                 Toast.makeText(this, "Authentificaiton annulée", Toast.LENGTH_LONG).show();
@@ -82,5 +90,11 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+
+    private void launchMainActivity() {
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
+
 
 }

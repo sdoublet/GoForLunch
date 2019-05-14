@@ -11,6 +11,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
+        <activity android:name=".controler.activities.ChatActivity"></activity>
+        <activity android:name=".controler.activities.SettingActivity" />
+        <activity android:name=".controler.activities.PlaceDetail" />
         <activity android:name=".controler.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -18,9 +21,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controler.activities.MainActivity">
-
-        </activity>
+        <activity android:name=".controler.activities.MainActivity" />
 
         <meta-data
             android:name="preloaded_fonts"

@@ -17,7 +17,7 @@
 
         </item>
         <item
-            android:id="@+id/Logout"
+            android:id="@+id/logout"
             android:title="@string/log_out"
             android:icon="@drawable/log_out">
 

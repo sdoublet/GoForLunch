@@ -6,7 +6,7 @@ import androidx.fragment.app.FragmentPagerAdapter;
 
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
-import com.example.goforlunch.controler.fragments.WorkersFragment;
+import com.example.goforlunch.controler.fragments.WorkmatesFragment;
 
 public class PageAdapter extends FragmentPagerAdapter {
     public PageAdapter(FragmentManager fm) {
@@ -21,7 +21,7 @@ public class PageAdapter extends FragmentPagerAdapter {
             case 1:
                 return new RestoListFragment();
             case 2:
-                return new WorkersFragment();
+                return new WorkmatesFragment();
                 default:return null;
         }
     }

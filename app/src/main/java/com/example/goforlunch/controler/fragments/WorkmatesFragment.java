@@ -13,12 +13,12 @@ import com.example.goforlunch.R;
 
 import butterknife.ButterKnife;
 
-public class WorkersFragment extends Fragment {
+public class WorkmatesFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view;
-        view = inflater.inflate(R.layout.fragment_workers, container, false);
+        view = inflater.inflate(R.layout.fragment_workmates, container, false);
         ButterKnife.bind(this, view);
         return view;
     }

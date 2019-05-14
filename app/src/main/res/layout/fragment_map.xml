@@ -5,10 +5,12 @@
     android:background="@color/colorPrimary">
 
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="MAP"
-        android:textSize="50sp"
-        android:gravity="center"/>
+
+    <Button
+        android:id="@+id/button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="hello"
+        android:gravity="center"
+        android:layout_gravity="center"/>
 </LinearLayout>

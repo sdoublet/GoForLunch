@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Resto;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,5 +36,12 @@ public class RecyclerviewHolder extends RecyclerView.ViewHolder {
     public RecyclerviewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
+    }
+
+    public void updateRestoListFragment(Resto resto) {
+        UpdateAllFragmentItem updateAllFragmentItem = new UpdateAllFragmentItem();
+        restoName.setText(updateAllFragmentItem.setName(resto));
+        restoKind.setText(updateAllFragmentItem.kind(resto));
+        restoAddress.setText(updateAllFragmentItem.address(resto));
     }
 }
