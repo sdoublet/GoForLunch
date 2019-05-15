@@ -3,6 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.goforlunch">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -11,9 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.DayNight.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".controler.activities.ChatActivity"></activity>
         <activity android:name=".controler.activities.SettingActivity" />
-        <activity android:name=".controler.activities.PlaceDetail" />
+        <activity android:name=".controler.activities.PlaceDetailActivity" />
         <activity android:name=".controler.activities.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -22,6 +25,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".controler.activities.MainActivity" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC_T9-1WiKjMsKg0nacNz5A97INMZ3-kGE"/>
 
         <meta-data
             android:name="preloaded_fonts"

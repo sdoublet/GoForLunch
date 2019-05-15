@@ -11,14 +11,27 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import com.example.goforlunch.R;
-import com.example.goforlunch.controler.activities.LoginActivity;
-import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.MapsInitializer;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
+
 
 public class MapFragment extends Fragment {
 
+    @BindView(R.id.map_view)
+    MapView mapView;
+private GoogleMap mGoogleMap;
+    public static Fragment newInstance() {
+        return new MapFragment();
+    }
 
     @Nullable
     @Override
@@ -26,13 +39,29 @@ public class MapFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_map, container, false);
         ButterKnife.bind(this, view);
+        mapView.onCreate(savedInstanceState);
+        mapView.onResume();
+        configureMapView();
         return view;
     }
 
-    @OnClick(R.id.button)
-    public void onclick(){
-        AuthUI.getInstance().signOut(getContext());
-        Intent intent = new Intent(getContext() , LoginActivity.class);
-        startActivity(intent);
+    private void configureMapView(){
+        try {
+            MapsInitializer.initialize(getActivity().getBaseContext());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        mapView.getMapAsync(new OnMapReadyCallback() {
+            @Override
+            public void onMapReady(GoogleMap googleMap) {
+                mGoogleMap = googleMap;
+
+                LatLng sydney = new LatLng(-34, 151);
+                mGoogleMap.addMarker(new MarkerOptions().position(sydney).title("Sydney"));
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+            }
+        });
     }
+
 }

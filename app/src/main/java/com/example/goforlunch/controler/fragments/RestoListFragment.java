@@ -30,6 +30,11 @@ public class RestoListFragment extends Fragment {
     RecyclerView recyclerView;
 private List<Resto> restoList;
 private RestoListFragmentAdapter adapter;
+
+    public static Fragment newInstance() {
+        return new RestoListFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

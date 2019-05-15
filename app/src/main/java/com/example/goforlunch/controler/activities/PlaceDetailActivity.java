@@ -6,7 +6,7 @@ import android.os.Bundle;
 
 import com.example.goforlunch.R;
 
-public class PlaceDetail extends AppCompatActivity {
+public class PlaceDetailActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
