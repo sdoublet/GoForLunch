@@ -62,6 +62,6 @@ public class Divider extends RecyclerView.ItemDecoration {
     }
 
     private static int convertDpToPx(){
-        return (int) (110 * Resources.getSystem().getDisplayMetrics().density);
+        return (int) (100 * Resources.getSystem().getDisplayMetrics().density);
     }
 }

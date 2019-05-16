@@ -25,15 +25,14 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <include
-        layout="@layout/view_pager"/>
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:menu="@menu/bottom_navigation_view"
-        android:background="@color/colorAccent"
+        android:background="@color/colorPrimary"
         android:layout_alignParentBottom="true">
 
 
@@ -53,8 +52,8 @@
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
         android:background="@color/colorAccent"
-        app:itemTextColor="#ffffff"
-        app:itemIconTint="#ffffff"
+        app:itemTextColor="@color/colorPrimaryDark"
+        app:itemIconTint="@color/colorPrimaryDark"
         app:headerLayout="@layout/nav_header"
         app:menu="@menu/activity_main_drawer">
 

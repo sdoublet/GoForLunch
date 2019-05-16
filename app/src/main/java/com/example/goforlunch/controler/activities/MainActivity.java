@@ -2,15 +2,22 @@ package com.example.goforlunch.controler.activities;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
@@ -22,11 +29,12 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
-import com.example.goforlunch.views.viewPager.PageAdapter;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -54,15 +62,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_CHAT = 3;
 
 
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-        this.configureViewPager();
+        displayFragment(FRAGMENT_MAP);
         this.configureToolbar();
         this.configureDrawerLayout();
         this.configureBottomView();
+        this.configureStatusBar();
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -89,14 +99,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     // CONFIGURATION
-    private void configureViewPager() {
-        ViewPager viewPager = findViewById(R.id.view_pager);
-        viewPager.setAdapter(new PageAdapter(getSupportFragmentManager()));
-    }
+
 
     private void configureToolbar() {
         setSupportActionBar(toolbar);
+        Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.title_toolbar));
+
     }
+private void configureStatusBar(){
+   if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+    Window window = getWindow();
+    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+    window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+}}
 
     private void configureDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -152,6 +168,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         });
     }
 
+
     //---------------------
     //REST REQUESTS
     //---------------------
@@ -176,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             }
         };
     }
+
 }
 
 

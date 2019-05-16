@@ -20,8 +20,12 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
+        debug {
+            resValue "string", "google_maps_api_key", google_maps_api_key
+        }
     }
 
+    sourceSets { main { res.srcDirs = ['src/main/res', 'src/main/res/values-21'] } }
 }
 
 dependencies {

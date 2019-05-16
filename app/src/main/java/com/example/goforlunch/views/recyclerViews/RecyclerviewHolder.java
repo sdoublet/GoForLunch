@@ -18,16 +18,12 @@ public class RecyclerviewHolder extends RecyclerView.ViewHolder {
 
     @BindView(R.id.resto_name)
     TextView restoName;
-    @BindView(R.id.resto_kind)
-    TextView restoKind;
     @BindView(R.id.resto_address)
     TextView restoAddress;
     @BindView(R.id.resto_opening_time)
     TextView restoOpeningTime;
     @BindView(R.id.resto_distance)
     TextView restoDistance;
-    @BindView(R.id.person_selected)
-    TextView personSelected;
     @BindView(R.id.rating)
     RatingBar rating;
     @BindView(R.id.resto_photo)
@@ -41,7 +37,6 @@ public class RecyclerviewHolder extends RecyclerView.ViewHolder {
     public void updateRestoListFragment(Resto resto) {
         UpdateAllFragmentItem updateAllFragmentItem = new UpdateAllFragmentItem();
         restoName.setText(updateAllFragmentItem.setName(resto));
-        restoKind.setText(updateAllFragmentItem.kind(resto));
         restoAddress.setText(updateAllFragmentItem.address(resto));
     }
 }

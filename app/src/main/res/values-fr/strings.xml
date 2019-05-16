@@ -17,4 +17,6 @@
     <string name="list_icon">Liste</string>
     <string name="chat_icon">Chat</string>
     <string name="workmates_icon">Collègues</string>
+    <string name="title_toolbar">A Table!</string>
+    <string name="title_toolbar_setting">Paramètres</string>
 </resources>

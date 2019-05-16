@@ -17,6 +17,12 @@ public class RestoListFragmentAdapter extends RecyclerView.Adapter<RecyclerviewH
 
     private List<Resto> restoList;
     private Context context;
+
+    public RestoListFragmentAdapter(Context context, List<Resto> restoList) {
+        this.restoList = restoList;
+        this.context = context;
+    }
+
     @NonNull
     @Override
     public RecyclerviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -32,5 +38,5 @@ holder.updateRestoListFragment(restoList.get(position));
 
     @Override
     public int getItemCount() {
-     return 0;
+     return restoList.size();
 }}
