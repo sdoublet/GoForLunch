@@ -7,19 +7,22 @@
     tools:context=".controler.activities.MainActivity"
     android:background="@color/colorAccent"
     android:orientation="vertical"
-    android:gravity="center"
+
     >
 
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
+        android:layout_gravity="center"
         android:fontFamily="@font/faster_one"
         android:text="@string/go4lunch"
         android:textColor="@color/colorPrimary"
         android:textSize="50sp" />
-
+<ImageView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:src="@drawable/meal_v3_final"/>
 
 
 

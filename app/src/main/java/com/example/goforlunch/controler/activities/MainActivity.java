@@ -2,18 +2,24 @@ package com.example.goforlunch.controler.activities;
 
 
 import android.content.Intent;
-import android.graphics.Color;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
@@ -22,8 +28,9 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.viewpager.widget.ViewPager;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
@@ -33,7 +40,11 @@ import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -51,7 +62,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     DrawerLayout drawerLayout;
     @BindView(R.id.bottom_view)
     BottomNavigationView bottomNavigationView;
-    @BindView(R.id.nav_view)NavigationView navigationView;
+    @BindView(R.id.nav_view)
+    NavigationView navigationView;
+
+
+    protected FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 
 
     // FOR DATA
@@ -60,7 +77,6 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public static final int FRAGMENT_LISTVIEW = 1;
     public static final int FRAGMENT_WORKMATES = 2;
     public static final int FRAGMENT_CHAT = 3;
-
 
 
     @Override
@@ -73,6 +89,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         this.configureDrawerLayout();
         this.configureBottomView();
         this.configureStatusBar();
+        updateUIWhenCreating();
         navigationView.setNavigationItemSelectedListener(this);
 
     }
@@ -106,17 +123,20 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         Objects.requireNonNull(getSupportActionBar()).setTitle(getString(R.string.title_toolbar));
 
     }
-private void configureStatusBar(){
-   if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
-    Window window = getWindow();
-    window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-    window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-    window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-}}
+
+    private void configureStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            Window window = getWindow();
+            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
+        }
+    }
 
     private void configureDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
+        //updateUIWhenCreating();
     }
 
 
@@ -193,7 +213,35 @@ private void configureStatusBar(){
             }
         };
     }
+    private void updateUIWhenCreating(){
 
+        View headerView = navigationView.getHeaderView(0);
+        ImageView imageViewProfile = headerView.findViewById(R.id.image_view_profile);
+        TextView usernameProfile = headerView.findViewById(R.id.username_profile);
+        TextView emailProfile = headerView.findViewById(R.id.email_profile);
+        if (this.getCurrentUser()!=null){
+            if (this.getCurrentUser().getPhotoUrl()!=null) {
+                Glide.with(this)
+                        .load(this.getCurrentUser().getPhotoUrl())
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewProfile);
+            }
+
+            //Get email and username from Firebase
+            String email = TextUtils.isEmpty(this.getCurrentUser().getEmail())?
+                    getString(R.string.info_no_email_found): this.getCurrentUser().getEmail();
+
+            String userName = TextUtils.isEmpty(this.getCurrentUser().getDisplayName())?
+                    getString(R.string.info_no_username_found): this.getCurrentUser().getDisplayName();
+
+            //Update navHeader with data
+            usernameProfile.setText(userName);
+            emailProfile.setText(email);
+
+        }
+
+
+    }
 }
 
 

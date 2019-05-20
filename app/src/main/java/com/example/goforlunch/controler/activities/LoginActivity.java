@@ -3,14 +3,19 @@ package com.example.goforlunch.controler.activities;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -19,6 +24,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,14 +33,14 @@ import butterknife.OnClick;
 public class LoginActivity extends AppCompatActivity {
 
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         if (isCurrentUserLogged()){
-            launchMainActivity();
+            this.launchMainActivity();
+
         }else {
             this.startSignInActivity();
         }
@@ -67,7 +73,7 @@ public class LoginActivity extends AppCompatActivity {
                                         new AuthUI.IdpConfig.EmailBuilder().build(),
                                         new AuthUI.IdpConfig.FacebookBuilder().build())
                         )
-                        .setLogo(R.drawable.avatar2)
+                        .setLogo(R.drawable.meal_v3_final)
                         .setIsSmartLockEnabled(false, true)
                         .build(),
                 RC_SIGN_IN);
@@ -83,7 +89,7 @@ public class LoginActivity extends AppCompatActivity {
                 // TODO: 07/05/2019   mettre intent vers mainactivity
             } else if (response == null) {
                 Toast.makeText(this, "Authentificaiton annulée", Toast.LENGTH_LONG).show();
-            } else if (response.getError().getErrorCode() == ErrorCodes.NO_NETWORK) {
+            } else if (Objects.requireNonNull(response.getError()).getErrorCode() == ErrorCodes.NO_NETWORK) {
                 Toast.makeText(this, "Aucune connexion internet", Toast.LENGTH_LONG).show();
             } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
                 Toast.makeText(this, "Une érreur s'est produite", Toast.LENGTH_LONG).show();
@@ -96,5 +102,4 @@ public class LoginActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-
-}
+    }

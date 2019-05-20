@@ -63,6 +63,8 @@ dependencies {
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     //GOOGLE SERVICES
     implementation "com.google.android.gms:play-services-maps:16.1.0"
+    implementation "com.google.android.gms:play-services-places:16.1.0"
+    implementation "com.google.android.gms:play-services-location:16.0.0"
 
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'androidx.test:runner:1.1.1'

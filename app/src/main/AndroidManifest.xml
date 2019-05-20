@@ -3,9 +3,10 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.goforlunch">
 
-
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -15,7 +16,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".controler.activities.SettingActivity"
+        <activity
+            android:name=".controler.activities.SettingActivity"
             android:parentActivityName=".controler.activities.MainActivity" />
         <activity android:name=".controler.activities.PlaceDetailActivity" />
         <activity android:name=".controler.activities.LoginActivity">
@@ -25,11 +27,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".controler.activities.MainActivity"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".controler.activities.MainActivity"
+            android:screenOrientation="portrait" />
+
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key"/>
+            android:value="@string/google_api_key" />
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
 
         <meta-data
             android:name="preloaded_fonts"

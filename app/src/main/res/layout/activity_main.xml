@@ -5,8 +5,8 @@
     android:id="@+id/drawer_layout_activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controler.activities.MainActivity"
     android:fitsSystemWindows="true"
+    tools:context=".controler.activities.MainActivity"
     tools:openDrawer="start">
 
 
@@ -18,47 +18,57 @@
         <include
             layout="@layout/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-<RelativeLayout
-    android:id="@+id/fragment_view"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <RelativeLayout
+                android:id="@+id/fragment_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_above="@id/bottom_view"/>
 
 
-
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/bottom_view"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:menu="@menu/bottom_navigation_view"
-        android:background="@color/colorPrimary"
-        android:layout_alignParentBottom="true">
-
-
-    </com.google.android.material.bottomnavigation.BottomNavigationView>
+            <com.google.android.material.bottomnavigation.BottomNavigationView
+                android:id="@+id/bottom_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/colorPrimary"
+                app:menu="@menu/bottom_navigation_view">
 
 
-</RelativeLayout>
+            </com.google.android.material.bottomnavigation.BottomNavigationView>
 
 
+        </RelativeLayout>
 
 
     </LinearLayout>
+
     <com.google.android.material.navigation.NavigationView
-       android:id="@+id/nav_view"
+        android:id="@+id/nav_view"
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:fitsSystemWindows="true"
         android:background="@color/colorAccent"
-        app:itemTextColor="@color/colorPrimaryDark"
-        app:itemIconTint="@color/colorPrimaryDark"
+        android:fitsSystemWindows="true"
         app:headerLayout="@layout/nav_header"
+        app:itemIconTint="@color/colorPrimaryDark"
+        app:itemTextColor="@color/colorPrimaryDark"
         app:menu="@menu/activity_main_drawer">
 
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:layout_gravity="bottom"
+            android:layout_marginStart="40dp"
+            android:layout_marginBottom="5dp"
+            android:src="@drawable/meal_v3_final" />
 
-</com.google.android.material.navigation.NavigationView>
+    </com.google.android.material.navigation.NavigationView>
 
 
 </androidx.drawerlayout.widget.DrawerLayout>
