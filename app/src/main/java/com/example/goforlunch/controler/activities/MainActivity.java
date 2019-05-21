@@ -2,14 +2,9 @@ package com.example.goforlunch.controler.activities;
 
 
 import android.content.Intent;
-import android.content.pm.PackageInfo;
-import android.content.pm.PackageManager;
-import android.content.pm.Signature;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -33,6 +28,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.fragments.ChatFragment;
+
+
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
@@ -43,8 +40,6 @@ import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 import java.util.Objects;
 
 import butterknife.BindView;
@@ -109,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                 break;
             case MainActivity.FRAGMENT_CHAT:
                 fragment = ChatFragment.newInstance();
+                break;
+
         }
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.fragment_view, fragment);
@@ -173,6 +170,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             switch (item.getItemId()) {
                 case R.id.map_view:
                     displayFragment(FRAGMENT_MAP);
+                    displayFragment(FRAGMENT_MAP);
+
                     break;
                 case R.id.list_view:
                     displayFragment(FRAGMENT_LISTVIEW);
