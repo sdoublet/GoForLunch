@@ -1,6 +1,4 @@
-package com.example.goforlunch.model.PlaceDeatails;
-
-
+package com.example.goforlunch.model.Api.Details;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -9,7 +7,7 @@ public class Geometry {
 
     @SerializedName("location")
     @Expose
-    private  Location location;
+    private Location location;
     @SerializedName("viewport")
     @Expose
     private Viewport viewport;
@@ -28,5 +26,6 @@ public class Geometry {
 
     public void setViewport(Viewport viewport) {
         this.viewport = viewport;
-    }}
+    }
 
+}

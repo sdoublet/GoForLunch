@@ -1,17 +1,17 @@
-package com.example.goforlunch.model.PlaceDeatails;
+package com.example.goforlunch.model.Api.Nearby;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class SearchApi {
+public class NearbyPlaces {
 
     @SerializedName("html_attributions")
     @Expose
     private List<Object> htmlAttributions = null;
-    @SerializedName("result")
+    @SerializedName("results")
     @Expose
-    private Result result;
+    private List<Result> results = null;
     @SerializedName("status")
     @Expose
     private String status;
@@ -24,12 +24,12 @@ public class SearchApi {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public Result getResult() {
-        return result;
+    public List<Result> getResults() {
+        return results;
     }
 
-    public void setResult(Result result) {
-        this.result = result;
+    public void setResults(List<Result> results) {
+        this.results = results;
     }
 
     public String getStatus() {
@@ -41,4 +41,3 @@ public class SearchApi {
     }
 
 }
-

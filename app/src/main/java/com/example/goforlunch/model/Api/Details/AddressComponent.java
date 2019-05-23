@@ -1,4 +1,4 @@
-package com.example.goforlunch.model.PlaceDeatails;
+package com.example.goforlunch.model.Api.Details;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

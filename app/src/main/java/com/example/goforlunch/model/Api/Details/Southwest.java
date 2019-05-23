@@ -1,9 +1,9 @@
-package com.example.goforlunch.model.PlaceDeatails;
+package com.example.goforlunch.model.Api.Details;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Location {
+public class Southwest {
 
     @SerializedName("lat")
     @Expose

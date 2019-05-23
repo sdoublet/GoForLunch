@@ -1,8 +1,10 @@
 package com.example.goforlunch.controler.fragments;
 
 import android.Manifest;
+import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -25,6 +27,7 @@ import com.google.android.gms.maps.MapsInitializer;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -76,13 +79,13 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         return view;
     }
 
-
-
+    @TargetApi(Build.VERSION_CODES.M)
     @Override
     public void onMapReady(GoogleMap googleMap) {
 
         MapsInitializer.initialize(Objects.requireNonNull(getContext()));
         displayCurrentLocation(googleMap);
+        mGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
     }
 
 
@@ -140,6 +143,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
 
     }
+
+    //Clear map
 
     @Override
     public void onResume() {

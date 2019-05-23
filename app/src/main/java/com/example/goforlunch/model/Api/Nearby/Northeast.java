@@ -1,9 +1,9 @@
-package com.example.goforlunch.model.PlaceDeatails;
+package com.example.goforlunch.model.Api.Nearby;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Southwest {
+public class Northeast {
 
     @SerializedName("lat")
     @Expose
@@ -29,4 +29,3 @@ public class Southwest {
     }
 
 }
-
