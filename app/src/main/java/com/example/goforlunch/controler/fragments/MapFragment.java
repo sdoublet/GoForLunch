@@ -3,6 +3,7 @@ package com.example.goforlunch.controler.fragments;
 import android.Manifest;
 import android.annotation.TargetApi;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -85,9 +86,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         MapsInitializer.initialize(Objects.requireNonNull(getContext()));
         displayCurrentLocation(googleMap);
-        mGoogleMap.setMapStyle(MapStyleOptions.loadRawResourceStyle(getContext(), R.raw.style_json));
-    }
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            getContext(), R.raw.style_json));
 
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+    }
 
     private void displayCurrentLocation(GoogleMap googleMap) {
         mGoogleMap = googleMap;
