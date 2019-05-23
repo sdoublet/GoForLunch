@@ -26,5 +26,13 @@
     <!-- LOGIN -->
     <string name="info_no_email_found">No email found</string>
     <string name="info_no_username_found">No username found</string>
+    <string name="error_uknown_error" translatable="false">error_unknown_error</string>
+    <string name="modify_your_name">Update your name</string>
+    <string name="modify_your_email">Update your email</string>
+    <string name="update_your_profile">Update your profile</string>
+    <string name="set_your_radius_search">set your radius search in meters</string>
+    <string name="check_to_receive_a_notification_at_12h00">Check to receive a notification at 12h00</string>
+    <string name="update_your_preferences">Update your preferences</string>
+    <string name="delete_profile">Delete profile</string>
 
 </resources>

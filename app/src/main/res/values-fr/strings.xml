@@ -21,4 +21,11 @@
     <string name="title_toolbar_setting">Paramètres</string>
     <string name="info_no_email_found">Aucune adresse email</string>
     <string name="info_no_username_found">Aucun nom d\'utilisateur</string>
+    <string name="modify_your_name">Modifiez votre nom</string>
+    <string name="modify_your_email">Modifiez votre email</string>
+    <string name="update_your_profile">Mettre à jour votre profil</string>
+    <string name="set_your_radius_search">Rayon de recherche en mètres</string>
+    <string name="check_to_receive_a_notification_at_12h00">Notification à 12h00</string>
+    <string name="update_your_preferences">Mettre à jour les paramètres</string>
+    <string name="delete_profile">Supprimer profil</string>
 </resources>

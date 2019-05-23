@@ -1,44 +1,53 @@
 package com.example.goforlunch.model;
 
 public class User {
-    private String uid;
-    private String username;
-    private String urlPicture;
+    private String mUid;
+    private String mUsername;
+    private String mUrlPicture;
+    private String mEmail;
 
     public User() {
     }
 
-    public User(String uid, String username, String urlPicture) {
-        this.uid = uid;
-        this.username = username;
-        this.urlPicture = urlPicture;
+    public User(String uid, String username, String urlPicture, String email) {
+        this.mUid = uid;
+        this.mUsername = username;
+        this.mUrlPicture = urlPicture;
+        this.mEmail = email;
     }
 
 
     //------------GETTERS-----------
     public String getUid() {
-        return uid;
+        return mUid;
     }
 
     public void setUid(String uid) {
-        this.uid = uid;
+        this.mUid = uid;
     }
 
     public String getUsername() {
-        return username;
+        return mUsername;
     }
 
+    public String getmEmail() {
+        return mEmail;
+    }
 
     //------------SETTERS-----------
     public void setUsername(String username) {
-        this.username = username;
+        this.mUsername = username;
     }
 
     public String getUrlPicture() {
-        return urlPicture;
+        return mUrlPicture;
     }
 
     public void setUrlPicture(String urlPicture) {
-        this.urlPicture = urlPicture;
+        this.mUrlPicture = urlPicture;
+    }
+
+    public void setmEmail(String mEmail) {
+        this.mEmail = mEmail;
     }
 }

@@ -112,28 +112,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             return;
         }
         mGoogleMap.setMyLocationEnabled(true);
-        locationResult.addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    // Set the map's camera position to the current location of the device.
-                    Location currentLocation = (Location) task.getResult();
-                    assert currentLocation != null;
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
-                    MarkerOptions markerOptions = new MarkerOptions();
-                    markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                    markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
-                    markerOptions.title("My position");
-                    marker = mGoogleMap.addMarker(markerOptions);
+        locationResult.addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                // Set the map's camera position to the current location of the device.
+                Location currentLocation = (Location) task.getResult();
+                assert currentLocation != null;
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                MarkerOptions markerOptions = new MarkerOptions();
+                markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
+                markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
+                markerOptions.title("My position");
+                marker = mGoogleMap.addMarker(markerOptions);
 
-                } else {
-                    Log.d(TAG, "Current location is null. Using defaults.");
-                    Log.e(TAG, "Exception: %s", task.getException());
-                    Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_LONG).show();
-                    LatLng mDefaultLocation = new LatLng(-34, 151);
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
-                    mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
-                }
+            } else {
+                Log.d(TAG, "Current location is null. Using defaults.");
+                Log.e(TAG, "Exception: %s", task.getException());
+                Toast.makeText(getContext(), "unable to get current location", Toast.LENGTH_LONG).show();
+                LatLng mDefaultLocation = new LatLng(-34, 151);
+                mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(mDefaultLocation, DEFAULT_ZOOM));
+                mGoogleMap.getUiSettings().setMyLocationButtonEnabled(false);
             }
         });
     }
@@ -141,16 +138,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     @Override
     public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String permissions[],
+                                           @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         mLocationPermissionGranted = false;
-        switch (requestCode) {
-            case PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION: {
-                // If request is cancelled, the result arrays are empty.
-                if (grantResults.length > 0
-                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    mLocationPermissionGranted = true;
-                }
+        // If request is cancelled, the result arrays are empty.
+        if (requestCode == PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION) {
+            if (grantResults.length > 0
+                    && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                mLocationPermissionGranted = true;
             }
         }
 

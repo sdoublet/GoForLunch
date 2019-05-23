@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.User;
 import com.example.goforlunch.views.recyclerViews.Divider;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
 
@@ -23,6 +24,7 @@ import butterknife.ButterKnife;
 
 public class WorkmatesFragment extends Fragment {
 
+    private List<User> users;
     private List<String> mNames = new ArrayList<>();
     private List<Integer> mImageUrls = new ArrayList<Integer>();
     private WorkmatesAdapter adapter;
