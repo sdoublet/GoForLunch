@@ -11,7 +11,7 @@ public class NearbyPlaces {
     private List<Object> htmlAttributions = null;
     @SerializedName("results")
     @Expose
-    private List<Result> results = null;
+    private List<ResultNearbySearch> results = null;
     @SerializedName("status")
     @Expose
     private String status;
@@ -24,11 +24,11 @@ public class NearbyPlaces {
         this.htmlAttributions = htmlAttributions;
     }
 
-    public List<Result> getResults() {
+    public List<ResultNearbySearch> getResults() {
         return results;
     }
 
-    public void setResults(List<Result> results) {
+    public void setResults(List<ResultNearbySearch> results) {
         this.results = results;
     }
 

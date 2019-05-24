@@ -31,13 +31,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.util.Objects;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
+
 
 import static android.content.ContentValues.TAG;
 
@@ -46,13 +47,15 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private static final float DEFAULT_ZOOM = 15f;
+    private static final String POI_TYPE = "restaurant";
+    private static final String API_KEY ="AIzaSyCSiJuGLlz7TocR74XSwF3jmEa1x_eYCH0";
     @BindView(R.id.map_view)
     MapView mapView;
 
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker marker;
-
+    private Disposable disposable;
     private boolean mLocationPermissionGranted = false;
 
 
@@ -76,6 +79,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mapView.getMapAsync(this);
         mapView.onCreate(savedInstanceState);
         mapView.onResume();
+
 
         return view;
     }
@@ -151,7 +155,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     }
 
-    //Clear map
+
+
+
 
     @Override
     public void onResume() {
