@@ -64,14 +64,7 @@ public class SettingActivity extends BaseActivity {
 
     }
 
-    private void configureStatusBar() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            Window window = getWindow();
-            window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
-            window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
-            window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        }
-    }
+
 
     @OnClick(R.id.delete_profile)
     public void onClickDeleteButton() {

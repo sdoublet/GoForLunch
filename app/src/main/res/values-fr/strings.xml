@@ -28,5 +28,5 @@
     <string name="check_to_receive_a_notification_at_12h00">Notification à 12h00</string>
     <string name="update_your_preferences">Mettre à jour les paramètres</string>
     <string name="delete_profile">Supprimer profil</string>
-    <string name="hasnt_decided_yet">%s n\a pas encore choisit</string>
+    <string name="hasnt_decided_yet">%s n\'a pas encore choisi</string>
 </resources>
