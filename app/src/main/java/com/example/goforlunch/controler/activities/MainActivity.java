@@ -88,6 +88,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+    @Override
+    public int getFragmentLayout() {
+        return R.layout.activity_main;
+    }
+
     //DISPLAY FRAGMENTS
     private void displayFragment(int fragmentIdentifier) {
         Fragment fragment = new Fragment();

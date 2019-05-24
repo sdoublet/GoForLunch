@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
 
     <application
         android:allowBackup="true"
@@ -19,6 +20,7 @@
         <activity
             android:name=".controler.activities.SettingActivity"
             android:parentActivityName=".controler.activities.MainActivity" />
+
         <activity android:name=".controler.activities.PlaceDetailActivity" />
         <activity android:name=".controler.activities.LoginActivity">
             <intent-filter>

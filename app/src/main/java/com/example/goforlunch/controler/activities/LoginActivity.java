@@ -1,9 +1,11 @@
 package com.example.goforlunch.controler.activities;
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -38,13 +40,20 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
-        if (isCurrentUserLogged()){
+        startApp();
+
+    }
+
+    private void startApp() {
+        if (getCurrentUser()!=null){
             this.launchMainActivity();
+            Toast toast = Toast.makeText(this, "Welcome back "+getCurrentUser().getDisplayName(), Toast.LENGTH_LONG);
+            toast.setGravity(Gravity.CENTER,0,0);
+            toast.show();
 
         }else {
             this.startSignInActivity();
         }
-
     }
 
     private static final int RC_SIGN_IN = 123;

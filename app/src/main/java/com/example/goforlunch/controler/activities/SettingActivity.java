@@ -1,27 +1,45 @@
 package com.example.goforlunch.controler.activities;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.os.Build;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
+import android.widget.EditText;
+import android.widget.ProgressBar;
+
 import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
-import android.os.Build;
-import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
-
-
 import com.example.goforlunch.R;
-
-import java.util.Objects;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
+import com.firebase.ui.auth.AuthUI;
+import com.google.android.gms.tasks.OnSuccessListener;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends BaseActivity {
 
+    private static final int DELETE_USER_TASK = 20;
+    private static final int UPDATE_USERNAME = 30;
+    private static final int UPDATE_EMAIL = 40;
+    private static final int SIGN_OUT_TASK = 10;
     @BindView(R.id.toolbar)
     Toolbar toolbar;
+    @BindView(R.id.update_name)
+    EditText updateName;
+    @BindView(R.id.update_email)
+    EditText updateEmail;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressBar;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,6 +47,11 @@ public class SettingActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         this.configureToolbar();
         this.configureStatusBar();
+    }
+
+    @Override
+    public int getFragmentLayout() {
+        return R.layout.activity_setting;
     }
 
     private void configureToolbar() {
@@ -39,11 +62,95 @@ public class SettingActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
-    private void configureStatusBar(){
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.LOLLIPOP){
+
+    private void configureStatusBar() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();
             window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
             window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
             window.setStatusBarColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
-        }}
+        }
+    }
+
+    @OnClick(R.id.delete_profile)
+    public void onClickDeleteButton() {
+        new AlertDialog.Builder(this)
+                .setMessage("are you sure")
+                .setPositiveButton("yes", (dialog, which) -> deleteUserFromFirebase())
+                .setNegativeButton("no", null)
+                .show();
+    }
+
+    @OnClick(R.id.update_button)
+    public void onClickUpdateButton() {
+        progressBar.setVisibility(View.VISIBLE);
+        updateProfileInFirebase();
+
+    }
+
+    @OnClick(R.id.update_preferences)
+    public void onClickUpdatePreferences() {
+
+        Log.e("button", "butoon checked");
+    }
+
+    //--------------------
+    //REST REQUEST
+    //--------------------
+
+
+    private void deleteUserFromFirebase(){
+        if (this.getCurrentUser()!=null){
+            // We also delete user from firestore storage
+            UserHelper.deleteUser(this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener());
+
+            AuthUI.getInstance()
+                    .delete(this)
+                    .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(DELETE_USER_TASK));
+        }
+    }
+
+    private void updateProfileInFirebase() {
+        String username = this.updateName.getText().toString();
+        //String email = this.updateEmail.getText().toString();
+
+        if (this.getCurrentUser() != null) {
+            if (!username.isEmpty() ) {
+                UserHelper.updateUser(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
+                Log.e("name", username);
+            }
+//            if (this.getCurrentUser() != null) {
+//                if (!email.isEmpty() ) {
+//                    UserHelper.updateEmail(email, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_EMAIL));
+//                }
+//            }
+        }
+
+    }
+
+    private OnSuccessListener<? super Void> updateUIAfterRESTRequestsCompleted(final int origin) {
+        return (OnSuccessListener<Void>) aVoid -> {
+            switch (origin) {
+                case DELETE_USER_TASK:
+                    launchLoginActivity();
+                    break;
+                case UPDATE_USERNAME:
+                    progressBar.setVisibility(View.INVISIBLE);
+                    launchMainActivity();
+                    break;
+                case UPDATE_EMAIL:
+                    progressBar.setVisibility(View.INVISIBLE);
+                    launchMainActivity();
+                    break;
+            }
+        };
+    }
+    private void launchLoginActivity(){
+        Intent intent = new Intent(this, LoginActivity.class);
+        startActivity(intent);
+    }
+    private void launchMainActivity(){
+        Intent intent = new Intent(this, MainActivity.class);
+        startActivity(intent);
+    }
 }
