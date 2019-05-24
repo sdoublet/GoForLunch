@@ -11,6 +11,7 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
@@ -74,9 +75,13 @@ public class SettingActivity extends BaseActivity {
 
     @OnClick(R.id.delete_profile)
     public void onClickDeleteButton() {
+
         new AlertDialog.Builder(this)
                 .setMessage("are you sure")
-                .setPositiveButton("yes", (dialog, which) -> deleteUserFromFirebase())
+                .setPositiveButton("yes", (dialog, which) -> {
+                    progressBar.setVisibility(View.VISIBLE);
+                    deleteUserFromFirebase();
+                })
                 .setNegativeButton("no", null)
                 .show();
     }
@@ -112,18 +117,18 @@ public class SettingActivity extends BaseActivity {
 
     private void updateProfileInFirebase() {
         String username = this.updateName.getText().toString();
-        //String email = this.updateEmail.getText().toString();
+        String email = this.updateEmail.getText().toString();
 
         if (this.getCurrentUser() != null) {
             if (!username.isEmpty() ) {
                 UserHelper.updateUser(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
                 Log.e("name", username);
             }
-//            if (this.getCurrentUser() != null) {
-//                if (!email.isEmpty() ) {
-//                    UserHelper.updateEmail(email, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_EMAIL));
-//                }
-//            }
+            if (this.getCurrentUser() != null) {
+                if (!email.isEmpty() ) {
+                    UserHelper.updateEmail(email, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_EMAIL));
+                }
+            }
         }
 
     }
@@ -132,6 +137,9 @@ public class SettingActivity extends BaseActivity {
         return (OnSuccessListener<Void>) aVoid -> {
             switch (origin) {
                 case DELETE_USER_TASK:
+                    progressBar.setVisibility(View.INVISIBLE);
+                    Toast.makeText(this, "your profile was deleted", Toast.LENGTH_LONG).show();
+                    finish();
                     launchLoginActivity();
                     break;
                 case UPDATE_USERNAME:

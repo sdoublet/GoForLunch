@@ -34,5 +34,6 @@
     <string name="check_to_receive_a_notification_at_12h00">Check to receive a notification at 12h00</string>
     <string name="update_your_preferences">Update your preferences</string>
     <string name="delete_profile">Delete profile</string>
+    <string name="hasnt_decided_yet">%s hasn\'t decided yet</string>
 
 </resources>

@@ -9,50 +9,44 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.User;
+import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class WorkmatesAdapter extends RecyclerView.Adapter <WorkmatesViewHolder>{
+public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesViewHolder> {
 
     private Context context;
-    private List<String> mImageNames = new ArrayList<>();
-    private List<Integer> mImages = new ArrayList<>();
+    private RequestManager glide;
 
-    public WorkmatesAdapter(Context context, List<String> mImageNames, List<Integer> mImages) {
+    public WorkmatesAdapter(@NonNull FirestoreRecyclerOptions<User> options, Context context, RequestManager glide) {
+        super(options);
         this.context = context;
-        this.mImageNames = mImageNames;
-        this.mImages = mImages;
+        this.glide = glide;
+    }
+
+    @Override
+    protected void onBindViewHolder(@NonNull WorkmatesViewHolder workmatesViewHolder, int i, @NonNull User user) {
+        workmatesViewHolder.textViewWorkmates.setText(String.format(context.getString(R.string.hasnt_decided_yet), user.getUsername()));
+        if (user.getUrlPicture()!=null && !user.getUrlPicture().isEmpty()){
+            String urlPhoto = user.getUrlPicture();
+            glide.load(urlPhoto)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(workmatesViewHolder.photoWorkmates);
+        }else {
+
+            glide.load(R.drawable.serveur).apply(RequestOptions.circleCropTransform()).into(workmatesViewHolder.photoWorkmates);
+        }
     }
 
     @NonNull
     @Override
     public WorkmatesViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.row_workmates, parent, false);
-        return new WorkmatesViewHolder(view);
-    }
-
-    @Override
-    public void onBindViewHolder(@NonNull WorkmatesViewHolder holder, int position) {
-
-
-        Glide.with(context)
-                .asBitmap()
-                .load(mImages.get(position))
-                .apply(RequestOptions.circleCropTransform())
-                .into(holder.photoWorkmates);
-
-        holder.textViewWorkmates.setText(mImageNames.get(position));
-    }
-
-
-
-
-    @Override
-    public int getItemCount() {
-        return mImageNames.size();
+       View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_workmates, parent, false);
+       return new WorkmatesViewHolder(view);
     }
 }

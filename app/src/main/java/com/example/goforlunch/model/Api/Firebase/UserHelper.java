@@ -27,6 +27,10 @@ public class UserHelper {
         return UserHelper.getUsersCollection().document(uid).get();
     }
 
+    public static CollectionReference getAllUsers(){
+        return UserHelper.getUsersCollection();
+    }
+
     //---UPDATE---
     public static Task<Void> updateUser(String username, String uid){
         return UserHelper.getUsersCollection().document(uid).update("username", username);

@@ -11,10 +11,14 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.views.recyclerViews.Divider;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,9 +28,7 @@ import butterknife.ButterKnife;
 
 public class WorkmatesFragment extends Fragment {
 
-    private List<User> users;
-    private List<String> mNames = new ArrayList<>();
-    private List<Integer> mImageUrls = new ArrayList<Integer>();
+
     private WorkmatesAdapter adapter;
     @BindView(R.id.recycler_workers)
     RecyclerView recyclerView;
@@ -41,72 +43,34 @@ public class WorkmatesFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_workmates, container, false);
         ButterKnife.bind(this, view);
-        initImageBitmap();
+        this.initRecyclerView();
         return view;
     }
 
-    private void initImageBitmap() {
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("Seb");
 
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("yoyoyoyoyyo");
-
-        mImageUrls.add(R.drawable.photoseb);
-        mNames.add("Salut a tous");
-
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("Seb");
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("yoyoyoyoyyo");
-
-        mImageUrls.add(R.drawable.photoseb);
-        mNames.add("Salut a tous");
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("Seb");
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("yoyoyoyoyyo");
-
-        mImageUrls.add(R.drawable.photoseb);
-        mNames.add("Salut a tous");
-
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("Seb");
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("yoyoyoyoyyo");
-
-        mImageUrls.add(R.drawable.photoseb);
-        mNames.add("Salut a tous");
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("Seb");
-
-        mImageUrls.add((R.drawable.photoseb));
-        mNames.add("yoyoyoyoyyo");
-
-        mImageUrls.add(R.drawable.photoseb);
-        mNames.add("Salut a tous");
-
-        //add last item to be invisible
-        mImageUrls.add(null);
-        mNames.add(null);
-
-        initRecyclerView();
-
-
-    }
 
     private void initRecyclerView() {
-        adapter = new WorkmatesAdapter(getContext(), mNames, mImageUrls);
+
+        Query allUsers = UserHelper.getAllUsers();
+        FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
+                .setQuery(allUsers, User.class)
+                .build();
+        adapter = new WorkmatesAdapter(options,getContext(), Glide.with(recyclerView));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new Divider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+        adapter.startListening();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        adapter.stopListening();
+    }
 }

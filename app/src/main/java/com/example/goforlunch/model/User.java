@@ -4,7 +4,7 @@ public class User {
     private String mUid;
     private String mUsername;
     private String mUrlPicture;
-    private String mEmail;
+    private String email;
 
     public User() {
     }
@@ -13,7 +13,7 @@ public class User {
         this.mUid = uid;
         this.mUsername = username;
         this.mUrlPicture = urlPicture;
-        this.mEmail = email;
+        this.email = email;
     }
 
 
@@ -31,7 +31,7 @@ public class User {
     }
 
     public String getmEmail() {
-        return mEmail;
+        return email;
     }
 
     //------------SETTERS-----------
@@ -48,6 +48,6 @@ public class User {
     }
 
     public void setmEmail(String mEmail) {
-        this.mEmail = mEmail;
+        this.email = mEmail;
     }
 }
