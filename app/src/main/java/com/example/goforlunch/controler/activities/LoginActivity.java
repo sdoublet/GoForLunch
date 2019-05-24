@@ -19,6 +19,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -32,16 +33,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LoginActivity extends AppCompatActivity {
+public class LoginActivity extends BaseActivity {
 
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_login);
         ButterKnife.bind(this);
         startApp();
 
+    }
+
+    @Override
+    public int getFragmentLayout() {
+        return R.layout.activity_login;
     }
 
     private void startApp() {
@@ -61,12 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     //------------------
     //UTILS
     //------------------
-    protected FirebaseUser getCurrentUser(){
-        return FirebaseAuth.getInstance().getCurrentUser();
-    }
-    protected Boolean isCurrentUserLogged(){
-        return (this.getCurrentUser()!=null);
-    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -95,6 +95,7 @@ public class LoginActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Toast.makeText(this, "Authentification réussie", Toast.LENGTH_LONG).show();
                 launchMainActivity();
+                this.createUserInFirestore();
                 // TODO: 07/05/2019   mettre intent vers mainactivity
             } else if (response == null) {
                 Toast.makeText(this, "Authentificaiton annulée", Toast.LENGTH_LONG).show();
@@ -109,6 +110,22 @@ public class LoginActivity extends AppCompatActivity {
     private void launchMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    //--------------------
+    //REST REQUEST
+    //--------------------
+
+    //   http request that create user in firestore
+    private void createUserInFirestore(){
+        if (getCurrentUser()!=null){
+            String urlPicture = (this.getCurrentUser().getPhotoUrl()!=null)? this.getCurrentUser().getPhotoUrl().toString() : null;
+            String username = this.getCurrentUser().getDisplayName();
+            String uid = this.getCurrentUser().getUid();
+            String email = this.getCurrentUser().getEmail();
+
+            UserHelper.createUser(uid, username, urlPicture, email).addOnFailureListener(this.onFailureListener());
+        }
     }
 
     }
