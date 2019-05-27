@@ -29,4 +29,5 @@
     <string name="update_your_preferences">Mettre à jour les paramètres</string>
     <string name="delete_profile">Supprimer profil</string>
     <string name="hasnt_decided_yet">%s n\'a pas encore choisi</string>
+
 </resources>

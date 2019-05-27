@@ -9,16 +9,19 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Resto;
 
 import java.util.List;
 
 public class RestoListFragmentAdapter extends RecyclerView.Adapter<RecyclerviewHolder> {
 
-    private List<Resto> restoList;
+    private List<Result> restoList;
     private Context context;
 
-    public RestoListFragmentAdapter(Context context, List<Resto> restoList) {
+    public RestoListFragmentAdapter(Context context, List<Result> restoList) {
         this.restoList = restoList;
         this.context = context;
     }

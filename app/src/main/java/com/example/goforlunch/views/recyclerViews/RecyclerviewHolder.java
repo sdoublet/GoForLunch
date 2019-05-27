@@ -9,6 +9,9 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Resto;
 
 import butterknife.BindView;
@@ -34,7 +37,7 @@ public class RecyclerviewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateRestoListFragment(Resto resto) {
+    public void updateRestoListFragment(Result resto) {
         UpdateAllFragmentItem updateAllFragmentItem = new UpdateAllFragmentItem();
         restoName.setText(updateAllFragmentItem.setName(resto));
         restoAddress.setText(updateAllFragmentItem.address(resto));

@@ -13,7 +13,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Resto;
+import com.example.goforlunch.utils.PlaceStreams;
 import com.example.goforlunch.views.recyclerViews.Divider;
 import com.example.goforlunch.views.recyclerViews.RestoListFragmentAdapter;
 
@@ -22,14 +26,16 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 
 public class RestoListFragment extends Fragment {
 
 
     @BindView(R.id.recycler_resto)
     RecyclerView recyclerView;
-    private List<Resto> restoList = new ArrayList<>();
+    private List<Result> restoList = new ArrayList<>();
     private RestoListFragmentAdapter adapter;
+    private Disposable disposable;
 
 
     public static Fragment newInstance() {
@@ -42,7 +48,7 @@ public class RestoListFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_resto_list, container, false);
         ButterKnife.bind(this, view);
-        init();
+
         return view;
     }
 
@@ -55,10 +61,5 @@ public class RestoListFragment extends Fragment {
 
     }
 
-    private void init() {
-        restoList.add(new Resto("Les radeliers", "19 rue du bois CHAMBLAY", "Bouchon", "19h00", 150, 2, 3));
-        restoList.add(new Resto("Petit blanc", "72 rue du stade Salins", "Jura", "20h00", 3500, 0, 1, 1));
-        restoList.add(new Resto("Pizza Pino", "165 rue de Lyon LYON", "Pizzeria", "22h00", 13500, R.drawable.avatar2, 5, 2));
-        configureRecyclerView();
-    }
+
 }
