@@ -142,6 +142,9 @@
     app:layout_constraintBottom_toBottomOf="@+id/guideline"
     app:layout_constraintRight_toRightOf="parent"
     android:backgroundTint="#ffffff"
-    android:layout_marginEnd="35dp"/>
+    android:layout_marginEnd="35dp"
+    android:src="@drawable/check_circle"
+    android:tint="#008000"
+    app:maxImageSize="40dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
