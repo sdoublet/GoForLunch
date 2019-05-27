@@ -75,6 +75,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
+        android:background="@color/white"
         app:layout_constraintTop_toBottomOf="@+id/detail_linear_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -82,27 +83,39 @@
         <Button
             android:id="@+id/image_phone"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_weight="1"
+            android:background="@color/white"
+            android:text="CALL"
             android:drawableTop="@drawable/phone"
+            android:drawablePadding="10dp"
+            style="@style/NoShadowButton"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/star"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/white"
+            android:text="LIKE"
             android:drawableTop="@drawable/star"
+            android:drawablePadding="10dp"
+            style="@style/NoShadowButton"
             android:layout_marginTop="15dp"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/website"
             android:layout_width="wrap_content"
-            android:layout_height="40dp"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
+            android:background="@color/white"
+            android:text="WEBSITE"
             android:drawableTop="@drawable/website"
+            android:drawablePadding="10dp"
+            style="@style/NoShadowButton"
             android:layout_marginTop="15dp"
             tools:ignore="ButtonStyle" />
 
@@ -112,7 +125,6 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:background="@color/colorPrimary"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/detail_linear_contact">
@@ -120,7 +132,8 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_recycler_view"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:layout_marginTop="20dp">
 
         </androidx.recyclerview.widget.RecyclerView>
 
@@ -142,6 +155,9 @@
     app:layout_constraintBottom_toBottomOf="@+id/guideline"
     app:layout_constraintRight_toRightOf="parent"
     android:backgroundTint="#ffffff"
-    android:layout_marginEnd="35dp"/>
+    android:src="@drawable/check_circle"
+    app:maxImageSize="35dp"
+    android:layout_marginEnd="35dp"
+    android:tint="@color/green"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

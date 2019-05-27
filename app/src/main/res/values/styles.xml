@@ -48,4 +48,9 @@
         <item name="colorControlNormal">@android:color/darker_gray</item>
         <item name="colorControlActivated">#ffd600</item>
     </style>
+
+    <!--BORDERLESS SHADOW-->
+    <style name="NoShadowButton" parent="android:style/Widget.Button">
+        <item name="android:stateListAnimator">@null</item>
+    </style>
 </resources>
