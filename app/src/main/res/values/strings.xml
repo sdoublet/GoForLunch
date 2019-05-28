@@ -35,6 +35,9 @@
     <string name="update_your_preferences">Update your preferences</string>
     <string name="delete_profile">Delete profile</string>
     <string name="hasnt_decided_yet">%s hasn\'t decided yet</string>
+    <string name="there_is_no_message_in_this_chat_yet">There is no message in this chat yet...</string>
+    <string name="type_your_message">Type your message</string>
+    <string name="send">SEND</string>
 
 
 </resources>

@@ -6,19 +6,76 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".controler.fragments.ChatFragment">
 
-  <include
-      layout="@layout/toolbar"
-      android:id="@+id/toolbar"/>
+
+
+    <TextView
+        android:id="@+id/chat_text_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="10dp"
+        app:layout_constraintBottom_toTopOf="@+id/chat_recycler_view"
+        android:text="@string/there_is_no_message_in_this_chat_yet"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textAlignment="center"
+        />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chat_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:layout_marginTop="10dp"
-        android:layout_marginBottom="10dp">
+        app:layout_constraintBottom_toBottomOf="@+id/chat_add_message_container"
+        app:layout_constraintTop_toBottomOf="@+id/chat_text_view"
+        android:layout_margin="10dp">
 
     </androidx.recyclerview.widget.RecyclerView>
+
+    <!-- ADD MESSAGE CONTAINER -->
+    <LinearLayout
+        android:id="@+id/chat_add_message_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/chat_recycler_view"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="10dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginStart="10dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginEnd="10dp"
+        >
+
+        <!-- ADD FILE BUTTON -->
+        <ImageButton
+            android:id="@+id/chat_add_file_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/add_circle_big"
+            tools:ignore="ContentDescription"
+            android:adjustViewBounds="true"
+            style="@style/Widget.AppCompat.Button.Borderless" />
+
+        <!-- TEXT MESSAGE EDIT TEXT -->
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:imeOptions="actionDone"
+            android:inputType="textMultiLine"
+            android:textSize="13sp"
+            android:hint="@string/type_your_message"/>
+
+        <!-- ADD MESSAGE BUTTON -->
+        <Button
+            android:id="@+id/chat_send_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/Widget.AppCompat.Button.Borderless"
+            android:text="@string/send"
+            android:textColor="@color/colorPrimaryDark"/>
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
