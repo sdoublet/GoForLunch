@@ -30,7 +30,7 @@ public class PlaceDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
         ButterKnife.bind(this);
-        restoPlaceId = getIntent().getStringExtra("restaurant");
+        restoPlaceId = getIntent().getStringExtra(RESTOPLACEID);
         photo = getIntent().getStringExtra("photo");
 
 

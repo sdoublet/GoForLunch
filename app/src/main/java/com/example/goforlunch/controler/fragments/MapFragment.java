@@ -22,6 +22,7 @@ import androidx.fragment.app.Fragment;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
+import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.PlaceStreams;
@@ -206,7 +207,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             .title(searchList.get(i).getName())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
 
-                    markerMap.put(marker.getId(), searchList.get(i));
+
                 }
             }
         } else {
@@ -237,7 +238,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-//        ResultNearbySearch resultNearbySearch = this.markerMap.get(marker.getId());
+       String PLACEDETAILRESTO= "resto_place_id";
+       String ref = (String) marker.getTag();
+        Log.e("nearby", marker.getId());
+
+        Log.e("nearby", marker.getTitle());
+
 //        String photo;
         //  assert resultNearbySearch != null;
         //  if (resultNearbySearch.getPhotos() != null) {
@@ -252,8 +258,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
         Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
-//        intent.putExtra("restaurant", resultNearbySearch.getId());
+       // intent.putExtra("restaurant", resultNearbySearch.getId());
         // intent.putExtra("photo", photo);
+        intent.putExtra(PLACEDETAILRESTO, ref);
         startActivity(intent);
         return true;
 
