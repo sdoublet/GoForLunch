@@ -206,6 +206,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                     searchList.get(i).getGeometry().getLocation().getLng()))
                             .title(searchList.get(i).getName())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
+                    marker.setTag(searchList.get(i).getId());
 
 
                 }
@@ -238,11 +239,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     @Override
     public boolean onMarkerClick(Marker marker) {
-       String PLACEDETAILRESTO= "resto_place_id";
+
        String ref = (String) marker.getTag();
         Log.e("nearby", marker.getId());
-
         Log.e("nearby", marker.getTitle());
+        Log.e("nearby", ref);
 
 //        String photo;
         //  assert resultNearbySearch != null;
@@ -259,10 +260,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
        // intent.putExtra("restaurant", resultNearbySearch.getId());
-        // intent.putExtra("photo", photo);
-        intent.putExtra(PLACEDETAILRESTO, ref);
+         intent.putExtra("photo", PlaceDetailActivity.PHOTO);
+        intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
         startActivity(intent);
-        return true;
+        return false;
 
 
     }

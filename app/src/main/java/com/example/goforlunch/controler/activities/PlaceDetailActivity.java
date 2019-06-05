@@ -6,7 +6,9 @@ import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.content.ContextCompat;
 
 import com.example.goforlunch.R;
@@ -18,20 +20,22 @@ import butterknife.OnClick;
 
 public class PlaceDetailActivity extends AppCompatActivity {
 
-
+    public static final String PLACEDETAILRESTO= "resto_place_id";
+    public static final String PHOTO = "photo";
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.floating_button)
     FloatingActionButton floatingButton;
-    private String RESTOPLACEID = "resto_place_id";
     private String restoPlaceId;
-    private String photo;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_detail);
         ButterKnife.bind(this);
-        restoPlaceId = getIntent().getStringExtra(RESTOPLACEID);
-        photo = getIntent().getStringExtra("photo");
+        restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
+       // photo = getIntent().getStringExtra("photo");
 
 
     }
@@ -50,5 +54,16 @@ public class PlaceDetailActivity extends AppCompatActivity {
             floatingButton.setActivated(false);
         }
     }
+    private void configureToolbar() {
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
+        actionBar.setTitle(R.string.title_toolbar_setting);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+
+    }
+    // recupere mon intent
+    // lance httprequest detail
+
 
 }

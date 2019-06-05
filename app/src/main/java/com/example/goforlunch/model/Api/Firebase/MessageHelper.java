@@ -10,7 +10,7 @@ public class MessageHelper {
 
     public static Query getAllMessageForChat(String chat){
         return ChatHelper.getChatCollection()
-                .document()
+                .document(chat)
                 .collection(COLLECTION_NAME)
                 .orderBy("dateCreated")
                 .limit(100);

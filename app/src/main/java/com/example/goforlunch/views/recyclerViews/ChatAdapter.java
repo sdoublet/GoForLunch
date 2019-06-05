@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 
 import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.R;
+import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.model.Message;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -25,10 +26,12 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, MessageViewHo
     //FOR COMMUNICATION
    private Listener callback;
 
-    public ChatAdapter(@NonNull FirestoreRecyclerOptions<Message> options, RequestManager glide, String idCurrentUser) {
+    public ChatAdapter(@NonNull FirestoreRecyclerOptions<Message> options, RequestManager glide, ChatFragment chatFragment, String idCurrentUser, Listener callback) {
         super(options);
         this.glide = glide;
         this.idCurrentUser = idCurrentUser;
+        this.callback = callback;
+
     }
 
     @Override
@@ -46,6 +49,6 @@ public class ChatAdapter extends FirestoreRecyclerAdapter<Message, MessageViewHo
     @Override
     public void onDataChanged() {
         super.onDataChanged();
-        this.callback.onDataChanged();
+
     }
 }
