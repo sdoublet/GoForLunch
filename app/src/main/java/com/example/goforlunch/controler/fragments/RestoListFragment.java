@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -13,12 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
-import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
-import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
-import com.example.goforlunch.model.Resto;
-import com.example.goforlunch.utils.PlaceStreams;
-import com.example.goforlunch.views.recyclerViews.Divider;
+import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.views.recyclerViews.RestoListFragmentAdapter;
 
 import java.util.ArrayList;

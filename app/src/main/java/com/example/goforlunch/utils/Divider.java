@@ -1,4 +1,4 @@
-package com.example.goforlunch.views.recyclerViews;
+package com.example.goforlunch.utils;
 
 import android.content.Context;
 import android.content.res.Resources;

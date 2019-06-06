@@ -16,30 +16,31 @@ import com.example.goforlunch.model.Resto;
 
 import java.util.List;
 
-public class RestoListFragmentAdapter extends RecyclerView.Adapter<RecyclerviewHolder> {
+public class RestoListFragmentAdapter extends RecyclerView.Adapter<RestoListFragmentViewHolder> {
 
     private List<Result> restoList;
-    private Context context;
 
     public RestoListFragmentAdapter(Context context, List<Result> restoList) {
         this.restoList = restoList;
-        this.context = context;
     }
 
     @NonNull
     @Override
-    public RecyclerviewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.row_resto_list, parent, false);
-        return new RecyclerviewHolder(view);
+    public RestoListFragmentViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.row_resto_list,parent, false );
+        return new RestoListFragmentViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerviewHolder holder, int position) {
-holder.updateRestoListFragment(restoList.get(position));
+    public void onBindViewHolder(@NonNull RestoListFragmentViewHolder holder, int position) {
+
     }
 
     @Override
     public int getItemCount() {
-     return restoList.size();
-}}
+        return restoList.size();
+    }
+}
+
+

@@ -9,6 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.recyclerview.widget.RecyclerView;
+
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
@@ -39,6 +41,8 @@ public class PlaceDetailActivity extends BaseActivity {
     ImageView photoResto;
     @BindView(R.id.rating)
     RatingBar restoRating;
+    @BindView(R.id.detail_recycler_view)
+    RecyclerView userRecyclerView;
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
@@ -145,5 +149,10 @@ public class PlaceDetailActivity extends BaseActivity {
         } else
             restoName.setText("No name");
     }
+
+    //--------------------
+    //Display RecyclerView
+    //--------------------
+
 
 }

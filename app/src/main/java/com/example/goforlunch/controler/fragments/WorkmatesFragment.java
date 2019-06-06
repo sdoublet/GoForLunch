@@ -15,13 +15,10 @@ import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
-import com.example.goforlunch.views.recyclerViews.Divider;
+import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.firebase.firestore.Query;
-
-import java.util.ArrayList;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
