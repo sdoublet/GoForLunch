@@ -110,7 +110,7 @@
             tools:ignore="ButtonStyle" />
 
         <Button
-            android:id="@+id/website"
+            android:id="@+id/website_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"

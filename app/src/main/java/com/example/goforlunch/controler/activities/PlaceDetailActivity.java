@@ -1,5 +1,6 @@
 package com.example.goforlunch.controler.activities;
 
+import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -81,6 +82,12 @@ public class PlaceDetailActivity extends BaseActivity {
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(false);
         }
+    }
+
+    @OnClick(R.id.website_button)
+    public void launchWebViewActivity(){
+        Intent intent = new Intent(this, WebView.class);
+        startActivity(intent);
     }
 
     // recupere mon intent
