@@ -4,12 +4,14 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
@@ -34,6 +36,8 @@ public class PlaceDetailActivity extends BaseActivity {
     @BindView(R.id.detail_resto_name)
     TextView restoName;
     @BindView(R.id.detail_address)TextView restoAddress;
+    @BindView(R.id.detail_image_resto)
+    ImageView photoResto;
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
@@ -114,6 +118,13 @@ onFailureListener();
         if (results.getResult()!=null){
           restoName.setText(results.getResult().getName());
           restoAddress.setText(results.getResult().getFormattedAddress());
+          if (results.getResult().getPhotos()!=null){
+              String restoPhoto = results.getResult().getPhotos().get(0).getPhotoReference();
+              String photoUrl ="https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + restoPhoto + "&key="+ BuildConfig.GOOGLE_MAPS_API_KEY;
+              Glide.with(getBaseContext()).load(photoUrl).into(photoResto);
+          }else {
+              photoResto.setImageResource(R.drawable.serveur);
+          }
         }else
             restoName.setText("No name");
     }
