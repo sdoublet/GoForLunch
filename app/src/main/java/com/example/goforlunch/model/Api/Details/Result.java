@@ -63,6 +63,12 @@ public class Result {
     @SerializedName("website")
     @Expose
     private String website;
+    @SerializedName("opening_hours")
+    @Expose
+    private OpeningHours openingHours=null;
+    @SerializedName("photos")
+    @Expose
+    private List<Photo> photos=null;
 
     public List<AddressComponent> getAddressComponents() {
         return addressComponents;
@@ -70,6 +76,22 @@ public class Result {
 
     public void setAddressComponents(List<AddressComponent> addressComponents) {
         this.addressComponents = addressComponents;
+    }
+
+    public List<Photo> getPhotos() {
+        return photos;
+    }
+
+    public void setPhotos(List<Photo> photos) {
+        this.photos = photos;
+    }
+
+    public OpeningHours getOpeningHours() {
+        return openingHours;
+    }
+
+    public void setOpeningHours(OpeningHours openingHours) {
+        this.openingHours = openingHours;
     }
 
     public String getAdrAddress() {

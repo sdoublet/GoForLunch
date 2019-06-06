@@ -13,6 +13,8 @@ public class MessageHelper {
                 .document(chat)
                 .collection(COLLECTION_NAME)
                 .orderBy("dateCreated")
-                .limit(100);
+                .limit(50);
     }
+
+
 }

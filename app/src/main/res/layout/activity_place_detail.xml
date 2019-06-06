@@ -51,7 +51,9 @@
         android:text="French restaurant - 12 rue du bois"
         android:textColor="@color/quantum_greywhite1000"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="10dp"/>
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"/>
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/rating"
@@ -60,10 +62,12 @@
         style="@style/Widget.AppCompat.RatingBar.Small"
         android:numStars="3"
         android:rating="1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
-        app:layout_constraintLeft_toRightOf="@+id/detail_resto_name"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
+        app:layout_constraintTop_toTopOf="@+id/detail_resto_name"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_resto_name"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_marginStart="5dp"
+        android:layout_marginEnd="20dp"
+
         />
 
 
@@ -152,7 +156,6 @@
     android:id="@+id/floating_button"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    app:layout_constraintTop_toTopOf="@+id/guideline"
     app:layout_constraintBottom_toBottomOf="@+id/guideline"
     app:layout_constraintRight_toRightOf="parent"
     android:backgroundTint="#ffffff"

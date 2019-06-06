@@ -22,7 +22,6 @@ import androidx.fragment.app.Fragment;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
-import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.PlaceStreams;
@@ -58,7 +57,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private static final float DEFAULT_ZOOM = 15f;
     private static final String POI_TYPE = "restaurant";
-    private static final String API_KEY = "AIzaSyCSiJuGLlz7TocR74XSwF3jmEa1x_eYCH0";
     @BindView(R.id.map_view)
     MapView mapView;
 
@@ -100,6 +98,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
 
         MapsInitializer.initialize(Objects.requireNonNull(getContext()));
+        //its running
         displayCurrentLocation(googleMap);
         try {
             // Customise the styling of the base map using a JSON object defined
@@ -118,7 +117,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void displayCurrentLocation(GoogleMap googleMap) {
         mGoogleMap = googleMap;
-        if (ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
         }
         Task locationResult = fusedLocationProviderClient.getLastLocation();
@@ -138,7 +137,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                 markerOptions.title("My position");
                 marker = mGoogleMap.addMarker(markerOptions);
-                httpRequestWithRetrofit(Double.toString(currentLocation.getLatitude()) + "," + Double.toString(currentLocation.getLongitude()));
+                httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
 
             } else {
                 Log.d(TAG, "Current location is null. Using defaults.");
@@ -172,10 +171,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     //--------------------------------
     private void httpRequestWithRetrofit(String location) {
 
-        this.disposable = PlaceStreams.streamFetchNearbySearch(location, 10000, "restaurant", BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
+        this.disposable = PlaceStreams.streamFetchNearbySearch(location, 10000, POI_TYPE, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
                 displayMarker(nearbyPlaces.getResults());
+
             }
 
             @Override
@@ -206,8 +206,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                                     searchList.get(i).getGeometry().getLocation().getLng()))
                             .title(searchList.get(i).getName())
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    marker.setTag(searchList.get(i).getId());
+                    //marker.setTag(searchList.get(i).getId());
+                    marker.setTag(searchList.get(i).getPlaceId());
 
+        Log.e("search", String.valueOf(searchList.size()));
 
                 }
             }
@@ -240,7 +242,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @Override
     public boolean onMarkerClick(Marker marker) {
 
-       String ref = (String) marker.getTag();
+        String ref = (String) marker.getTag();
         Log.e("nearby", marker.getId());
         Log.e("nearby", marker.getTitle());
         Log.e("nearby", ref);
@@ -259,8 +261,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
         Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
-       // intent.putExtra("restaurant", resultNearbySearch.getId());
-         intent.putExtra("photo", PlaceDetailActivity.PHOTO);
         intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
         startActivity(intent);
         return false;
