@@ -17,7 +17,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.Light.NoActionBar"
         tools:ignore="GoogleAppIndexingWarning">
-        <activity android:name=".controler.activities.WebView"></activity>
+        <activity android:name=".controler.activities.WebViewRestaurant">
+
+        </activity>
         <activity android:name=".controler.activities.SplashScreenActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -29,7 +31,9 @@
             android:name=".controler.activities.SettingActivity"
             android:parentActivityName=".controler.activities.MainActivity" />
         <activity android:name=".controler.activities.PlaceDetailActivity" />
-        <activity android:name=".controler.activities.LoginActivity"></activity>
+        <activity android:name=".controler.activities.LoginActivity">
+
+        </activity>
         <activity
             android:name=".controler.activities.MainActivity"
             android:screenOrientation="portrait" />

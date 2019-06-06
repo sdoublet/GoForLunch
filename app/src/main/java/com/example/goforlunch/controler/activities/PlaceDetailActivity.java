@@ -86,8 +86,13 @@ public class PlaceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.website_button)
     public void launchWebViewActivity(){
-        Intent intent = new Intent(this, WebView.class);
-        startActivity(intent);
+        Intent intent = new Intent(this, WebViewRestaurant.class);
+        if (placeDetailResult.getWebsite()!=null){
+            intent.putExtra("website", placeDetailResult.getWebsite());
+            startActivity(intent);
+        }else {
+            Toast.makeText(this, "No website for this restaurant", Toast.LENGTH_SHORT).show();
+        }
     }
 
     // recupere mon intent

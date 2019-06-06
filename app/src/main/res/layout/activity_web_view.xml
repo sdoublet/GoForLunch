@@ -4,15 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".controler.activities.WebView">
+    tools:context=".controler.activities.WebViewRestaurant">
 
     <include
         layout="@layout/toolbar"
-        android:id="@+id/toolbar"
-        app:title="website"
-        app:titleTextColor="@color/white" />
+        android:id="@+id/toolbar" />
 
     <WebView
+        android:id="@+id/web_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
