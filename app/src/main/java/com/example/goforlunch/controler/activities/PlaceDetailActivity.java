@@ -3,9 +3,14 @@ package com.example.goforlunch.controler.activities;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -44,16 +49,20 @@ public class PlaceDetailActivity extends BaseActivity {
     RatingBar restoRating;
     @BindView(R.id.detail_recycler_view)
     RecyclerView userRecyclerView;
+    @BindView(R.id.website_button)
+    Button websiteButton;
+    @BindView(R.id.progress_bar)
+    ProgressBar progressbar;
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         // setContentView(R.layout.activity_place_detail);
         ButterKnife.bind(this);
+        configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
@@ -83,6 +92,9 @@ public class PlaceDetailActivity extends BaseActivity {
             floatingButton.setActivated(false);
         }
     }
+    //------------------
+    //ACTION
+    //------------------
 
     @OnClick(R.id.website_button)
     public void launchWebViewActivity(){
@@ -95,8 +107,15 @@ public class PlaceDetailActivity extends BaseActivity {
         }
     }
 
-    // recupere mon intent
-    // lance httprequest detail
+    @OnClick(R.id.image_phone)
+    public void callRestaurant(){
+        // TODO: 07/06/2019 get permission
+        String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
+        Log.e("phone", phoneNumber);
+//        Intent intentCall = new Intent(Intent.ACTION_CALL);
+//        intentCall.setData(Uri.parse("tel:"+ phoneNumber));
+//        startActivity(intentCall);
+    }
     //-----------------------
     //HTTP REQUEST
     //-----------------------
@@ -158,9 +177,29 @@ public class PlaceDetailActivity extends BaseActivity {
             Log.e("rating", String.valueOf(rating));
             Log.e("rating", String.valueOf(ratingResult));
 
+            //--------------------------
+            //Hide website button
+            //--------------------------
+            if (results.getResult().getWebsite()!=null){
+                websiteButton.setVisibility(View.VISIBLE);
+            }else {
+                websiteButton.setVisibility(View.GONE);
+            }
+
+            //-------------------------
+            //Configure Progressbar
+            //-------------------------
+            if (!photoResto.isShown()){
+                progressbar.setVisibility(View.VISIBLE);
+            }else{
+                progressbar.setVisibility(View.INVISIBLE);
+            }
+
         } else
             restoName.setText("No name");
     }
+
+
 
     //--------------------
     //Display RecyclerView

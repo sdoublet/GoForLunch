@@ -1,5 +1,7 @@
 package com.example.goforlunch.model.Api.Firebase;
 
+import android.util.Log;
+
 import com.example.goforlunch.model.User;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
@@ -29,6 +31,7 @@ public class UserHelper {
 
     public static CollectionReference getAllUsers(){
         return UserHelper.getUsersCollection();
+
     }
 
     //---UPDATE---

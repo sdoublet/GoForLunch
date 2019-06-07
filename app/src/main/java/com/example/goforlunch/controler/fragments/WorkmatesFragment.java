@@ -1,6 +1,7 @@
 package com.example.goforlunch.controler.fragments;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,6 +19,7 @@ import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;

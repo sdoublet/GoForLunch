@@ -66,7 +66,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private Disposable disposable;
     private boolean mLocationPermissionGranted = false;
     private List<ResultNearbySearch> searchList = new ArrayList<>();
-    private HashMap<String, ResultNearbySearch> markerMap = new HashMap<>();
+    //private HashMap<String, ResultNearbySearch> markerMap = new HashMap<>();
 
     public static Fragment newInstance() {
         return new MapFragment();
@@ -246,19 +246,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Log.e("nearby", marker.getId());
         Log.e("nearby", marker.getTitle());
         Log.e("nearby", ref);
-
-//        String photo;
-        //  assert resultNearbySearch != null;
-        //  if (resultNearbySearch.getPhotos() != null) {
-//            if (resultNearbySearch.getPhotos().get(0).getPhotoReference() != null) {
-//                photo = resultNearbySearch.getPhotos().get(0).getPhotoReference();
-//            } else {
-//                photo = null;
-        // }
-        // } else {
-        //    photo = null;
-        //  }
-
 
         Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
         intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);

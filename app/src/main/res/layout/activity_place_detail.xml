@@ -19,6 +19,16 @@
         android:background="@color/colorAccent"
         tools:ignore="ContentDescription" />
 
+    <ProgressBar
+        android:id="@+id/progress_bar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/guideline"/>
+
+
     <LinearLayout
         android:id="@+id/detail_linear_layout"
         android:layout_width="match_parent"
@@ -28,6 +38,8 @@
         app:layout_constraintTop_toBottomOf="@+id/guideline"
         android:background="@color/colorAccent"
         >
+
+
 
     </LinearLayout>
 
@@ -69,7 +81,15 @@
 
         />
 
-
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No worker has chosen this restaurant today"
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/detail_linear_contact" />
 
 
 
@@ -78,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="80dp"
         android:orientation="horizontal"
-        android:background="@color/white"
+        android:background="@color/colorSecondary"
         app:layout_constraintTop_toBottomOf="@+id/detail_linear_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent">
@@ -89,7 +109,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@color/colorSecondary"
             android:text="CALL"
             android:drawableTop="@drawable/phone"
             android:drawablePadding="10dp"
@@ -101,7 +121,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@color/colorSecondary"
             android:text="LIKE"
             android:drawableTop="@drawable/star"
             android:drawablePadding="10dp"
@@ -114,7 +134,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:background="@color/white"
+            android:background="@color/colorSecondary"
             android:text="WEBSITE"
             android:drawableTop="@drawable/website"
             android:drawablePadding="10dp"
@@ -130,7 +150,10 @@
         android:layout_height="0dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/detail_linear_contact">
+        app:layout_constraintTop_toBottomOf="@+id/detail_linear_contact"
+
+        >
+
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/detail_recycler_view"
