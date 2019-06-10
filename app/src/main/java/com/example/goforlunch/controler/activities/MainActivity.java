@@ -167,8 +167,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             switch (item.getItemId()) {
                 case R.id.map_view:
                     displayFragment(FRAGMENT_MAP);
-                    displayFragment(FRAGMENT_MAP);
-
                     break;
                 case R.id.list_view:
                     displayFragment(FRAGMENT_LISTVIEW);
