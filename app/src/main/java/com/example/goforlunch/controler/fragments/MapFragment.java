@@ -40,7 +40,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Objects;
 
@@ -209,7 +208,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     //marker.setTag(searchList.get(i).getId());
                     marker.setTag(searchList.get(i).getPlaceId());
 
-        Log.e("search", String.valueOf(searchList.size()));
+                    Log.e("search", String.valueOf(searchList.size()));
 
                 }
             }
@@ -247,9 +246,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         Log.e("nearby", marker.getTitle());
         Log.e("nearby", ref);
 
-        Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
-        intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
-        startActivity(intent);
+       Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
+       intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
+       startActivity(intent);
         return false;
 
 

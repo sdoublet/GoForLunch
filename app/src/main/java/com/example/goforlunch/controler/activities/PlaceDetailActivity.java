@@ -3,9 +3,7 @@ package com.example.goforlunch.controler.activities;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -20,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Details.OpeningHours;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.utils.PlaceStreams;
@@ -97,18 +96,18 @@ public class PlaceDetailActivity extends BaseActivity {
     //------------------
 
     @OnClick(R.id.website_button)
-    public void launchWebViewActivity(){
+    public void launchWebViewActivity() {
         Intent intent = new Intent(this, WebViewRestaurant.class);
-        if (placeDetailResult.getWebsite()!=null){
+        if (placeDetailResult.getWebsite() != null) {
             intent.putExtra("website", placeDetailResult.getWebsite());
             startActivity(intent);
-        }else {
+        } else {
             Toast.makeText(this, "No website for this restaurant", Toast.LENGTH_SHORT).show();
         }
     }
 
     @OnClick(R.id.image_phone)
-    public void callRestaurant(){
+    public void callRestaurant() {
         // TODO: 07/06/2019 get permission
         String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
         Log.e("phone", phoneNumber);
@@ -116,6 +115,7 @@ public class PlaceDetailActivity extends BaseActivity {
 //        intentCall.setData(Uri.parse("tel:"+ phoneNumber));
 //        startActivity(intentCall);
     }
+
     //-----------------------
     //HTTP REQUEST
     //-----------------------
@@ -171,34 +171,38 @@ public class PlaceDetailActivity extends BaseActivity {
             //--------------------------
             //Display restaurant rating
             //--------------------------
-            double rating = results.getResult().getRating();
-            double ratingResult = (rating/5)*3;
-            restoRating.setRating((float) ratingResult);
-            Log.e("rating", String.valueOf(rating));
-            Log.e("rating", String.valueOf(ratingResult));
+            if (results.getResult().getRating() != null) {
+                double rating = results.getResult().getRating();
+                double ratingResult = (rating / 5) * 3;
+                restoRating.setRating((float) ratingResult);
+                Log.e("rating", String.valueOf(rating));
+                Log.e("rating", String.valueOf(ratingResult));
+            } else restoRating.setVisibility(View.GONE);
+
+
+
 
             //--------------------------
             //Hide website button
             //--------------------------
-            if (results.getResult().getWebsite()!=null){
+            if (results.getResult().getWebsite() != null) {
                 websiteButton.setVisibility(View.VISIBLE);
-            }else {
+            } else {
                 websiteButton.setVisibility(View.GONE);
             }
 
             //-------------------------
             //Configure Progressbar
             //-------------------------
-            if (!photoResto.isShown()){
+            if (!photoResto.isShown()) {
                 progressbar.setVisibility(View.VISIBLE);
-            }else{
+            } else {
                 progressbar.setVisibility(View.INVISIBLE);
             }
 
         } else
             restoName.setText("No name");
     }
-
 
 
     //--------------------

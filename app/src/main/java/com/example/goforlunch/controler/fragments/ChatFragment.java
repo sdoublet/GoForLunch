@@ -3,14 +3,17 @@ package com.example.goforlunch.controler.fragments;
 
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
@@ -20,15 +23,21 @@ import com.example.goforlunch.model.Message;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.views.recyclerViews.ChatAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
 
+import java.util.Objects;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+
+import static com.firebase.ui.auth.AuthUI.getApplicationContext;
 
 
 public class ChatFragment extends Fragment implements ChatAdapter.Listener {
@@ -37,6 +46,8 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     RecyclerView chatRecycler;
     @BindView(R.id.chat_text_view)
     TextView chatIsEmpty;
+    @BindView(R.id.input_text_message)
+    TextInputEditText inputTextMessage;
     private User modelCurrentUser;
     private String currentChatName;
     private ChatAdapter chatAdapter;
@@ -77,11 +88,16 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     //-------------
 
     @OnClick(R.id.chat_send_button)
-    public void onClickMessageSend(){
+    void onClickMessageSend(){
+        if (!TextUtils.isEmpty(inputTextMessage.getText())&&modelCurrentUser!=null){
+            MessageHelper.createMessageForChat(Objects.requireNonNull(inputTextMessage.getText()).toString(),
+                    this.currentChatName, modelCurrentUser).addOnFailureListener(this.onFailureListener());
+            this.inputTextMessage.setText("");
+        }
     }
 
     @OnClick(R.id.chat_add_file_button)
-    public void onClickAddFile(){}
+    void onClickAddFile(){}
 
     //--------------
     //REST REQUESTS
@@ -131,5 +147,17 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     public void onDataChanged() {
         // 7 - Show TextView in case RecyclerView is empty
         chatIsEmpty.setVisibility(this.chatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
+    }
+
+    //------------------
+    //ERROR HANDLER
+    //------------------
+    protected OnFailureListener onFailureListener(){
+        return new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(getContext(), "An error is coming",Toast.LENGTH_SHORT).show();
+            }
+        };
     }
 }

@@ -79,7 +79,7 @@
 
                 <!-- TEXT MESSAGE -->
                 <TextView
-                    android:id="@+id/activity_mentor_chat_item_message_container_text_message_container_text_view"
+                    android:id="@+id/activity_user_chat_item_message_container_text_message_container_text_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:textIsSelectable="true"

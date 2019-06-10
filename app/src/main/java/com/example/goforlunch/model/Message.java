@@ -1,6 +1,8 @@
 package com.example.goforlunch.model;
 
 
+import com.google.firebase.firestore.ServerTimestamp;
+
 import java.util.Date;
 
 public class Message {
@@ -8,6 +10,8 @@ public class Message {
     private Date dateCreated;
     private User userSender;
     private String urlImage;
+
+    public Message(){}
 
     public Message(String message, User userSender) {
         this.message = message;
@@ -19,12 +23,14 @@ public class Message {
         this.userSender = userSender;
         this.urlImage = urlImage;
     }
-    // --- GETTERS ---
+
+    //--------GETTERS---------
 
     public String getMessage() {
         return message;
     }
 
+    @ServerTimestamp // Permet d'indiquer la date de creation de l'objet
     public Date getDateCreated() {
         return dateCreated;
     }
@@ -37,8 +43,7 @@ public class Message {
         return urlImage;
     }
 
-    // --- setters ---
-
+    //-------SETTERS---------
 
     public void setMessage(String message) {
         this.message = message;

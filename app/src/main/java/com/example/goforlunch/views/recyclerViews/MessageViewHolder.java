@@ -24,6 +24,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class MessageViewHolder extends RecyclerView.ViewHolder {
 
@@ -50,7 +51,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
     //TEXT MESSAGE CONTAINER
     @BindView(R.id.activity_mentor_chat_item_message_container_text_message_container)
     LinearLayout textMessageContainer;
-    @BindView(R.id.activity_mentor_chat_item_message_container_text_message_container_text_view)
+    @BindView(R.id.activity_user_chat_item_message_container_text_message_container_text_view)
     TextView textViewMessage;
     //DATE TEXT
     @BindView(R.id.activity_mentor_chat_item_message_container_text_view_date)
@@ -63,7 +64,8 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
 
     public MessageViewHolder(@NonNull View itemView) {
         super(itemView);
-        colorCurrentUser = ContextCompat.getColor(itemView.getContext(), R.color.colorPrimaryDark);
+        ButterKnife.bind(this, itemView);
+        colorCurrentUser = ContextCompat.getColor(itemView.getContext(), R.color.colorAccent);
 
         colorRemoteUser = ContextCompat.getColor(itemView.getContext(), R.color.green);
     }
