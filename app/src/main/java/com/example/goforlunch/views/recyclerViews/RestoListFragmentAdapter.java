@@ -14,6 +14,7 @@ import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Resto;
+import com.example.goforlunch.utils.ListResto;
 
 import java.util.List;
 
@@ -21,9 +22,12 @@ public class RestoListFragmentAdapter extends RecyclerView.Adapter<RestoListFrag
 
     private List<Result> restoList;
 
+
     public RestoListFragmentAdapter(Context context, List<Result> restoList) {
         this.restoList = restoList;
     }
+
+
 
     @NonNull
     @Override

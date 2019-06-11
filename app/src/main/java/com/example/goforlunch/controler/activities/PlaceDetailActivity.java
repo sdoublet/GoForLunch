@@ -21,6 +21,7 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.OpeningHours;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.utils.ListResto;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
@@ -63,6 +64,7 @@ public class PlaceDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
+        //restoPlaceId= ListResto.getInstance().getPlaceId();
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
 
@@ -200,8 +202,15 @@ public class PlaceDetailActivity extends BaseActivity {
                 progressbar.setVisibility(View.INVISIBLE);
             }
 
-        } else
-            restoName.setText("No name");
+            //----------------------
+            //Distance
+            //----------------------
+
+
+
+        } else{
+            restoName.setText("No name");}
+
     }
 
 

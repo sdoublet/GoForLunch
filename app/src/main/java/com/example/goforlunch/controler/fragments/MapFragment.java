@@ -24,6 +24,7 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.utils.ListResto;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,6 +41,7 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -175,6 +177,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onNext(NearbyPlaces nearbyPlaces) {
                 displayMarker(nearbyPlaces.getResults());
 
+                //getinstance.setresto nerabyplace.getresult
+
             }
 
             @Override
@@ -207,7 +211,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
                     //marker.setTag(searchList.get(i).getId());
                     marker.setTag(searchList.get(i).getPlaceId());
-
+                     ListResto.getInstance().setPlaceId(searchList.get(i).getPlaceId());
+                     ListResto.getInstance().setMyList(Collections.singletonList(searchList.get(i).getPlaceId()));
+                    Log.e("list", ListResto.getInstance().getPlaceId());
+                    Log.e("single", String.valueOf(ListResto.getInstance().getMyList()));
                     Log.e("search", String.valueOf(searchList.size()));
 
                 }

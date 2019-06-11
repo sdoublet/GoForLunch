@@ -2,6 +2,7 @@ package com.example.goforlunch.utils;
 
 import com.example.goforlunch.model.Api.Autocomplete.Prediction;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 
 import io.reactivex.Observable;
@@ -27,6 +28,7 @@ public interface PlaceServices {
                                          @Query("location")String location,
                                          @Query("radius")int radius,
                                          @Query("key")String key);
+
 
 
     Retrofit retrofit = new Retrofit.Builder()

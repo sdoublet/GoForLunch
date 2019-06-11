@@ -7,6 +7,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,13 +32,19 @@ import com.example.goforlunch.views.recyclerViews.ChatAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
+import java.util.UUID;
+import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -120,9 +127,19 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     @OnClick(R.id.chat_send_button)
     void onClickMessageSend() {
         if (!TextUtils.isEmpty(inputTextMessage.getText()) && modelCurrentUser != null) {
-            MessageHelper.createMessageForChat(Objects.requireNonNull(inputTextMessage.getText()).toString(),
-                    this.currentChatName, modelCurrentUser).addOnFailureListener(this.onFailureListener());
-            this.inputTextMessage.setText("");
+            //check if the imageView is set
+            if (this.imagePreview.getDrawable()==null){
+                //send message with text
+                MessageHelper.createMessageForChat(Objects.requireNonNull(inputTextMessage.getText()).toString(),
+                        this.currentChatName, modelCurrentUser).addOnFailureListener(this.onFailureListener());
+                this.inputTextMessage.setText("");
+            }else {
+                //send a message with text and image
+                this.uploadPhotoInFirebaseAndSendAMessage(Objects.requireNonNull(inputTextMessage.getText()).toString());
+                this.inputTextMessage.setText("");
+                this.imagePreview.setImageDrawable(null);
+            }
+
         }
     }
 
@@ -143,6 +160,24 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
                 modelCurrentUser = documentSnapshot.toObject(User.class);
             }
         });
+    }
+    //Upload a picture in Firebase and send a message
+    private void uploadPhotoInFirebaseAndSendAMessage(final String message){
+        String uuid = UUID.randomUUID().toString();//GENERATE UNIQUE STRING
+        //Upload to CGS
+        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
+        mImageRef.putFile(this.uriImageSelected)
+                .addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                        String pathImageSavedInFirebase = taskSnapshot.getStorage().getDownloadUrl().getResult().toString();
+
+
+                        //Save message in firestore
+                        MessageHelper.createMessageWithImageForChat(pathImageSavedInFirebase, message, currentChatName,modelCurrentUser).addOnFailureListener(onFailureListener());
+                    }
+                })
+                .addOnFailureListener(this.onFailureListener());
     }
 
     // --------------------

@@ -30,6 +30,8 @@ public class PlaceStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
+
+
     public static Observable<Prediction> streamFetchPrediction(String input, String location, int radius, String key){
         return placeservices.getPrediction(input, location, radius, key)
                 .subscribeOn(Schedulers.io())
