@@ -169,20 +169,7 @@ Log.e("iddd", DataHolder.getInstance().getPlaceId());
 
     }
 
-    private void takeMyList(List<ResultNearbySearch> resultNearbySearches) {
-        this.searchList.addAll(resultNearbySearches);
-        if (searchList.size() != 0) {
-            for (int i = 0; i < searchList.size(); i++) {
-                if (searchList.get(i) != null) {
-                    String name = searchList.get(i).getName();
-                    idd = searchList.get(i).getPlaceId();
-                    Log.e("test", String.valueOf(searchList.size()));
-                    Log.e("test", name);
-                }
 
-            }
-        }
-    }
 
     private void updateUII(List<ResultNearbySearch> resultNearbySearches) {
         searchList.clear();

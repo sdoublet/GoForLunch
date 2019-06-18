@@ -9,6 +9,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
@@ -36,22 +37,19 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     RatingBar rating;
     @BindView(R.id.resto_photo)
     ImageView restoPhoto;
+    private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo";
+    private static final int MAX_WIDTH = 75;
+    private static final int MAX_HEIGHT = 75;
 
-    public RestoListFragmentViewHolder(@NonNull View itemView) {
+
+    RestoListFragmentViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
     }
 
-    public void updateView(ResultNearbySearch restaurantDetail, RequestManager glide) {
+    void updateView(ResultNearbySearch restaurantDetail, RequestManager glide) {
 
-        //Name
-        //-------------
-        restoName.setText(restaurantDetail.getName());
-        //Address
-        //-------------
-        restoAddress.setText(restaurantDetail.getPlaceId());
-        //Rating
-        //------------
+
         if (restaurantDetail.getRating() != null) {
             double ratingGoogle = restaurantDetail.getRating();
             double ratingResult = (ratingGoogle / 5) * 3;
@@ -62,7 +60,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
-                //displaydetail()
+                displayDetail(placeDetail);
             }
 
             @Override
@@ -75,6 +73,20 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         });
     }
 
-    //display detail (placedetail)
+    //Display Detail
+    private void displayDetail(PlaceDetail placeDetail) {
+        RequestManager glide = Glide.with(itemView);
+        restoAddress.setText(placeDetail.getResult().getFormattedAddress());
+        restoName.setText(placeDetail.getResult().getName());
+        if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
+            glide.load(BASE_URL+"?maxwigth="+MAX_WIDTH+"&maxheight="+MAX_HEIGHT+"&photoreference="+placeDetail.getResult().getPhotos().get(0).getPhotoReference()+"&key="+BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
+            Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
+
+        }else {
+            restoPhoto.setImageResource(R.drawable.serveur);
+        }
+
+
     }
+}
 
