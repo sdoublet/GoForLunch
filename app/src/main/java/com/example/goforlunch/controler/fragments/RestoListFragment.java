@@ -18,8 +18,6 @@ import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
-import com.example.goforlunch.model.Api.Details.PlaceDetail;
-import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
@@ -64,25 +62,19 @@ public class RestoListFragment extends Fragment {
         ButterKnife.bind(this, view);
 
 
-
-
-
-       // httpRequestDistancematrix(DataHolder.getInstance().getCurrentPosiiton(), String.valueOf(DataHolder.getInstance().getStringList()));
+        // httpRequestDistancematrix(DataHolder.getInstance().getCurrentPosiiton(), String.valueOf(DataHolder.getInstance().getStringList()));
 
 
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
         Log.e("data", DataHolder.getInstance().getCurrentPosiiton());
         httpRequestWithRetrofit2(myPosition);
-      //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
+        //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
         configureonClickRecyclerView();
 
 
         return view;
     }
-
-
-
 
 
     private void httpRequestDistancematrix(String origins, String destinations) {
@@ -110,18 +102,6 @@ public class RestoListFragment extends Fragment {
     }
 
 
-
-
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        this.disposeWhenDestroy();
-    }
-    //-------------------------------------------------------------------------------------------------------------------------
-    //for test
-    //--------------
-
     //--------------------------------
     //HTTP REQUEST WITH RETROFIT
     //--------------------------------
@@ -132,9 +112,11 @@ public class RestoListFragment extends Fragment {
             public void onNext(NearbyPlaces nearbyPlaces) {
                 updateUII(nearbyPlaces.getResults());
             }
+
             @Override
             public void onError(Throwable e) {
             }
+
             @Override
             public void onComplete() {
 
@@ -144,16 +126,15 @@ public class RestoListFragment extends Fragment {
     }
 
 
-
     private void updateUII(List<ResultNearbySearch> resultNearbySearches) {
         searchList.clear();
         searchList.addAll(resultNearbySearches);
-        if (searchList.size()!=0){
-            for (int i=0; i<searchList.size(); i++){
+        if (searchList.size() != 0) {
+            for (int i = 0; i < searchList.size(); i++) {
                 DataHolder.getInstance().setPlaceId(searchList.get(i).getPlaceId());
 
             }
-        }else {
+        } else {
             Toast.makeText(getContext(), "There is no restaurant with this parameters", Toast.LENGTH_SHORT).show();
 
         }
@@ -172,8 +153,8 @@ public class RestoListFragment extends Fragment {
 
     }
 
-    private void configureonClickRecyclerView(){
-        ItemClickSupport.addTo(recyclerView,R.layout.row_resto_list )
+    private void configureonClickRecyclerView() {
+        ItemClickSupport.addTo(recyclerView, R.layout.row_resto_list)
                 .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
                     @Override
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
@@ -185,7 +166,15 @@ public class RestoListFragment extends Fragment {
                 });
 
     }
+
     private void disposeWhenDestroy() {
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        this.disposeWhenDestroy();
     }
 }

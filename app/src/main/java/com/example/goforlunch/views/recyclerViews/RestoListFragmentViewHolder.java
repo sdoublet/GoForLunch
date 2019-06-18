@@ -1,6 +1,5 @@
 package com.example.goforlunch.views.recyclerViews;
 
-import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -15,7 +14,9 @@ import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 
 import butterknife.BindView;
@@ -49,7 +50,6 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
-    @SuppressLint("CheckResult")
     void updateView(ResultNearbySearch restaurantDetail, RequestManager glide) {
 
 
@@ -79,8 +79,11 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     //Display Detail
     private void displayDetail(PlaceDetail placeDetail) {
         RequestManager glide = Glide.with(itemView);
+        //---Address---
         restoAddress.setText(placeDetail.getResult().getFormattedAddress());
+        //---Name---
         restoName.setText(placeDetail.getResult().getName());
+        //---Photo---
         if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
             glide.load(BASE_URL+"?maxwigth="+MAX_WIDTH+"&maxheight="+MAX_HEIGHT+"&photoreference="+placeDetail.getResult().getPhotos().get(0).getPhotoReference()+"&key="+BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
             Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
@@ -88,8 +91,44 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         }else {
             restoPhoto.setImageResource(R.drawable.serveur);
         }
+        //---Distance---
+        String lat = String.valueOf(placeDetail.getResult().getGeometry().getLocation().getLat());
+        String lng = String.valueOf(placeDetail.getResult().getGeometry().getLocation().getLng());
+        String destination = lat + "," + lng;
+
+        PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<DistanceMatrix>() {
+            @Override
+            public void onNext(DistanceMatrix distanceMatrix) {
+
+                int distance=  distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getValue();
+                if (distance<1000) {
+                    restoDistance.setText(distance + " m");
+                }else {
+                    float distanceKm = distance/1000f ;
+                    double doubleDistance = distanceKm;
+                    doubleDistance *=100.0;
+                    doubleDistance = Math.floor(doubleDistance+0.5);
+                    doubleDistance /= 100.0;
+                    restoDistance.setText(doubleDistance + " km");
+                }
+
+
+
+            }
+
+            @Override
+            public void onError(Throwable e) {
+
+            }
+
+            @Override
+            public void onComplete() {
+
+            }
+        });
 
 
     }
+
 }
 

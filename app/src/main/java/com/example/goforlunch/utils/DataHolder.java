@@ -8,6 +8,7 @@ public class DataHolder {
 
     private String currentPosiiton;
     private String restaurantPosition;
+    private int distance;
     private String placeId;
     private List<String> stringList;
     private static final DataHolder ourInstance = new DataHolder();
@@ -49,5 +50,13 @@ public class DataHolder {
 
     public void setStringList(List<String> stringList) {
         this.stringList = stringList;
+    }
+
+    public int getDistance() {
+        return distance;
+    }
+
+    public void setDistance(int distance) {
+        this.distance = distance;
     }
 }
