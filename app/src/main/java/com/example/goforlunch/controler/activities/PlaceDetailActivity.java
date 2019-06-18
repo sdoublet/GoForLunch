@@ -18,12 +18,16 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
-import com.example.goforlunch.model.Api.Details.OpeningHours;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
-import com.example.goforlunch.utils.ListResto;
+import com.example.goforlunch.model.Api.Firebase.RestaurantHelper;
+import com.example.goforlunch.model.Booking;
+import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -64,7 +68,6 @@ public class PlaceDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
-        //restoPlaceId= ListResto.getInstance().getPlaceId();
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
 
@@ -86,13 +89,17 @@ public class PlaceDetailActivity extends BaseActivity {
             Toast.makeText(getBaseContext(), "You choose this restaurant", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
+            bookingRestaurant(getCurrentUser().getUid());
         } else {
             Drawable drawable = getResources().getDrawable(R.drawable.add_circle).mutate();
             Toast.makeText(getBaseContext(), "Make your choice", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(false);
+            deleteBooking(getCurrentUser().getUid());
         }
     }
+
+
     //------------------
     //ACTION
     //------------------
@@ -149,6 +156,31 @@ public class PlaceDetailActivity extends BaseActivity {
         };
     }
 
+    //----------------------
+    //REST REQUEST
+    //----------------------
+    private void bookingRestaurant(String userId) {
+        RestaurantHelper.getBooking(userId, restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    Booking booking = documentSnapshot.toObject(Booking.class);
+                } else {
+                    RestaurantHelper.createBookingRestaurant(userId,restoPlaceId, placeDetailResult.getName(), null);
+                }
+            }
+        });
+
+    }
+
+    private void deleteBooking(String userId) {
+        RestaurantHelper.deleteBooking(userId).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+            }
+        });
+    }
+
     //------------------
     //UPDATE UI
     //------------------
@@ -182,8 +214,6 @@ public class PlaceDetailActivity extends BaseActivity {
             } else restoRating.setVisibility(View.GONE);
 
 
-
-
             //--------------------------
             //Hide website button
             //--------------------------
@@ -202,14 +232,11 @@ public class PlaceDetailActivity extends BaseActivity {
                 progressbar.setVisibility(View.INVISIBLE);
             }
 
-            //----------------------
-            //Distance
-            //----------------------
 
 
-
-        } else{
-            restoName.setText("No name");}
+        } else {
+            restoName.setText("No name");
+        }
 
     }
 

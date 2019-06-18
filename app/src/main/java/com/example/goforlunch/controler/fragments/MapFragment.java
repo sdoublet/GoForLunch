@@ -24,6 +24,7 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.ListResto;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -64,6 +65,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker marker;
+    private String lat;
+    private String lng;
     private Disposable disposable;
     private boolean mLocationPermissionGranted = false;
     private List<ResultNearbySearch> searchList = new ArrayList<>();
@@ -139,6 +142,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 markerOptions.title("My position");
                 marker = mGoogleMap.addMarker(markerOptions);
                 httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
+                lat = String.valueOf(currentLocation.getLatitude());
+                lng = String.valueOf(currentLocation.getLongitude());
+                DataHolder.getInstance().setCurrentPosiiton(lat + "," + lng);
 
             } else {
                 Log.d(TAG, "Current location is null. Using defaults.");
@@ -199,30 +205,31 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void displayMarker(List<ResultNearbySearch> resultNearbySearches) {
         this.searchList.addAll(resultNearbySearches);
-
+        ArrayList<String> temp = new ArrayList<>();
         mGoogleMap.setOnMarkerClickListener(this);
         if (searchList.size() != 0) {
+
             for (int i = 0; i < searchList.size(); i++) {
                 if (searchList.get(i) != null) {
                     marker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(searchList.get(i).getGeometry().getLocation().getLat(),
                                     searchList.get(i).getGeometry().getLocation().getLng()))
                             .title(searchList.get(i).getName())
-                            .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED)));
-                    //marker.setTag(searchList.get(i).getId());
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker)));
                     marker.setTag(searchList.get(i).getPlaceId());
-                     ListResto.getInstance().setPlaceId(searchList.get(i).getPlaceId());
-                     ListResto.getInstance().setMyList(Collections.singletonList(searchList.get(i).getPlaceId()));
-                    Log.e("list", ListResto.getInstance().getPlaceId());
-                    Log.e("single", String.valueOf(ListResto.getInstance().getMyList()));
-                    Log.e("search", String.valueOf(searchList.size()));
+                   temp.add(searchList.get(i).getPlaceId());
+                    Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
+
+                    Log.e("map", String.valueOf(searchList.size()));
+
+
 
                 }
             }
         } else {
             Log.e("Marker", "search list is null!");//anything
         }
-
+        DataHolder.getInstance().setStringList(temp);
     }
 
 
@@ -251,11 +258,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         String ref = (String) marker.getTag();
         Log.e("nearby", marker.getId());
         Log.e("nearby", marker.getTitle());
-        Log.e("nearby", ref);
+//        String lat = String.valueOf(marker.getPosition().latitude);
+//        String lng = String.valueOf(marker.getPosition().longitude);
+//        String restaurantPosition = lat + ","+lng;
+//        Log.e("nearby", restaurantPosition);
+//        DataHolder.getInstance().setRestaurantPosition(restaurantPosition);
+//        Log.e("nearby", DataHolder.getInstance().getRestaurantPosition());
 
-       Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
-       intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
-       startActivity(intent);
+
+        if (ref != null) {
+            Log.e("nearby", ref);
+            Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
+            intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
+            startActivity(intent);
+        }
         return false;
 
 

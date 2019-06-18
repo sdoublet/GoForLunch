@@ -13,36 +13,32 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface PlaceServices {
-    @GET("nearbysearch/json?")
+    @GET("maps/api/place/nearbysearch/json?")
     Observable<NearbyPlaces> getNearbyPlaces(@Query("location") String location,
                                              @Query("radius") int radius,
                                              @Query("type") String type,
                                              @Query("key") String key);
 
-    @GET("details/json?")
+    @GET("maps/api/place/details/json?")
     Observable<PlaceDetail> getPlaceDetails(@Query("placeid") String placeId,
                                             @Query("key") String key);
 
-    @GET("autocomplet/json?")
+    @GET("maps/api/place/autocomplete/json?")
     Observable<Prediction> getPrediction(@Query("input") String input,
                                          @Query("location") String location,
                                          @Query("radius") int radius,
                                          @Query("key") String key);
 
-    @GET("json?")
+    @GET("maps/api/distancematrix/json?")
     Observable<DistanceMatrix> getDistance(@Query("origins") String originLatLng,
                                            @Query("destinations") String destinationLatLng,
                                            @Query("key") String key);
 
     Retrofit retrofit = new Retrofit.Builder()
-            .baseUrl("https://maps.googleapis.com/maps/api/place/distancematrix")
+            .baseUrl("https://maps.googleapis.com/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build();
 
-    Retrofit retrofitDistanceMatrix = new Retrofit.Builder()
-            .baseUrl("https://maps.googleapis.com/maps/api/")
-            .addConverterFactory(GsonConverterFactory.create())
-            .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
-            .build();
+
 }

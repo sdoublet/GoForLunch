@@ -16,6 +16,7 @@ import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
+import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -43,6 +44,7 @@ public class WorkmatesFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_workmates, container, false);
         ButterKnife.bind(this, view);
         this.initRecyclerView();
+
         return view;
     }
 

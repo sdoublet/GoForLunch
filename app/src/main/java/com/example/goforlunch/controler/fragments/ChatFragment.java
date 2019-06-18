@@ -30,6 +30,8 @@ import com.example.goforlunch.model.Message;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.views.recyclerViews.ChatAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -166,18 +168,39 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         String uuid = UUID.randomUUID().toString();//GENERATE UNIQUE STRING
         //Upload to CGS
         StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
-        mImageRef.putFile(this.uriImageSelected)
-                .addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                        String pathImageSavedInFirebase = taskSnapshot.getStorage().getDownloadUrl().getResult().toString();
+        UploadTask uploadTask = mImageRef.putFile(this.uriImageSelected);
+
+        Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (task.isSuccessful()){
+                    throw Objects.requireNonNull(task.getException());
+                }
+                return mImageRef.getDownloadUrl();
+            }
+        }) .addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()){
+                    Uri downloadUri = task.getResult();
+                    MessageHelper.createMessageWithImageForChat(Objects.requireNonNull(downloadUri).toString(), message,currentChatName, modelCurrentUser).addOnFailureListener(onFailureListener());
+                }else{
+                    Log.e("chat", "Error on complete:"+ task.getException());
+                }
+            }
+        });
+//        mImageRef.putFile(this.uriImageSelected)
+//                .addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<UploadTask.TaskSnapshot>() {
+//                    @Override
+//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+//                        String pathImageSavedInFirebase = taskSnapshot.getStorage().getDownloadUrl().getResult().toString();
 
 
-                        //Save message in firestore
-                        MessageHelper.createMessageWithImageForChat(pathImageSavedInFirebase, message, currentChatName,modelCurrentUser).addOnFailureListener(onFailureListener());
-                    }
-                })
-                .addOnFailureListener(this.onFailureListener());
+//                        //Save message in firestore
+//                        MessageHelper.createMessageWithImageForChat(pathImageSavedInFirebase, message, currentChatName,modelCurrentUser).addOnFailureListener(onFailureListener());
+//                    }
+//                })
+//                .addOnFailureListener(this.onFailureListener());
     }
 
     // --------------------

@@ -1,5 +1,6 @@
 package com.example.goforlunch.views.recyclerViews;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.RatingBar;
@@ -9,10 +10,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
+import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
-import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.model.Api.Details.PlaceDetail;
+import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.utils.PlaceStreams;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import io.reactivex.observers.DisposableObserver;
 
 public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
@@ -33,21 +39,42 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
     public RestoListFragmentViewHolder(@NonNull View itemView) {
         super(itemView);
+        ButterKnife.bind(this, itemView);
     }
 
-    private void updateView(Result restaurantDetail, RequestManager glide) {
+    public void updateView(ResultNearbySearch restaurantDetail, RequestManager glide) {
 
         //Name
         //-------------
         restoName.setText(restaurantDetail.getName());
         //Address
         //-------------
-        restoAddress.setText(restaurantDetail.getFormattedAddress());
+        restoAddress.setText(restaurantDetail.getPlaceId());
         //Rating
         //------------
-        double ratingGoogle = restaurantDetail.getRating();
-        double ratingResult = (ratingGoogle/5)*3;
-        rating.setRating((float) ratingResult);
+        if (restaurantDetail.getRating() != null) {
+            double ratingGoogle = restaurantDetail.getRating();
+            double ratingResult = (ratingGoogle / 5) * 3;
+            rating.setRating((float) ratingResult);
+        } else rating.setVisibility(View.INVISIBLE);
 
+        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
+            @Override
+            public void onNext(PlaceDetail placeDetail) {
+                Log.e("placeDetail", placeDetail.getResult().getName());
+                //displaydetail()
+            }
+
+            @Override
+            public void onError(Throwable e) {
+            }
+
+            @Override
+            public void onComplete() {
+            }
+        });
     }
-}
+
+    //display detail (placedetail)
+    }
+

@@ -12,6 +12,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Firebase.RestaurantHelper;
 import com.example.goforlunch.model.User;
 import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
@@ -31,6 +32,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesVi
 
     @Override
     protected void onBindViewHolder(@NonNull WorkmatesViewHolder workmatesViewHolder, int i, @NonNull User user) {
+
         workmatesViewHolder.textViewWorkmates.setText(String.format(context.getString(R.string.hasnt_decided_yet), user.getUsername()));
         if (user.getUrlPicture()!=null && !user.getUrlPicture().isEmpty()){
             String urlPhoto = user.getUrlPicture();
@@ -49,4 +51,5 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesVi
        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_workmates, parent, false);
        return new WorkmatesViewHolder(view);
     }
+
 }
