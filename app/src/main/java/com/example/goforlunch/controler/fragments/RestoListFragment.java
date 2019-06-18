@@ -1,5 +1,6 @@
 package com.example.goforlunch.controler.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -16,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
+import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
@@ -23,6 +25,7 @@ import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.Divider;
+import com.example.goforlunch.utils.ItemClickSupport;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.example.goforlunch.views.recyclerViews.RestoListFragmentAdapter;
 
@@ -39,10 +42,9 @@ public class RestoListFragment extends Fragment {
 
     @BindView(R.id.recycler_resto)
     RecyclerView recyclerView;
-    private Result result;
+
     private DistanceMatrix distanceMatrix;
-    private String idd;
-    private List<Result> mRestoList ;
+
     //for test
     private List<ResultNearbySearch> searchList = new ArrayList<>();
     //----------
@@ -72,7 +74,8 @@ public class RestoListFragment extends Fragment {
         Log.e("data", DataHolder.getInstance().getCurrentPosiiton());
         httpRequestWithRetrofit2(myPosition);
       //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
-        configureRecyclerView2();
+        configureRecyclerView();
+        configureonClickRecyclerView();
 
 
         return view;
@@ -106,19 +109,9 @@ public class RestoListFragment extends Fragment {
         });
     }
 
-    private void disposeWhenDestroy() {
-        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
-    }
 
-    private void updateUI(List<Result> restoList) {
-        mRestoList.clear();
-        if (restoList.size() > 0) {
-            mRestoList.addAll(restoList);
-        } else {
-            Toast.makeText(getContext(), "There is no restaurant with this parameters", Toast.LENGTH_SHORT).show();
-        }
-        adapter.notifyDataSetChanged();
-    }
+
+
 
     @Override
     public void onDestroy() {
@@ -160,13 +153,16 @@ public class RestoListFragment extends Fragment {
                 DataHolder.getInstance().setPlaceId(searchList.get(i).getPlaceId());
 
             }
+        }else {
+            Toast.makeText(getContext(), "There is no restaurant with this parameters", Toast.LENGTH_SHORT).show();
+
         }
 
         Log.e("rv", String.valueOf(searchList.size()));
         adapter.notifyDataSetChanged();
     }
 
-    private void configureRecyclerView2() {
+    private void configureRecyclerView() {
         this.searchList = new ArrayList<>();
         adapter = new RestoListFragmentAdapter(getContext(), searchList, Glide.with(this));//Listresto.getinstance
         Log.e("rv", String.valueOf(searchList.size()));
@@ -174,5 +170,22 @@ public class RestoListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
+    }
+
+    private void configureonClickRecyclerView(){
+        ItemClickSupport.addTo(recyclerView,R.layout.row_resto_list )
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        ResultNearbySearch result = adapter.getRestaurant(position);
+                        Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+                        intent.putExtra("resto_place_id", result.getPlaceId());
+                        startActivity(intent);
+                    }
+                });
+
+    }
+    private void disposeWhenDestroy() {
+        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
 }
