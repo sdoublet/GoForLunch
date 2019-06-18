@@ -65,29 +65,20 @@ public class RestoListFragment extends Fragment {
 
 
 
-        httpRequestDistancematrix(DataHolder.getInstance().getCurrentPosiiton(), String.valueOf(DataHolder.getInstance().getStringList()));
+       // httpRequestDistancematrix(DataHolder.getInstance().getCurrentPosiiton(), String.valueOf(DataHolder.getInstance().getStringList()));
 
 
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
         Log.e("data", DataHolder.getInstance().getCurrentPosiiton());
         httpRequestWithRetrofit2(myPosition);
-        httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
+      //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView2();
 
 
-
-        // this.configureRecyclerView();
         return view;
     }
 
-//    private void configureRecyclerView() {
-//        this.mRestoList = new ArrayList<>();
-//        adapter = new RestoListFragmentAdapter(getContext(), mRestoList);//Listresto.getinstance
-//        recyclerView.addItemDecoration(new Divider(getContext(), LinearLayoutManager.VERTICAL));
-//        recyclerView.setAdapter(adapter);
-//        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
 
-//    }
 
 
 
@@ -146,21 +137,11 @@ public class RestoListFragment extends Fragment {
         this.disposable = PlaceStreams.streamFetchNearbySearch(location, 10000, "restaurant", BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
-                //takeMyList(nearbyPlaces.getResults());
                 updateUII(nearbyPlaces.getResults());
-
-Log.e("iddd", DataHolder.getInstance().getPlaceId());
-                //getinstance.setresto nerabyplace.getresult
-
-
-
             }
-
             @Override
             public void onError(Throwable e) {
-
             }
-
             @Override
             public void onComplete() {
 
@@ -177,8 +158,7 @@ Log.e("iddd", DataHolder.getInstance().getPlaceId());
         if (searchList.size()!=0){
             for (int i=0; i<searchList.size(); i++){
                 DataHolder.getInstance().setPlaceId(searchList.get(i).getPlaceId());
-                idd = DataHolder.getInstance().getPlaceId();
-                Log.e("yoyo", idd);
+
             }
         }
 

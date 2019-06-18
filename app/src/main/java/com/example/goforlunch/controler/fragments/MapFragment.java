@@ -205,7 +205,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void displayMarker(List<ResultNearbySearch> resultNearbySearches) {
         this.searchList.addAll(resultNearbySearches);
-        ArrayList<String> temp = new ArrayList<>();
+        //ArrayList<String> temp = new ArrayList<>();
         mGoogleMap.setOnMarkerClickListener(this);
         if (searchList.size() != 0) {
 
@@ -217,7 +217,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             .title(searchList.get(i).getName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker)));
                     marker.setTag(searchList.get(i).getPlaceId());
-                   temp.add(searchList.get(i).getPlaceId());
+                  // temp.add(searchList.get(i).getPlaceId());
                     Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
 
                     Log.e("map", String.valueOf(searchList.size()));
@@ -229,7 +229,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         } else {
             Log.e("Marker", "search list is null!");//anything
         }
-        DataHolder.getInstance().setStringList(temp);
+        //DataHolder.getInstance().setStringList(temp);
     }
 
 
@@ -258,12 +258,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         String ref = (String) marker.getTag();
         Log.e("nearby", marker.getId());
         Log.e("nearby", marker.getTitle());
-//        String lat = String.valueOf(marker.getPosition().latitude);
-//        String lng = String.valueOf(marker.getPosition().longitude);
-//        String restaurantPosition = lat + ","+lng;
-//        Log.e("nearby", restaurantPosition);
-//        DataHolder.getInstance().setRestaurantPosition(restaurantPosition);
-//        Log.e("nearby", DataHolder.getInstance().getRestaurantPosition());
+
 
 
         if (ref != null) {

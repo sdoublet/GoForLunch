@@ -1,5 +1,6 @@
 package com.example.goforlunch.views.recyclerViews;
 
+import android.annotation.SuppressLint;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -19,6 +20,7 @@ import com.example.goforlunch.utils.PlaceStreams;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
@@ -47,6 +49,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         ButterKnife.bind(this, itemView);
     }
 
+    @SuppressLint("CheckResult")
     void updateView(ResultNearbySearch restaurantDetail, RequestManager glide) {
 
 
@@ -56,7 +59,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             rating.setRating((float) ratingResult);
         } else rating.setVisibility(View.INVISIBLE);
 
-        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
+       PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
             @Override
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
