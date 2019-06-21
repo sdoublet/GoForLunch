@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
@@ -30,6 +31,8 @@ public class SettingActivity extends BaseActivity {
     private static final int UPDATE_USERNAME = 30;
     private static final int UPDATE_EMAIL = 40;
     private static final int SIGN_OUT_TASK = 10;
+    public static final String RADIUS_PREF=  "radiusPref";
+    public static final String SHARE_PREF = "sharePref";
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -40,8 +43,8 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.progress_bar)
     ProgressBar progressBar;
     @BindView(R.id.radius)
-    EditText radius;
-    private SharedPreferences sharedPreferences;
+    EditText radiusEditText;
+
     private SharedPreferences.Editor editor;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +53,12 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         this.configureToolbar();
         this.configureStatusBar();
-        radius.setText(DataHolder.getInstance().getRadius());
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        String radius = sharedPreferences.getString(RADIUS_PREF, "1000");
+        radiusEditText.setText(radius);
+
+
     }
 
     @Override
@@ -154,8 +162,16 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void updateRadius() {
-        String rad = radius.getText().toString();
+        String rad = radiusEditText.getText().toString();
         DataHolder.getInstance().setRadius(rad);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+        editor = sharedPreferences.edit();
+        editor.putString(RADIUS_PREF, rad);
+        editor.apply();
+        progressBar.setVisibility(View.VISIBLE);
+        hideProgressBar();
+
+
 
     }
 
@@ -167,5 +183,17 @@ public class SettingActivity extends BaseActivity {
     private void launchMainActivity() {
         Intent intent = new Intent(this, MainActivity.class);
         startActivity(intent);
+    }
+
+    private void hideProgressBar(){
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                progressBar.setVisibility(View.INVISIBLE);
+                Toast.makeText(getApplicationContext(), "Change updated", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }, 2000);
+
     }
 }

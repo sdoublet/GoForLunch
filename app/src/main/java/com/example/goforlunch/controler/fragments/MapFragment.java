@@ -55,7 +55,7 @@ import static android.content.ContentValues.TAG;
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
-    private static final float DEFAULT_ZOOM = 15f;
+    private static final float DEFAULT_ZOOM = 12f;
     private static final String POI_TYPE = "restaurant";
     @BindView(R.id.map_view)
     MapView mapView;
