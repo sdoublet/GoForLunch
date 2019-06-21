@@ -177,7 +177,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void httpRequestWithRetrofit(String location) {
 
 
-        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());//replace by sharepref
         this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, POI_TYPE, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {

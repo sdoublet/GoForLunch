@@ -1,5 +1,6 @@
 package com.example.goforlunch.views.recyclerViews;
 
+import android.text.Html;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -18,6 +19,9 @@ import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
+
+import java.util.Calendar;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -115,10 +119,44 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         });
 
         //OpeningHours
+        int[] daysPeriods = {0, 1, 2, 3, 4, 5, 6};
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
+        int hours = calendar.get(Calendar.HOUR_OF_DAY);
+        int min = calendar.get(Calendar.MINUTE);
+        if (min < 10) {
+            min = '0' + min;
+        }
+        String currentTime = hours + "" + min;
+        int currentHour = Integer.parseInt(currentTime);
+        Log.e("date", day + " " + hours + ":" + min);
+        Log.e("time", currentTime);
 
 
+        if (placeDetail.getResult().getOpeningHours() != null) {
+            for (int i = 0; i < placeDetail.getResult().getOpeningHours().getPeriods().size(); i++) {
+                if (placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() == daysPeriods[day]) {
+                    String hour = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime();
+                    String open = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime();
+                    int openHour = Integer.parseInt(open);
+                    String restau = placeDetail.getResult().getName();// just for log
+                    Log.e("hour", restau + " " + open + " " + hour);
+                    if (openHour > currentHour && openHour < 2400) {
+                        openHour = Integer.parseInt(open);
+                        Log.e("open", restau + " " + open);
+                        Log.e("openining", restau + openHour);
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">"+"Close"+"</font>"+", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                    } else if (placeDetail.getResult().getOpeningHours().getOpenNow()) {
+                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">"+"Open"+"</font></b>"+", close at " + convertDate(hour, Locale.getDefault().getLanguage())));
+                    }
 
+                }
+            }
+
+        } else restoOpening.setText("no information");
     }
+
+
     //Calculation of distance
     public void distance(DistanceMatrix distanceMatrix) {
         int distance = distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getValue();
@@ -131,6 +169,25 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             doubleDistance /= 100.0;
             restoDistance.setText(doubleDistance + " km");
         }
+    }
+
+
+    //Convert Date by language
+    public String convertDate(String date, String language) {
+        int hour = Integer.parseInt(date.substring(0, 2));
+        String mn = date.substring(2);
+        if (language.equals("English")) {
+            if (hour > 12) {
+                return (hour - 12) + "." + mn + "pm";
+            } else if (hour == 12) {
+                return "12" + "." + mn + "pm";
+            } else if (hour == 0) {
+                return "12" + "." + mn + "am";
+            } else {
+                return hour + "." + mn + "am";
+            }
+        } else
+            return hour + "h" + mn;
     }
 }
 

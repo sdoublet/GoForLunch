@@ -66,7 +66,9 @@ public class RestoListFragment extends Fragment {
 
 
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
+       // String newPosition = "46.947127, 5.867130";
         Log.e("data", DataHolder.getInstance().getCurrentPosiiton());
+       // httpRequestWithRetrofit2(myPosition);
         httpRequestWithRetrofit2(myPosition);
         //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
@@ -83,7 +85,7 @@ public class RestoListFragment extends Fragment {
     //HTTP REQUEST WITH RETROFIT
     //--------------------------------
     private void httpRequestWithRetrofit2(String location) {
-        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());//replace by sharepref
         this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, "restaurant", BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
