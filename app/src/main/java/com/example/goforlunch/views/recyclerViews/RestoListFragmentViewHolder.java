@@ -114,6 +114,9 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             }
         });
 
+        //OpeningHours
+
+
 
     }
     //Calculation of distance
@@ -122,8 +125,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         if (distance < 1000) {
             restoDistance.setText(distance + " m");
         } else {
-            float distanceKm = distance / 1000f;
-            double doubleDistance = distanceKm;
+            double doubleDistance = distance / 1000f;
             doubleDistance *= 100.0;
             doubleDistance = Math.floor(doubleDistance + 0.5);
             doubleDistance /= 100.0;

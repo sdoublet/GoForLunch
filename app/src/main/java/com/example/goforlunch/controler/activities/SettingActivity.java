@@ -190,7 +190,7 @@ public class SettingActivity extends BaseActivity {
             @Override
             public void run() {
                 progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Change updated", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Apply changed", Toast.LENGTH_SHORT).show();
                 finish();
             }
         }, 2000);

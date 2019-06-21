@@ -77,37 +77,14 @@ public class RestoListFragment extends Fragment {
     }
 
 
-    private void httpRequestDistancematrix(String origins, String destinations) {
-        this.disposable = PlaceStreams.streamfetchDistanceMatrix(origins, destinations, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<DistanceMatrix>() {
-            @Override
-            public void onNext(DistanceMatrix distanceMatrix) {
-                Log.e("request", distanceMatrix.getStatus());
-                Log.e("request", distanceMatrix.getOriginAddresses().toString());
-                Log.e("request", distanceMatrix.getDestinationAddresses().toString());
-                //Log.e("request", String.valueOf(distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getValue()));
-
-
-            }
-
-            @Override
-            public void onError(Throwable e) {
-
-            }
-
-            @Override
-            public void onComplete() {
-
-            }
-        });
-    }
 
 
     //--------------------------------
     //HTTP REQUEST WITH RETROFIT
     //--------------------------------
     private void httpRequestWithRetrofit2(String location) {
-
-        this.disposable = PlaceStreams.streamFetchNearbySearch(location, 10000, "restaurant", BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
+        this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, "restaurant", BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
                 updateUII(nearbyPlaces.getResults());
