@@ -21,7 +21,6 @@ import com.example.goforlunch.utils.PlaceStreams;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
@@ -59,7 +58,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             rating.setRating((float) ratingResult);
         } else rating.setVisibility(View.INVISIBLE);
 
-       PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
+        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
             @Override
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
@@ -85,10 +84,10 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         restoName.setText(placeDetail.getResult().getName());
         //---Photo---
         if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
-            glide.load(BASE_URL+"?maxwigth="+MAX_WIDTH+"&maxheight="+MAX_HEIGHT+"&photoreference="+placeDetail.getResult().getPhotos().get(0).getPhotoReference()+"&key="+BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
+            glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
             Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
 
-        }else {
+        } else {
             restoPhoto.setImageResource(R.drawable.serveur);
         }
         //---Distance---
@@ -99,19 +98,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<DistanceMatrix>() {
             @Override
             public void onNext(DistanceMatrix distanceMatrix) {
-
-                int distance=  distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getValue();
-                if (distance<1000) {
-                    restoDistance.setText(distance + " m");
-                }else {
-                    float distanceKm = distance/1000f ;
-                    double doubleDistance = distanceKm;
-                    doubleDistance *=100.0;
-                    doubleDistance = Math.floor(doubleDistance+0.5);
-                    doubleDistance /= 100.0;
-                    restoDistance.setText(doubleDistance + " km");
-                }
-
+                distance(distanceMatrix);
 
 
             }
@@ -129,6 +116,19 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
 
     }
-
+    //Calculation of distance
+    public void distance(DistanceMatrix distanceMatrix) {
+        int distance = distanceMatrix.getRows().get(0).getElements().get(0).getDistance().getValue();
+        if (distance < 1000) {
+            restoDistance.setText(distance + " m");
+        } else {
+            float distanceKm = distance / 1000f;
+            double doubleDistance = distanceKm;
+            doubleDistance *= 100.0;
+            doubleDistance = Math.floor(doubleDistance + 0.5);
+            doubleDistance /= 100.0;
+            restoDistance.setText(doubleDistance + " km");
+        }
+    }
 }
 

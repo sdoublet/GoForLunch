@@ -125,15 +125,20 @@
         android:hint="@string/set_your_radius_search">
     </TextView>
 
-    <Spinner
+    <EditText
+        android:id="@+id/radius"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintLeft_toRightOf="@+id/search_radius"
-        app:layout_constraintTop_toTopOf="@+id/search_radius"
+        android:inputType="number"
+        android:hint="Your radius"
         app:layout_constraintBottom_toBottomOf="@+id/search_radius"
-        android:layout_marginStart="5dp">
+        app:layout_constraintLeft_toRightOf="@+id/search_radius"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/search_radius"
 
-    </Spinner>
+        tools:ignore="Autofill">
+
+    </EditText>
 
     <TextView
         android:id="@+id/text_view_notification"

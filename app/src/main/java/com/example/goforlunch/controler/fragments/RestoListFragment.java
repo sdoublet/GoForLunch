@@ -145,7 +145,7 @@ public class RestoListFragment extends Fragment {
 
     private void configureRecyclerView() {
         this.searchList = new ArrayList<>();
-        adapter = new RestoListFragmentAdapter(getContext(), searchList, Glide.with(this));//Listresto.getinstance
+        adapter = new RestoListFragmentAdapter(getContext(), searchList, Glide.with(this));
         Log.e("rv", String.valueOf(searchList.size()));
         recyclerView.addItemDecoration(new Divider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);

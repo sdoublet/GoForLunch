@@ -11,6 +11,7 @@ public class DataHolder {
     private int distance;
     private String placeId;
     private List<String> stringList;
+    private String radius = "10000";
     private static final DataHolder ourInstance = new DataHolder();
 
     public static DataHolder getInstance() {
@@ -58,5 +59,13 @@ public class DataHolder {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public String getRadius() {
+        return radius;
+    }
+
+    public void setRadius(String radius) {
+        this.radius = radius;
     }
 }

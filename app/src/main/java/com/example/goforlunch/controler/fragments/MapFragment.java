@@ -25,7 +25,6 @@ import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
-import com.example.goforlunch.utils.ListResto;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,7 +41,6 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 
@@ -178,7 +176,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     //--------------------------------
     private void httpRequestWithRetrofit(String location) {
 
-        this.disposable = PlaceStreams.streamFetchNearbySearch(location, 10000, POI_TYPE, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
+
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
+        this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, POI_TYPE, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
                 displayMarker(nearbyPlaces.getResults());
@@ -217,11 +217,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             .title(searchList.get(i).getName())
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker)));
                     marker.setTag(searchList.get(i).getPlaceId());
-                  // temp.add(searchList.get(i).getPlaceId());
+                    // temp.add(searchList.get(i).getPlaceId());
                     Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
 
                     Log.e("map", String.valueOf(searchList.size()));
-
 
 
                 }
@@ -258,7 +257,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         String ref = (String) marker.getTag();
         Log.e("nearby", marker.getId());
         Log.e("nearby", marker.getTitle());
-
 
 
         if (ref != null) {
