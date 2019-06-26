@@ -2,6 +2,8 @@ package com.example.goforlunch.controler.fragments;
 
 import android.Manifest;
 import android.annotation.TargetApi;
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -10,8 +12,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -60,6 +68,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     @BindView(R.id.map_view)
     MapView mapView;
 
+
     private GoogleMap mGoogleMap;
     private FusedLocationProviderClient fusedLocationProviderClient;
     private Marker marker;
@@ -94,6 +103,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
         return view;
     }
+
 
     @TargetApi(Build.VERSION_CODES.M)
     @Override
@@ -269,4 +279,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
     }
+
+
 }

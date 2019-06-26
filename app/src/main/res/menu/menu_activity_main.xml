@@ -4,9 +4,9 @@
 
     <item
         android:id="@+id/search_button"
-        android:orderInCategory="1"
+        android:orderInCategory="100"
         android:title="Search"
         android:icon="@drawable/search"
-        app:showAsAction="ifRoom"
-        app:actionViewClass="android.widget.SearchView"/>
+        app:showAsAction="ifRoom" />
+
 </menu>

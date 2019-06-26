@@ -132,26 +132,49 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         Log.e("date", day + " " + hours + ":" + min);
         Log.e("time", currentTime);
 
-
+// TODO: 21/06/2019 add closing soon if closing hour is less than 30mn and add close if resto is close today
+// TODO: 21/06/2019 add 24/24 if getday==0 and close=0000
         if (placeDetail.getResult().getOpeningHours() != null) {
+            String restau = placeDetail.getResult().getName();// just for log
             for (int i = 0; i < placeDetail.getResult().getOpeningHours().getPeriods().size(); i++) {
-                if (placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() == daysPeriods[day]) {
-                    String hour = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime();
-                    String open = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime();
-                    int openHour = Integer.parseInt(open);
-                    String restau = placeDetail.getResult().getName();// just for log
-                    Log.e("hour", restau + " " + open + " " + hour);
-                    if (openHour > currentHour && openHour < 2400) {
-                        openHour = Integer.parseInt(open);
-                        Log.e("open", restau + " " + open);
-                        Log.e("openining", restau + openHour);
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">"+"Close"+"</font>"+", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                Log.e("opening", restau + " " + placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() + " " +
+                        placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime() + " " +
+                        placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime() + " " +
+                        placeDetail.getResult().getOpeningHours().getOpenNow());
+
+                String closeHours = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime();
+                String openHours = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime();
+
+                int openHour = Integer.parseInt(openHours);
+                int closeHour = Integer.parseInt(closeHours);
+
+                if (placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() == day) {
+                    if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
+                        Log.e("close", restau + " hour<openhour");
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                    } else if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour > openHour && currentHour < closeHour) {
+                        Log.e("close", restau + " hour>open<close");
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                    } else if (currentHour > closeHour) {
+                        Log.e("close", restau + " ever close");
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>"));
                     } else if (placeDetail.getResult().getOpeningHours().getOpenNow()) {
-                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">"+"Open"+"</font></b>"+", close at " + convertDate(hour, Locale.getDefault().getLanguage())));
+                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
+                        Log.e("open", restau);
                     }
 
+                } else if (placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
+                    Log.e("new", restau);
+                    try {
+                        restoOpening.setText("open, close at " + placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime());
+                    } catch (ArrayIndexOutOfBoundsException e) {
+                        //
+                    }
+                }else Log.e("newclose", restau);
+
                 }
-            }
+
+
 
         } else restoOpening.setText("no information");
     }

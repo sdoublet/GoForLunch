@@ -107,6 +107,10 @@ public class RestoListFragment extends Fragment {
 
     private void updateUII(List<ResultNearbySearch> resultNearbySearches) {
         searchList.clear();
+        // TODO: 25/06/2019 trier avec comparator par field
+        // TODO: 25/06/2019 fair ela requete avec for sur *resto
+        // TODO: 25/06/2019 mettre la distance dans un champs nearbysearch
+
         searchList.addAll(resultNearbySearches);
         if (searchList.size() != 0) {
             for (int i = 0; i < searchList.size(); i++) {
