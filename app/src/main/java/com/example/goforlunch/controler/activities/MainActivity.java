@@ -28,11 +28,15 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
+import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
+import com.google.android.libraries.places.api.model.RectangularBounds;
+import com.google.android.libraries.places.api.model.TypeFilter;
 import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteActivity;
 import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
@@ -157,9 +161,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             }
             List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
+            //Restrict an area
+            RectangularBounds bounds = RectangularBounds.newInstance(new LatLng(DataHolder.getInstance().getCurrentLat()-0.1, DataHolder.getInstance().getCurrentLng()-0.1),
+                    new LatLng(DataHolder.getInstance().getCurrentLat()+0.1, DataHolder.getInstance().getCurrentLng()+0.1));
             // Start the autocomplete intent.
             Intent intent = new Autocomplete.IntentBuilder(
                     AutocompleteActivityMode.OVERLAY, fields)
+                    .setLocationRestriction(bounds)
+                    .setTypeFilter(TypeFilter.ESTABLISHMENT)
                     .build(this);
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
         }

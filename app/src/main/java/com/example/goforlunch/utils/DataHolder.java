@@ -7,6 +7,8 @@ import java.util.List;
 public class DataHolder {
 
     private String currentPosiiton;
+    private double currentLat;
+    private double currentLng;
     private String restaurantPosition;
     private int distance;
     private String placeId;
@@ -67,5 +69,23 @@ public class DataHolder {
 
     public void setRadius(String radius) {
         this.radius = radius;
+    }
+
+    public double getCurrentLat() {
+        return currentLat;
+    }
+
+
+
+    public double getCurrentLng() {
+        return currentLng;
+    }
+
+    public void setCurrentLat(double currentLat) {
+        this.currentLat = currentLat;
+    }
+
+    public void setCurrentLng(double currentLng) {
+        this.currentLng = currentLng;
     }
 }

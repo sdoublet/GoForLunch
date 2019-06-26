@@ -152,6 +152,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                 httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
                 lat = String.valueOf(currentLocation.getLatitude());
                 lng = String.valueOf(currentLocation.getLongitude());
+                DataHolder.getInstance().setCurrentLat(currentLocation.getLatitude());
+                DataHolder.getInstance().setCurrentLng(currentLocation.getLongitude());
                 DataHolder.getInstance().setCurrentPosiiton(lat + "," + lng);
 
             } else {
