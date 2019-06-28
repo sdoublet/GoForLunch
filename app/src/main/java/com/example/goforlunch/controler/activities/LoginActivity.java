@@ -125,8 +125,10 @@ public class LoginActivity extends BaseActivity {
             String username = this.getCurrentUser().getDisplayName();
             String uid = this.getCurrentUser().getUid();
             String email = this.getCurrentUser().getEmail();
+            String restoName = null;
+            String restoId = null;
 
-            UserHelper.createUser(uid, username, urlPicture, email).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture, email,restoId, restoName).addOnFailureListener(this.onFailureListener());
         }
     }
 

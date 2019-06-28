@@ -1,7 +1,5 @@
 package com.example.goforlunch.utils;
 
-import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
-
 import java.util.List;
 
 public class DataHolder {
@@ -12,6 +10,8 @@ public class DataHolder {
     private String restaurantPosition;
     private int distance;
     private String placeId;
+    private String restaurantId;
+    private String userUid;
     private List<String> stringList;
     private String radius = "10000";
     private static final DataHolder ourInstance = new DataHolder();
@@ -67,6 +67,14 @@ public class DataHolder {
         return radius;
     }
 
+    public String getRestaurantId() {
+        return restaurantId;
+    }
+
+    public void setRestaurantId(String restaurantId) {
+        this.restaurantId = restaurantId;
+    }
+
     public void setRadius(String radius) {
         this.radius = radius;
     }
@@ -74,8 +82,6 @@ public class DataHolder {
     public double getCurrentLat() {
         return currentLat;
     }
-
-
 
     public double getCurrentLng() {
         return currentLng;
@@ -87,5 +93,13 @@ public class DataHolder {
 
     public void setCurrentLng(double currentLng) {
         this.currentLng = currentLng;
+    }
+
+    public String getUserUid() {
+        return userUid;
+    }
+
+    public void setUserUid(String userUid) {
+        this.userUid = userUid;
     }
 }

@@ -21,13 +21,13 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Firebase.RestaurantHelper;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Booking;
-import com.example.goforlunch.utils.DataHolder;
+import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,6 +60,7 @@ public class PlaceDetailActivity extends BaseActivity {
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,12 +91,17 @@ public class PlaceDetailActivity extends BaseActivity {
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
             bookingRestaurant(getCurrentUser().getUid());
+            updateRestaurantName(placeDetailResult.getName());
+            updateRestaurantId(restoPlaceId);
+
         } else {
             Drawable drawable = getResources().getDrawable(R.drawable.add_circle).mutate();
             Toast.makeText(getBaseContext(), "Make your choice", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(false);
             deleteBooking(getCurrentUser().getUid());
+            updateRestaurantName(null);
+            updateRestaurantId(null);
         }
     }
 
@@ -160,17 +166,41 @@ public class PlaceDetailActivity extends BaseActivity {
     //REST REQUEST
     //----------------------
     private void bookingRestaurant(String userId) {
-        RestaurantHelper.getBooking(userId, restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        RestaurantHelper.getBooking(restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
                     Booking booking = documentSnapshot.toObject(Booking.class);
+                    RestaurantHelper.updateBooking(userId, restoPlaceId);
                 } else {
-                    RestaurantHelper.createBookingRestaurant(userId,restoPlaceId, placeDetailResult.getName(), null);
+                    RestaurantHelper.createBookingRestaurant(userId, restoPlaceId, placeDetailResult.getName(), null);
                 }
             }
         });
 
+    }
+
+    private void updateRestaurantName(String restoName) {
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+
+                user = documentSnapshot.toObject(User.class);
+                UserHelper.updateRestaurantName(getCurrentUser().getUid(), restoName);
+
+
+            }
+        });
+    }
+
+    private void updateRestaurantId(String restoId) {
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user = documentSnapshot.toObject(User.class);
+                UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoPlaceId);
+            }
+        });
     }
 
     private void deleteBooking(String userId) {
@@ -231,7 +261,6 @@ public class PlaceDetailActivity extends BaseActivity {
             } else {
                 progressbar.setVisibility(View.INVISIBLE);
             }
-
 
 
         } else {

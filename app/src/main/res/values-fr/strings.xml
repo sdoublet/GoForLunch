@@ -32,5 +32,6 @@
     <string name="there_is_no_message_in_this_chat_yet">Ce chat ne contient pour le moment aucun message…</string>
     <string name="type_your_message">Composer votre message</string>
     <string name="send">ENVOYER</string>
+    <string name="eating">déjeune au restaurant </string>
 
 </resources>

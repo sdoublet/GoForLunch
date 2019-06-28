@@ -28,6 +28,7 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
+import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
@@ -44,6 +45,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -74,6 +76,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
+
+
     // FOR DATA
     // Fragment identifier
     public static final int FRAGMENT_MAP = 0;
@@ -95,7 +99,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.configureStatusBar();
         updateUIWhenCreating();
         navigationView.setNavigationItemSelectedListener(this);
-
+        DataHolder.getInstance().setUserUid(getCurrentUser().getUid());
+        Log.e("userId", DataHolder.getInstance().getUserUid());
 
     }
 
@@ -162,8 +167,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             List<Place.Field> fields = Arrays.asList(Place.Field.ID, Place.Field.NAME);
 
             //Restrict an area
-            RectangularBounds bounds = RectangularBounds.newInstance(new LatLng(DataHolder.getInstance().getCurrentLat()-0.1, DataHolder.getInstance().getCurrentLng()-0.1),
-                    new LatLng(DataHolder.getInstance().getCurrentLat()+0.1, DataHolder.getInstance().getCurrentLng()+0.1));
+            RectangularBounds bounds = RectangularBounds.newInstance(new LatLng(DataHolder.getInstance().getCurrentLat() - 0.1, DataHolder.getInstance().getCurrentLng() - 0.1),
+                    new LatLng(DataHolder.getInstance().getCurrentLat() + 0.1, DataHolder.getInstance().getCurrentLng() + 0.1));
             // Start the autocomplete intent.
             Intent intent = new Autocomplete.IntentBuilder(
                     AutocompleteActivityMode.OVERLAY, fields)
@@ -280,6 +285,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             //Get email and username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ?
                     getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
+// TODO: 27/06/2019 change displayname by username in users collection
 
             String userName = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ?
                     getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();

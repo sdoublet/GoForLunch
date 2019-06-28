@@ -1,10 +1,11 @@
 package com.example.goforlunch.controler.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,13 +15,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
+import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
-import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.Divider;
+import com.example.goforlunch.utils.ItemClickSupport;
 import com.example.goforlunch.views.recyclerViews.WorkmatesAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
@@ -43,25 +44,43 @@ public class WorkmatesFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_workmates, container, false);
         ButterKnife.bind(this, view);
-        this.initRecyclerView();
+        this.configureRecyclerView();
+        this.configureOnClickRecyclerView();
 
         return view;
     }
 
 
-
-    private void initRecyclerView() {
+    private void configureRecyclerView() {
 
         Query allUsers = UserHelper.getAllUsers();
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(allUsers, User.class)
                 .build();
-        adapter = new WorkmatesAdapter(options,getContext(), Glide.with(recyclerView));
+        adapter = new WorkmatesAdapter(options, getContext(), Glide.with(recyclerView));
         recyclerView.setAdapter(adapter);
         recyclerView.addItemDecoration(new Divider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
+
+    private void configureOnClickRecyclerView() {
+        ItemClickSupport.addTo(recyclerView, R.layout.row_workmates)
+                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        User user = adapter.getItem(position);
+                        if (user.getmRestaurantId() != null) {
+                            Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+                            intent.putExtra("resto_place_id", user.getmRestaurantId());
+                            startActivity(intent);
+                        }else {
+                            Toast.makeText(getContext(), user.getUsername()+ " n'a pas encore choisit",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+    }
+
 
     @Override
     public void onStart() {

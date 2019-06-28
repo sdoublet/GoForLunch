@@ -67,7 +67,7 @@ public class RestoListFragment extends Fragment {
 
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
        // String newPosition = "46.947127, 5.867130";
-        Log.e("data", DataHolder.getInstance().getCurrentPosiiton());
+        Log.e("data", ""+myPosition);
        // httpRequestWithRetrofit2(myPosition);
         httpRequestWithRetrofit2(myPosition);
         //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
@@ -115,6 +115,7 @@ public class RestoListFragment extends Fragment {
         if (searchList.size() != 0) {
             for (int i = 0; i < searchList.size(); i++) {
                 DataHolder.getInstance().setPlaceId(searchList.get(i).getPlaceId());
+
 
             }
         } else {

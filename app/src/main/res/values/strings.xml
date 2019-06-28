@@ -38,6 +38,7 @@
     <string name="there_is_no_message_in_this_chat_yet">There is no message in this chat yet...</string>
     <string name="type_your_message">Type your message</string>
     <string name="send">SEND</string>
+    <string name="eating">is eating at</string>
 
 
 </resources>

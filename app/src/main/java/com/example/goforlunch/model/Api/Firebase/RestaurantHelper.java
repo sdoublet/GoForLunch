@@ -22,8 +22,13 @@ public class RestaurantHelper {
     }
 
     //--- GET ---
-    public static Task<DocumentSnapshot> getBooking(String userId, String restaurantId){
+    public static Task<DocumentSnapshot> getBooking( String restaurantId){
         return RestaurantHelper.getBookingRestaurantCollection().document(restaurantId).get();
+    }
+
+    //---UPDATE---
+    public static Task<Void>updateBooking(String userId, String restoId){
+        return RestaurantHelper.getBookingRestaurantCollection().document(userId).update("restaurantId", restoId);
     }
 
     //--- DELETE ---
