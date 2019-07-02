@@ -18,7 +18,7 @@ public class RestaurantHelper {
     //--- CREATE ---
     public static Task<Void> createBookingRestaurant(String userId, String restaurantId, String restaurantName, String date){//perhaps add boolean like
         Booking bookingToCreate = new Booking(userId, restaurantId, restaurantName, date);
-        return RestaurantHelper.getBookingRestaurantCollection().document(userId).set(bookingToCreate);
+        return RestaurantHelper.getBookingRestaurantCollection().document(restaurantId).collection("workmates").document(userId).set(bookingToCreate);
     }
 
     //--- GET ---
@@ -28,7 +28,7 @@ public class RestaurantHelper {
 
     //---UPDATE---
     public static Task<Void>updateBooking(String userId, String restoId){
-        return RestaurantHelper.getBookingRestaurantCollection().document(userId).update("restaurantId", restoId);
+        return RestaurantHelper.getBookingRestaurantCollection().document(restoId).collection("workmates").document(userId).update("userId", userId);
     }
 
     //--- DELETE ---

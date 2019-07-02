@@ -53,7 +53,7 @@ public class WorkmatesFragment extends Fragment {
 
     private void configureRecyclerView() {
 
-        Query allUsers = UserHelper.getAllUsers();
+        Query allUsers = UserHelper.getAllUsers().orderBy("mRestaurantId", Query.Direction.DESCENDING);
         FirestoreRecyclerOptions<User> options = new FirestoreRecyclerOptions.Builder<User>()
                 .setQuery(allUsers, User.class)
                 .build();

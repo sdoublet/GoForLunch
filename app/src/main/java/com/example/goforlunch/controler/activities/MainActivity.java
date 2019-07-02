@@ -1,6 +1,7 @@
 package com.example.goforlunch.controler.activities;
 
 
+import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -28,12 +29,15 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
+import com.example.goforlunch.notifications.NotificationService;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -45,6 +49,8 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 
 import java.util.Arrays;
@@ -97,7 +103,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.configureDrawerLayout();
         this.configureBottomView();
         this.configureStatusBar();
-        updateUIWhenCreating();
+        this.updateUIWhenCreating();
         navigationView.setNavigationItemSelectedListener(this);
         DataHolder.getInstance().setUserUid(getCurrentUser().getUid());
         Log.e("userId", DataHolder.getInstance().getUserUid());
@@ -213,6 +219,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             case R.id.setting:
                 Intent intent = new Intent(this, SettingActivity.class);
                 startActivity(intent);
+                break;
+            case R.id.your_lunch:
+                Intent intent1 = new Intent(this, PlaceDetailActivity.class);
+                intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
+                startActivity(intent1);
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;

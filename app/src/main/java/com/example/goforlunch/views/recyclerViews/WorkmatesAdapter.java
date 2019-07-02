@@ -30,7 +30,7 @@ public class WorkmatesAdapter extends FirestoreRecyclerAdapter<User, WorkmatesVi
     protected void onBindViewHolder(@NonNull WorkmatesViewHolder workmatesViewHolder, int i, @NonNull User user) {
 
 
-        if (user.getmRestaurantId() != null) {
+        if (user.getmRestaurantName() != null) {
             workmatesViewHolder.textViewWorkmates.setText(user.getUsername()+"\n" + context.getString(R.string.eating)+"\n" +"("+ user.getmRestaurantName()+")");
         } else {
             workmatesViewHolder.textViewWorkmates.setText(String.format(context.getString(R.string.hasnt_decided_yet), user.getUsername()));

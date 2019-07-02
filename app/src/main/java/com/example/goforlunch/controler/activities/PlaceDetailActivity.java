@@ -24,6 +24,7 @@ import com.example.goforlunch.model.Api.Firebase.RestaurantHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Booking;
 import com.example.goforlunch.model.User;
+import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
@@ -99,7 +100,6 @@ public class PlaceDetailActivity extends BaseActivity {
             Toast.makeText(getBaseContext(), "Make your choice", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(false);
-            deleteBooking(getCurrentUser().getUid());
             updateRestaurantName(null);
             updateRestaurantId(null);
         }
@@ -198,7 +198,9 @@ public class PlaceDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 user = documentSnapshot.toObject(User.class);
-                UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoPlaceId);
+                UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoId);
+                DataHolder.getInstance().setRestaurantId(restoPlaceId);
+
             }
         });
     }

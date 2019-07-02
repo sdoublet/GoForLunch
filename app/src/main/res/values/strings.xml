@@ -39,6 +39,8 @@
     <string name="type_your_message">Type your message</string>
     <string name="send">SEND</string>
     <string name="eating">is eating at</string>
+    <string name="AppTitle">GoForLunch</string>
+    <string name="Reminder">Reminder for your choice</string>
 
 
 </resources>

@@ -30,8 +30,10 @@ import androidx.fragment.app.Fragment;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -47,6 +49,8 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,6 +81,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private Disposable disposable;
     private boolean mLocationPermissionGranted = false;
     private List<ResultNearbySearch> searchList = new ArrayList<>();
+    User user;
     //private HashMap<String, ResultNearbySearch> markerMap = new HashMap<>();
 
     public static Fragment newInstance() {
@@ -217,7 +222,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
     private void displayMarker(List<ResultNearbySearch> resultNearbySearches) {
         this.searchList.addAll(resultNearbySearches);
-        //ArrayList<String> temp = new ArrayList<>();
         mGoogleMap.setOnMarkerClickListener(this);
         if (searchList.size() != 0) {
 
@@ -227,13 +231,17 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                             .position(new LatLng(searchList.get(i).getGeometry().getLocation().getLat(),
                                     searchList.get(i).getGeometry().getLocation().getLng()))
                             .title(searchList.get(i).getName())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker)));
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker)));
                     marker.setTag(searchList.get(i).getPlaceId());
                     // temp.add(searchList.get(i).getPlaceId());
                     Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
 
                     Log.e("map", String.valueOf(searchList.size()));
+// for test
 
+                    if (searchList.get(i).getPlaceId().equals("ChIJ93ivtng4jUcR4LNT9ajeOu0")){
+                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker));
+                    }
 
                 }
             }
