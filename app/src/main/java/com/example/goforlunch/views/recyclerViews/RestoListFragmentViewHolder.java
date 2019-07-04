@@ -16,9 +16,12 @@ import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -67,6 +70,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
                 displayDetail(placeDetail);
+                displayWormates(restaurantDetail.getPlaceId());
             }
 
             @Override
@@ -211,6 +215,16 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             }
         } else
             return hour + "h" + mn;
+    }
+
+    private void displayWormates(String restoId){
+        UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                String workmates = String.valueOf(queryDocumentSnapshots.size());
+                numberOfPerson.setText("("+workmates+")");
+            }
+        });
     }
 }
 

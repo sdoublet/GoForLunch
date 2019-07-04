@@ -20,9 +20,7 @@ import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
-import com.example.goforlunch.model.Api.Firebase.RestaurantHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
-import com.example.goforlunch.model.Booking;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
@@ -32,6 +30,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -75,6 +74,15 @@ public class PlaceDetailActivity extends BaseActivity {
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
+        UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+               // if (!queryDocumentSnapshots.isEmpty()&&restoPlaceId==queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantId")){
+                    Log.e("detail", "" + queryDocumentSnapshots.size());
+               // }else
+               //     Log.e("detail", String.valueOf(queryDocumentSnapshots.size()));
+            }
+        });
 
     }
 
@@ -97,7 +105,7 @@ public class PlaceDetailActivity extends BaseActivity {
             Toast.makeText(getBaseContext(), "You choose this restaurant", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
-            bookingRestaurant(getCurrentUser().getUid());
+            //bookingRestaurant(getCurrentUser().getUid());
             updateRestaurantName(placeDetailResult.getName());
             updateRestaurantId(restoPlaceId);
 
@@ -176,22 +184,22 @@ public class PlaceDetailActivity extends BaseActivity {
     //----------------------
     //REST REQUEST
     //----------------------
-    private void bookingRestaurant(String userId) {
-        RestaurantHelper.getBooking(restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    Log.e("restoId", "true" + restoPlaceId);
-                    Booking booking = documentSnapshot.toObject(Booking.class);
-                    RestaurantHelper.updateBooking(userId, restoPlaceId);
-                } else {
-                    Log.e("restoId", "false" + restoPlaceId);
-                    RestaurantHelper.createBookingRestaurant(userId, restoPlaceId, placeDetailResult.getName(), null);
-                }
-            }
-        });
+//    private void bookingRestaurant(String userId) {
+//        RestaurantHelper.getBooking(restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+//            @Override
+//            public void onSuccess(DocumentSnapshot documentSnapshot) {
+//                if (documentSnapshot.exists()) {
+//                    Log.e("restoId", "true" + restoPlaceId);
+//                    Booking booking = documentSnapshot.toObject(Booking.class);
+//                    RestaurantHelper.updateBooking(userId, restoPlaceId);
+//                } else {
+//                    Log.e("restoId", "false" + restoPlaceId);
+//                    RestaurantHelper.createBookingRestaurant(userId, restoPlaceId, placeDetailResult.getName(), null);
+//                }
+//            }
+//        });
 
-    }
+//    }
 
     private void updateRestaurantName(String restoName) {
         UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -218,13 +226,13 @@ public class PlaceDetailActivity extends BaseActivity {
         });
     }
 
-    private void deleteBooking(String userId) {
-        RestaurantHelper.deleteBooking(userId).addOnSuccessListener(new OnSuccessListener<Void>() {
-            @Override
-            public void onSuccess(Void aVoid) {
-            }
-        });
-    }
+//    private void deleteBooking(String userId) {
+//        RestaurantHelper.deleteBooking(userId).addOnSuccessListener(new OnSuccessListener<Void>() {
+//            @Override
+//            public void onSuccess(Void aVoid) {
+//            }
+//        });
+//    }
 
 
 

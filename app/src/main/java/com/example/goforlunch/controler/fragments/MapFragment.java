@@ -48,9 +48,14 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -228,18 +233,34 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     marker = mGoogleMap.addMarker(new MarkerOptions()
                             .position(new LatLng(searchList.get(i).getGeometry().getLocation().getLat(),
                                     searchList.get(i).getGeometry().getLocation().getLng()))
-                            .title(searchList.get(i).getName())
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker)));
+                            .title(searchList.get(i).getName()));
+                           // .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker)));
                     marker.setTag(searchList.get(i).getPlaceId());
-                    // temp.add(searchList.get(i).getPlaceId());
                     Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
 
                     Log.e("map", String.valueOf(searchList.size()));
 // for test
 
-                    if (searchList.get(i).getPlaceId().equals("ChIJ93ivtng4jUcR4LNT9ajeOu0")){
-                        marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker));
-                    }
+                    int finalI = i;
+                    UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                     @Override
+                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                         if (!queryDocumentSnapshots.isEmpty() && searchList.get(finalI).getPlaceId().equals(queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantId"))){
+                             Log.e("size", searchList.get(finalI).getPlaceId());
+                           marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
+                             Log.e("size", String.valueOf(queryDocumentSnapshots.size()) + queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantName"));
+
+                         }
+
+
+                     }
+                 }).addOnFailureListener(new OnFailureListener() {
+                     @Override
+                     public void onFailure(@NonNull Exception e) {
+
+                     }
+                 });
+
 
                 }
             }
