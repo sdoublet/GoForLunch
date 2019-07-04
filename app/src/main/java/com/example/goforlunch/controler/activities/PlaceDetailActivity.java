@@ -26,9 +26,12 @@ import com.example.goforlunch.model.Booking;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
+import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.Query;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -73,9 +76,12 @@ public class PlaceDetailActivity extends BaseActivity {
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
 
-        // photo = getIntent().getStringExtra("photo");
+    }
 
-
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        this.disposeWhenDestroy();
     }
 
     @Override
@@ -123,7 +129,7 @@ public class PlaceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.image_phone)
     public void callRestaurant() {
-        // TODO: 07/06/2019 get permission
+        // TODO: 07/06/2019 get permission with easypermission
         String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
         Log.e("phone", phoneNumber);
 //        Intent intentCall = new Intent(Intent.ACTION_CALL);
@@ -162,6 +168,11 @@ public class PlaceDetailActivity extends BaseActivity {
         };
     }
 
+
+    //  Dispose subscription
+    private void disposeWhenDestroy(){
+        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
     //----------------------
     //REST REQUEST
     //----------------------
@@ -170,9 +181,11 @@ public class PlaceDetailActivity extends BaseActivity {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.exists()) {
+                    Log.e("restoId", "true" + restoPlaceId);
                     Booking booking = documentSnapshot.toObject(Booking.class);
                     RestaurantHelper.updateBooking(userId, restoPlaceId);
                 } else {
+                    Log.e("restoId", "false" + restoPlaceId);
                     RestaurantHelper.createBookingRestaurant(userId, restoPlaceId, placeDetailResult.getName(), null);
                 }
             }
@@ -212,6 +225,8 @@ public class PlaceDetailActivity extends BaseActivity {
             }
         });
     }
+
+
 
     //------------------
     //UPDATE UI

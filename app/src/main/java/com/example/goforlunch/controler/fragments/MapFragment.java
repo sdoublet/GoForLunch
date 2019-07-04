@@ -200,8 +200,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             public void onNext(NearbyPlaces nearbyPlaces) {
                 displayMarker(nearbyPlaces.getResults());
 
-                //getinstance.setresto nerabyplace.getresult
-
             }
 
             @Override
@@ -251,6 +249,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         //DataHolder.getInstance().setStringList(temp);
     }
 
+    //  Dispose subscription
+    private void disposeWhenDestroy(){
+        if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
+    }
+
 
     @Override
     public void onResume() {
@@ -269,6 +272,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onDestroy() {
         super.onDestroy();
         mapView.onDestroy();
+        this.disposeWhenDestroy();
     }
 
     @Override

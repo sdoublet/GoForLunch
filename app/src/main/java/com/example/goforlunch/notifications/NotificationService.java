@@ -43,7 +43,7 @@ public class NotificationService extends FirebaseMessagingService {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(getString(R.string.AppTitle));
         inboxStyle.addLine(messageBody);
-        
+
 
         //Build a notification object
         NotificationCompat.Builder notificationBuilder =
