@@ -1,10 +1,12 @@
 package com.example.goforlunch.notifications;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
 import android.util.Log;
@@ -12,28 +14,42 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.goforlunch.R;
+import com.example.goforlunch.controler.activities.BaseActivity;
 import com.example.goforlunch.controler.activities.MainActivity;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
+import com.example.goforlunch.model.User;
+import com.example.goforlunch.utils.DataHolder;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
-public class NotificationService extends FirebaseMessagingService {
+
+public class NotificationService extends FirebaseMessagingService  {
+
     private static final String CHANNEL_ID = "CHANNEL_ID";
-    private final int NOTIFICATION_ID =1;
+    private final int NOTIFICATION_ID = 1;
     private final String NOTIFICATION_TAG = "GOFORLUNCH";
+    private String restoName;
 
-
-
+    protected FirebaseUser getCurrentUser(){
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
         super.onMessageReceived(remoteMessage);
         if (remoteMessage.getNotification() != null) {
             //Get message sent by firebase
-            String message = remoteMessage.getNotification().getBody();
+            checkIfUserBooking();
+            String message = "Bonjour " + getCurrentUser().getDisplayName() +" " + remoteMessage.getNotification().getBody() + " " + DataHolder.getInstance().getRestoName()  ;
             Log.e("TAG", message);
-            this.sendVisualNotificaiton(message);
+            sendVisualNotificaiton(message);
         }
     }
-    private void sendVisualNotificaiton(String messageBody){
+
+    public void sendVisualNotificaiton(String messageBody) {
 
         // Create an intent that will be shown when user will click on the Notification
         Intent intent = new Intent(this, MainActivity.class);
@@ -60,10 +76,13 @@ public class NotificationService extends FirebaseMessagingService {
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         // Support version >=Android 8
-        if (Build.VERSION.SDK_INT>=Build.VERSION_CODES.O){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence channelName = "Message from Firebase";
             int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, channelName, importance);
+            mChannel.enableLights(true);
+            mChannel.setLightColor(Color.RED);
+            mChannel.setVibrationPattern(new long[]{100,200,300,400,500,400,300,200,100});
             notificationManager.createNotificationChannel(mChannel);
         }
 
@@ -72,5 +91,24 @@ public class NotificationService extends FirebaseMessagingService {
 
 
     }
+
+    private void checkIfUserBooking(){
+
+        UserHelper.getUser(DataHolder.getInstance().getUserUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                User user = documentSnapshot.toObject(User.class);
+               // if (user!=null&&user.getmRestaurantName()!=null){
+                   restoName = user.getmRestaurantName();
+                   DataHolder.getInstance().setRestoName(restoName);
+                    Log.e("notif", restoName);
+                }
+           // }
+        });
+
+
+    }
+
 
 }

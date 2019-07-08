@@ -21,6 +21,7 @@ import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
@@ -200,7 +201,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
 
     //Convert Date by language
-    public String convertDate(String date, String language) {
+    private String convertDate(String date, String language) {
         int hour = Integer.parseInt(date.substring(0, 2));
         String mn = date.substring(2);
         if (language.equals("English")) {
@@ -226,5 +227,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             }
         });
     }
+
+
 }
 

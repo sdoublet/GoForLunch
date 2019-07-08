@@ -77,8 +77,9 @@ public class PlaceDetailActivity extends BaseActivity {
         UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-               // if (!queryDocumentSnapshots.isEmpty()&&restoPlaceId==queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantId")){
-                    Log.e("detail", "" + queryDocumentSnapshots.size());
+                if (!queryDocumentSnapshots.isEmpty()){
+
+                    Log.e("detail", "" + queryDocumentSnapshots.size() + " " + queryDocumentSnapshots.getDocuments().get(0).get("username") );}
                // }else
                //     Log.e("detail", String.valueOf(queryDocumentSnapshots.size()));
             }

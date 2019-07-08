@@ -2,8 +2,6 @@ package com.example.goforlunch.controler.fragments;
 
 import android.Manifest;
 import android.annotation.TargetApi;
-import android.app.SearchManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
@@ -12,14 +10,8 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
-import android.widget.SearchView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,7 +25,6 @@ import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
-import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -49,12 +40,7 @@ import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
@@ -86,8 +72,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private Disposable disposable;
     private boolean mLocationPermissionGranted = false;
     private List<ResultNearbySearch> searchList = new ArrayList<>();
-    User user;
-    //private HashMap<String, ResultNearbySearch> markerMap = new HashMap<>();
 
     public static Fragment newInstance() {
         return new MapFragment();
@@ -230,48 +214,46 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
             for (int i = 0; i < searchList.size(); i++) {
                 if (searchList.get(i) != null) {
-                    marker = mGoogleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(searchList.get(i).getGeometry().getLocation().getLat(),
-                                    searchList.get(i).getGeometry().getLocation().getLng()))
-                            .title(searchList.get(i).getName()));
-                           // .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker)));
-                    marker.setTag(searchList.get(i).getPlaceId());
+
                     Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
 
                     Log.e("map", String.valueOf(searchList.size()));
-// for test
 
                     int finalI = i;
-                    UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                     @Override
-                     public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                         if (!queryDocumentSnapshots.isEmpty() && searchList.get(finalI).getPlaceId().equals(queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantId"))){
-                             Log.e("size", searchList.get(finalI).getPlaceId());
-                           marker.setIcon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_ROSE));
-                             Log.e("size", String.valueOf(queryDocumentSnapshots.size()) + queryDocumentSnapshots.getDocuments().get(0).get("mRestaurantName"));
 
-                         }
+                    UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                Log.e("size", "success " + searchList.get(finalI).getPlaceId());
+                                marker = mGoogleMap.addMarker(new MarkerOptions()
+                                        .position(new LatLng(searchList.get(finalI).getGeometry().getLocation().getLat(),
+                                                searchList.get(finalI).getGeometry().getLocation().getLng()))
+                                        .title(searchList.get(finalI).getName()));
+                                marker.setTag(searchList.get(finalI).getPlaceId());
+                                if (Objects.requireNonNull(task.getResult()).isEmpty()) {
+                                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker));
 
+                                } else {
+                                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker));
 
-                     }
-                 }).addOnFailureListener(new OnFailureListener() {
-                     @Override
-                     public void onFailure(@NonNull Exception e) {
+                                }
 
-                     }
-                 });
+                            }
+                        }
+                    });
 
-
+                } else {
+                    Log.e("Marker", "search list is null!");//anything
                 }
+
             }
-        } else {
-            Log.e("Marker", "search list is null!");//anything
         }
-        //DataHolder.getInstance().setStringList(temp);
     }
 
+
     //  Dispose subscription
-    private void disposeWhenDestroy(){
+    private void disposeWhenDestroy() {
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
 

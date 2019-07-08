@@ -11,6 +11,7 @@ public class DataHolder {
     private int distance;
     private String placeId;
     private String restaurantId;
+    private String restoName;
     private String userUid;
     private List<String> stringList;
     private String radius = "10000";
@@ -101,5 +102,13 @@ public class DataHolder {
 
     public void setUserUid(String userUid) {
         this.userUid = userUid;
+    }
+
+    public String getRestoName() {
+        return restoName;
+    }
+
+    public void setRestoName(String restoName) {
+        this.restoName = restoName;
     }
 }
