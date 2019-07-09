@@ -145,7 +145,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         }
     }
 
- 
+
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     void onClickAddFile() {
         this.chooseImageFromPhone();

@@ -217,9 +217,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
             case R.id.your_lunch:
+                if (DataHolder.getInstance().getRestaurantId()!=null){
                 Intent intent1 = new Intent(this, PlaceDetailActivity.class);
                 intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
-                startActivity(intent1);
+                startActivity(intent1);}
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
