@@ -59,15 +59,6 @@
         >
 
 
-        <!-- ADD FILE BUTTON -->
-        <ImageButton
-            android:id="@+id/chat_add_file_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/add_circle_big"
-            tools:ignore="ContentDescription"
-            android:adjustViewBounds="true"
-            style="@style/Widget.AppCompat.Button.Borderless" />
 
         <!-- TEXT MESSAGE EDIT TEXT -->
         <com.google.android.material.textfield.TextInputEditText

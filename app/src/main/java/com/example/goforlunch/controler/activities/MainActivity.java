@@ -177,6 +177,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     .setTypeFilter(TypeFilter.ESTABLISHMENT)
                     .build(this);
             startActivityForResult(intent, AUTOCOMPLETE_REQUEST_CODE);
+
         }
         return super.onOptionsItemSelected(item);
     }

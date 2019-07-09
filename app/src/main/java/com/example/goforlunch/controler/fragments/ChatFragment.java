@@ -145,7 +145,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         }
     }
 
-    @OnClick(R.id.chat_add_file_button)
+ 
     @AfterPermissionGranted(RC_IMAGE_PERMS)
     void onClickAddFile() {
         this.chooseImageFromPhone();
@@ -189,18 +189,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
                 }
             }
         });
-//        mImageRef.putFile(this.uriImageSelected)
-//                .addOnSuccessListener(Objects.requireNonNull(getActivity()), new OnSuccessListener<UploadTask.TaskSnapshot>() {
-//                    @Override
-//                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-//                        String pathImageSavedInFirebase = taskSnapshot.getStorage().getDownloadUrl().getResult().toString();
 
-
-//                        //Save message in firestore
-//                        MessageHelper.createMessageWithImageForChat(pathImageSavedInFirebase, message, currentChatName,modelCurrentUser).addOnFailureListener(onFailureListener());
-//                    }
-//                })
-//                .addOnFailureListener(this.onFailureListener());
     }
 
     // --------------------
