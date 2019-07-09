@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -62,6 +63,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final String POI_TYPE = "restaurant";
     @BindView(R.id.map_view)
     MapView mapView;
+    @BindView(R.id.my_progree_bar)
+    ProgressBar myProgreeBar;
 
 
     private GoogleMap mGoogleMap;
@@ -224,6 +227,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            myProgreeBar.setVisibility(View.GONE);
                             if (task.isSuccessful()) {
                                 Log.e("size", "success " + searchList.get(finalI).getPlaceId());
                                 marker = mGoogleMap.addMarker(new MarkerOptions()

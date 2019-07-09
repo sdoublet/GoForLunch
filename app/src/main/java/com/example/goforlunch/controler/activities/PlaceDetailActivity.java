@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
+import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
@@ -109,6 +110,8 @@ public class PlaceDetailActivity extends BaseActivity {
             //bookingRestaurant(getCurrentUser().getUid());
             updateRestaurantName(placeDetailResult.getName());
             updateRestaurantId(restoPlaceId);
+
+
 
         } else {
             Drawable drawable = getResources().getDrawable(R.drawable.add_circle).mutate();

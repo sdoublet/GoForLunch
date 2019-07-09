@@ -1,14 +1,15 @@
 package com.example.goforlunch.controler.activities;
 
 
-import android.app.DownloadManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -29,15 +30,11 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
-import com.example.goforlunch.model.Api.Firebase.UserHelper;
-import com.example.goforlunch.model.User;
-import com.example.goforlunch.notifications.NotificationService;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.libraries.places.api.Places;
 import com.google.android.libraries.places.api.model.Place;
 import com.google.android.libraries.places.api.model.RectangularBounds;
@@ -49,9 +46,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,11 +71,10 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     NavigationView navigationView;
 
 
+
     protected FirebaseUser getCurrentUser() {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
-
-
 
 
     // FOR DATA
@@ -161,6 +154,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         return true;
     }
 
+
+    //set autocomplete search button
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
 
@@ -230,23 +225,20 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
     private void configureBottomView() {
+
         bottomNavigationView.setOnNavigationItemSelectedListener(item -> {
             switch (item.getItemId()) {
                 case R.id.map_view:
                     displayFragment(FRAGMENT_MAP);
-
                     break;
                 case R.id.list_view:
                     displayFragment(FRAGMENT_LISTVIEW);
-
                     break;
                 case R.id.workmates:
                     displayFragment(FRAGMENT_WORKMATES);
-
                     break;
                 case R.id.chat:
                     displayFragment(FRAGMENT_CHAT);
-
                     break;
             }
             return true;
