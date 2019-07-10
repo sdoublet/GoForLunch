@@ -162,6 +162,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (item.getItemId() == R.id.search_button) {
             // Set the fields to specify which types of place data to
             // return after the user has made a selection.
+
             if (!Places.isInitialized()) {
                 Places.initialize(getApplicationContext(), BuildConfig.GOOGLE_MAPS_API_KEY, Locale.getDefault());
             }

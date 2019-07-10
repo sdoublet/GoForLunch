@@ -20,6 +20,7 @@ import androidx.coordinatorlayout.widget.CoordinatorLayout;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Firebase.LikeHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
@@ -127,8 +128,10 @@ public class LoginActivity extends BaseActivity {
             String email = this.getCurrentUser().getEmail();
             String restoName = null;
             String restoId = null;
+            Boolean like = false;
 
-            UserHelper.createUser(uid, username, urlPicture, email,restoId, restoName).addOnFailureListener(this.onFailureListener());
+            UserHelper.createUser(uid, username, urlPicture, email,restoId, restoName, like).addOnFailureListener(this.onFailureListener());
+
         }
     }
 

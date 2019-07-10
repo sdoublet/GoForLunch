@@ -2,7 +2,11 @@ package com.example.goforlunch.controler.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -38,6 +42,12 @@ public class WorkmatesFragment extends Fragment {
         return new WorkmatesFragment();
     }
 
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -47,9 +57,20 @@ public class WorkmatesFragment extends Fragment {
         this.configureRecyclerView();
         this.configureOnClickRecyclerView();
 
+
+
         return view;
     }
 
+    //Hide search button item
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item=menu.findItem(R.id.search_button);
+        if (item!=null){
+            item.setVisible(false);
+        }
+    }
 
     private void configureRecyclerView() {
 
@@ -63,6 +84,7 @@ public class WorkmatesFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
     }
+
 
     private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(recyclerView, R.layout.row_workmates)

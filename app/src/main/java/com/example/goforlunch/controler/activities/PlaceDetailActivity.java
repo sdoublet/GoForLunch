@@ -13,24 +13,24 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
-import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
+import com.example.goforlunch.model.Api.Firebase.LikeHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
+import com.example.goforlunch.model.Like;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import butterknife.BindView;
@@ -61,6 +61,8 @@ public class PlaceDetailActivity extends BaseActivity {
     Button websiteButton;
     @BindView(R.id.progress_bar)
     ProgressBar progressbar;
+    @BindView(R.id.star)
+    Button like;
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
@@ -75,14 +77,17 @@ public class PlaceDetailActivity extends BaseActivity {
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
+        //for test
         UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if (!queryDocumentSnapshots.isEmpty()){
+                if (!queryDocumentSnapshots.isEmpty()) {
 
-                    Log.e("detail", "" + queryDocumentSnapshots.size() + " " + queryDocumentSnapshots.getDocuments().get(0).get("username") );}
-               // }else
-               //     Log.e("detail", String.valueOf(queryDocumentSnapshots.size()));
+                    Log.e("detail", "" + queryDocumentSnapshots.size() + " " + queryDocumentSnapshots.getDocuments().get(0).get("username") + " " + queryDocumentSnapshots.getDocuments().get(0).get("mLike"));
+
+                }
+                // }else
+                //     Log.e("detail", String.valueOf(queryDocumentSnapshots.size()));
             }
         });
 
@@ -107,10 +112,8 @@ public class PlaceDetailActivity extends BaseActivity {
             Toast.makeText(getBaseContext(), "You choose this restaurant", Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
-            //bookingRestaurant(getCurrentUser().getUid());
             updateRestaurantName(placeDetailResult.getName());
             updateRestaurantId(restoPlaceId);
-
 
 
         } else {
@@ -149,6 +152,39 @@ public class PlaceDetailActivity extends BaseActivity {
 //        startActivity(intentCall);
     }
 
+    @OnClick(R.id.star)
+    public void addLike() {
+
+
+        LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()){
+                    Log.e("like", "deja présent " + placeDetailResult.getName());
+
+
+
+                    Log.e("like", " ca fait " + like);
+                    LikeHelper.updateLike(placeDetailResult.getPlaceId(), 10);
+
+                }else {
+                    Log.e("like", "pas présent " + placeDetailResult.getName());
+                    LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
+
+                }
+
+
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+
+    }
+
     //-----------------------
     //HTTP REQUEST
     //-----------------------
@@ -182,28 +218,22 @@ public class PlaceDetailActivity extends BaseActivity {
 
 
     //  Dispose subscription
-    private void disposeWhenDestroy(){
+    private void disposeWhenDestroy() {
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
     //----------------------
     //REST REQUEST
     //----------------------
-//    private void bookingRestaurant(String userId) {
-//        RestaurantHelper.getBooking(restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-//            @Override
-//            public void onSuccess(DocumentSnapshot documentSnapshot) {
-//                if (documentSnapshot.exists()) {
-//                    Log.e("restoId", "true" + restoPlaceId);
-//                    Booking booking = documentSnapshot.toObject(Booking.class);
-//                    RestaurantHelper.updateBooking(userId, restoPlaceId);
-//                } else {
-//                    Log.e("restoId", "false" + restoPlaceId);
-//                    RestaurantHelper.createBookingRestaurant(userId, restoPlaceId, placeDetailResult.getName(), null);
-//                }
-//            }
-//        });
 
-//    }
+    private void updateLike(Boolean like) {
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                user = documentSnapshot.toObject(User.class);
+                UserHelper.updateLike(getCurrentUser().getUid(), like);
+            }
+        });
+    }
 
     private void updateRestaurantName(String restoName) {
         UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
@@ -230,15 +260,6 @@ public class PlaceDetailActivity extends BaseActivity {
         });
     }
 
-//    private void deleteBooking(String userId) {
-//        RestaurantHelper.deleteBooking(userId).addOnSuccessListener(new OnSuccessListener<Void>() {
-//            @Override
-//            public void onSuccess(Void aVoid) {
-//            }
-//        });
-//    }
-
-
 
     //------------------
     //UPDATE UI
@@ -264,6 +285,8 @@ public class PlaceDetailActivity extends BaseActivity {
             //--------------------------
             //Display restaurant rating
             //--------------------------
+
+
             if (results.getResult().getRating() != null) {
                 double rating = results.getResult().getRating();
                 double ratingResult = (rating / 5) * 3;

@@ -7,17 +7,20 @@ public class User {
     private String email;
     private String mRestaurantId;
     private String mRestaurantName;
+    private Boolean mLike;
 
     public User() {
     }
 
-    public User(String uid, String username, String urlPicture, String email, String restaurantId, String restaurantName) {
+    public User(String uid, String username, String urlPicture, String email, String restaurantId, String restaurantName, Boolean like) {
         this.mUid = uid;
         this.mUsername = username;
         this.mUrlPicture = urlPicture;
         this.email = email;
         this.mRestaurantId = restaurantId;
         this.mRestaurantName=  restaurantName;
+        this.mLike = like;
+
     }
 
 
@@ -46,6 +49,10 @@ public class User {
         return mRestaurantName;
     }
 
+    public Boolean getmLike() {
+        return mLike;
+    }
+
     //------------SETTERS-----------
     public void setUsername(String username) {
         this.mUsername = username;
@@ -69,5 +76,9 @@ public class User {
 
     public void setmRestaurantName(String mRestaurantName) {
         this.mRestaurantName = mRestaurantName;
+    }
+
+    public void setmLike(Boolean mLike) {
+        this.mLike = mLike;
     }
 }

@@ -9,6 +9,8 @@ import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -73,8 +75,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     private Uri uriImageSelected;
 
     // STATIC DATA FOR PICTURE
-    private static final String PERMS = Manifest.permission.READ_EXTERNAL_STORAGE;
-    private static final int RC_IMAGE_PERMS = 100;
+
     public static final int RC_CHOOSE_PHOTO = 200;
 
     public ChatFragment() {
@@ -92,10 +93,12 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
     }
 
+
+
     @Override
-    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        this.handleResponse(requestCode, resultCode, data);
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
     @Override
@@ -146,10 +149,6 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     }
 
 
-    @AfterPermissionGranted(RC_IMAGE_PERMS)
-    void onClickAddFile() {
-        this.chooseImageFromPhone();
-    }
 
     //--------------
     //REST REQUESTS
@@ -195,7 +194,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     // --------------------
     // UI
     // --------------------
-    // 5 - Configure RecyclerView with a Query
+    //  Configure RecyclerView with a Query
     private void configureRecyclerView(String chatName) {
         //Track current chat name
         this.currentChatName = chatName;
@@ -212,12 +211,22 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         chatRecycler.setAdapter(this.chatAdapter);
     }
 
-    // 6 - Create options for RecyclerView from a Query
+    //  Create options for RecyclerView from a Query
     private FirestoreRecyclerOptions<Message> generateOptionsForAdapter(Query query) {
         return new FirestoreRecyclerOptions.Builder<Message>()
                 .setQuery(query, Message.class)
                 .setLifecycleOwner(this)
                 .build();
+    }
+
+    // Hide search button item
+    @Override
+    public void onPrepareOptionsMenu(@NonNull Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        MenuItem item=menu.findItem(R.id.search_button);
+        if (item!=null){
+            item.setVisible(false);
+        }
     }
 
     // --------------------
@@ -242,31 +251,5 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         };
     }
 
-    //-----------------
-    //FILE MANAGEMENT
-    //-----------------
-    private void chooseImageFromPhone() {
-        if (!EasyPermissions.hasPermissions(Objects.requireNonNull(getContext()), PERMS)) {
-            EasyPermissions.requestPermissions(this, "this application need permission to run", RC_IMAGE_PERMS, PERMS);
-            return;
-        }
-        //Launch an "selection image" Activity
-        Intent i = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-        startActivityForResult(i, RC_CHOOSE_PHOTO);
-    }
 
-    // Handle activity response (after user has chosen or not a picture)
-    private void handleResponse(int requestCode, int resultCode, Intent data) {
-        if (requestCode == RC_CHOOSE_PHOTO) {
-            if (resultCode == RESULT_OK) {//SUCCESS
-                this.uriImageSelected = data.getData();
-                Glide.with(this)//SHOWING PREVIEW OF IMAGE
-                        .load(this.uriImageSelected)
-                        .apply(RequestOptions.circleCropTransform())
-                        .into(this.imagePreview);
-            } else {
-                Toast.makeText(getContext(), "No picture selected", Toast.LENGTH_SHORT).show();
-            }
-        }
-    }
 }

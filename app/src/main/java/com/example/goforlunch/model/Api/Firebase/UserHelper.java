@@ -21,8 +21,8 @@ public class UserHelper {
     }
 
     //---CREATE---
-    public static Task<Void> createUser(String uid, String username, String urlPicture, String email, String restaurantId, String restaurantName ){
-        User userToCreate = new User(uid, username, urlPicture, email, restaurantId, restaurantName);
+    public static Task<Void> createUser(String uid, String username, String urlPicture, String email, String restaurantId, String restaurantName, Boolean like ){
+        User userToCreate = new User(uid, username, urlPicture, email, restaurantId, restaurantName, like);
         return UserHelper.getUsersCollection().document(uid).set(userToCreate);
     }
 
@@ -34,6 +34,7 @@ public class UserHelper {
     public static Task<QuerySnapshot> getRestoId(String restoId){
         return UserHelper.getUsersCollection().whereEqualTo("mRestaurantId",restoId ).get();
     }
+
 
     public static CollectionReference getAllUsers(){
         return UserHelper.getUsersCollection();
@@ -53,6 +54,10 @@ public class UserHelper {
     }
  public static Task<Void>updateRestaurantName(String uid, String restaurantName){
         return UserHelper.getUsersCollection().document(uid).update("mRestaurantName", restaurantName);
+    }
+
+    public static Task<Void>updateLike(String uid,   Boolean like){
+        return UserHelper.getUsersCollection().document(uid).update("mLike", like);
     }
 
     //---DELETE---
