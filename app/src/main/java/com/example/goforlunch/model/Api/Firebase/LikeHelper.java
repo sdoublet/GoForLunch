@@ -29,6 +29,6 @@ public class LikeHelper {
 
     //---UPDATE---
     public  static Task<Void>updateLike(String restoId, int like){
-        return LikeHelper.getLikeCollection().document(restoId).update("mLike", like+1);
+        return LikeHelper.getLikeCollection().document(restoId).update("mLike", like);
     }
 }

@@ -1,15 +1,16 @@
 package com.example.goforlunch.controler.activities;
 
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.text.Layout;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -30,6 +31,7 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
+import com.example.goforlunch.utils.AlertReceiver;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
@@ -48,6 +50,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
@@ -69,7 +72,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     BottomNavigationView bottomNavigationView;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
-
 
 
     protected FirebaseUser getCurrentUser() {
@@ -97,6 +99,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.configureBottomView();
         this.configureStatusBar();
         this.updateUIWhenCreating();
+        this.deleteBooking();
         navigationView.setNavigationItemSelectedListener(this);
         DataHolder.getInstance().setUserUid(getCurrentUser().getUid());
         Log.e("userId", DataHolder.getInstance().getUserUid());
@@ -218,10 +221,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
             case R.id.your_lunch:
-                if (DataHolder.getInstance().getRestaurantId()!=null){
-                Intent intent1 = new Intent(this, PlaceDetailActivity.class);
-                intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
-                startActivity(intent1);}
+                if (DataHolder.getInstance().getRestaurantId() != null) {
+                    Intent intent1 = new Intent(this, PlaceDetailActivity.class);
+                    intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
+                    startActivity(intent1);
+                }
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
@@ -306,6 +310,25 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     }
 
 
+    private void deleteBooking() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 17);
+        calendar.set(Calendar.MINUTE, 50);
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+        startAlarm(calendar);
+        Log.e("alarm", "alarm set");
+
+    }
+
+    private void startAlarm(Calendar calendar) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+
+        alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
 }
 
 
