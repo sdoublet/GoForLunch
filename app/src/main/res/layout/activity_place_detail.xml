@@ -7,38 +7,35 @@
     tools:context=".controler.activities.PlaceDetailActivity">
 
 
-
     <ImageView
         android:id="@+id/detail_image_resto"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toTopOf="parent"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
-        android:background="@color/colorAccent"
+        app:layout_constraintTop_toTopOf="parent"
         tools:ignore="ContentDescription" />
 
     <ProgressBar
         android:id="@+id/progress_bar"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/guideline"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 
     <LinearLayout
         android:id="@+id/detail_linear_layout"
         android:layout_width="match_parent"
-        android:orientation="horizontal"
         android:layout_height="80dp"
-        app:layout_constraintVertical_weight="1"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
         android:background="@color/colorAccent"
-        >
-
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@+id/guideline"
+        app:layout_constraintVertical_weight="1">
 
 
     </LinearLayout>
@@ -47,41 +44,42 @@
         android:id="@+id/detail_resto_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="10dp"
         android:text="Les Radeliers"
         android:textColor="@color/quantum_greywhite1000"
         android:textSize="25sp"
-        app:layout_constraintTop_toBottomOf="@+id/guideline"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="10dp" />
+        app:layout_constraintTop_toBottomOf="@+id/guideline" />
 
     <TextView
         android:id="@+id/detail_address"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@+id/detail_resto_name"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:text="French restaurant - 12 rue du bois"
         android:textColor="@color/quantum_greywhite1000"
         app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginStart="10dp"
-        android:layout_marginEnd="10dp"/>
+        app:layout_constraintTop_toBottomOf="@+id/detail_resto_name" />
 
     <androidx.appcompat.widget.AppCompatRatingBar
         android:id="@+id/rating"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="@style/Widget.AppCompat.RatingBar.Small"
-        android:numStars="3"
-        android:rating="1"
-        app:layout_constraintTop_toTopOf="@+id/detail_resto_name"
-        app:layout_constraintBottom_toBottomOf="@+id/detail_resto_name"
-        app:layout_constraintRight_toRightOf="parent"
         android:layout_marginStart="5dp"
         android:layout_marginEnd="20dp"
+        android:numStars="3"
+        android:rating="1"
+        app:layout_constraintBottom_toBottomOf="@+id/detail_resto_name"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/detail_resto_name"
 
         />
 
     <TextView
+        android:id="@+id/noWorker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="No worker has chosen this restaurant today"
@@ -92,54 +90,53 @@
         app:layout_constraintTop_toTopOf="@+id/detail_linear_contact" />
 
 
-
     <LinearLayout
         android:id="@+id/detail_linear_contact"
         android:layout_width="match_parent"
         android:layout_height="80dp"
-        android:orientation="horizontal"
         android:background="@color/colorSecondary"
-        app:layout_constraintTop_toBottomOf="@+id/detail_linear_layout"
+        android:orientation="horizontal"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/detail_linear_layout">
 
         <Button
             android:id="@+id/image_phone"
+            style="@style/NoShadowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:background="@color/colorSecondary"
-            android:text="CALL"
             android:drawableTop="@drawable/phone"
             android:drawablePadding="10dp"
-            style="@style/NoShadowButton"
+            android:text="CALL"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/star"
+            style="@style/NoShadowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:background="@color/colorSecondary"
-            android:text="LIKE"
             android:drawableTop="@drawable/star"
             android:drawablePadding="10dp"
-            style="@style/NoShadowButton"
-            android:layout_marginTop="15dp"
+            android:text="LIKE"
             tools:ignore="ButtonStyle" />
 
         <Button
             android:id="@+id/website_button"
+            style="@style/NoShadowButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
             android:layout_weight="1"
             android:background="@color/colorSecondary"
-            android:text="WEBSITE"
             android:drawableTop="@drawable/website"
             android:drawablePadding="10dp"
-            style="@style/NoShadowButton"
-            android:layout_marginTop="15dp"
+            android:text="WEBSITE"
             tools:ignore="ButtonStyle" />
 
     </LinearLayout>
@@ -171,19 +168,18 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3"/>
+        app:layout_constraintGuide_percent="0.3" />
 
 
-<com.google.android.material.floatingactionbutton.FloatingActionButton
-    android:id="@+id/floating_button"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    app:layout_constraintBottom_toBottomOf="@+id/guideline"
-    app:layout_constraintRight_toRightOf="parent"
-    android:backgroundTint="#ffffff"
-    android:src="@drawable/add_circle"
-    app:maxImageSize="35dp"
-    android:layout_marginEnd="35dp"
-    />
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floating_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="35dp"
+        android:backgroundTint="#ffffff"
+        android:src="@drawable/add_circle"
+        app:layout_constraintBottom_toBottomOf="@+id/guideline"
+        app:layout_constraintRight_toRightOf="parent"
+        app:maxImageSize="35dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

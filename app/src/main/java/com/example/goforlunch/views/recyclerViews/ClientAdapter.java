@@ -1,36 +1,45 @@
 package com.example.goforlunch.views.recyclerViews;
 
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.User;
-import com.firebase.ui.firestore.FirestoreRecyclerAdapter;
-import com.firebase.ui.firestore.FirestoreRecyclerOptions;
 
-public class ClientAdapter extends FirestoreRecyclerAdapter<User, ClientViewHolder> {
-    /**
-     * Create a new RecyclerView adapter that listens to a Firestore Query.  See {@link
-     * FirestoreRecyclerOptions} for configuration options.
-     *
-     * @param options
-     */
-    public ClientAdapter(@NonNull FirestoreRecyclerOptions<User> options) {
-        super(options);
-    }
+import java.util.List;
 
-    @Override
-    protected void onBindViewHolder(@NonNull ClientViewHolder clientViewHolder, int i, @NonNull User user) {
+public class ClientAdapter extends RecyclerView.Adapter<ClientViewHolder> {
 
+    private List<User> users;
+    RequestManager glide;
+
+    public ClientAdapter(List<User> users, RequestManager glide) {
+        this.users = users;
+        this.glide = glide;
     }
 
     @NonNull
     @Override
     public ClientViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.row_workmates, parent, false);
+        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        View view = inflater.inflate(R.layout.row_workmates, parent, false);
         return new ClientViewHolder(view);
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ClientViewHolder holder, int position) {
+        holder.updateView(users.get(position), glide);
+
+    }
+
+    @Override
+    public int getItemCount() {
+        return users.size();
     }
 }

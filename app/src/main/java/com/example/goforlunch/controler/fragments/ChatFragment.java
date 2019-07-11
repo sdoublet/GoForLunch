@@ -1,11 +1,8 @@
 package com.example.goforlunch.controler.fragments;
 
 
-import android.Manifest;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Firebase.MessageHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
@@ -48,15 +44,12 @@ import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
 import java.util.UUID;
-import java.util.concurrent.Executor;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
-import static android.app.Activity.RESULT_OK;
 
 
 public class ChatFragment extends Fragment implements ChatAdapter.Listener {
@@ -72,14 +65,11 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     private User modelCurrentUser;
     private String currentChatName;
     private ChatAdapter chatAdapter;
-    private Uri uriImageSelected;
 
-    // STATIC DATA FOR PICTURE
 
-    public static final int RC_CHOOSE_PHOTO = 200;
+
 
     public ChatFragment() {
-        // Required empty public constructor
     }
 
     public static Fragment newInstance() {
@@ -138,13 +128,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
                 MessageHelper.createMessageForChat(Objects.requireNonNull(inputTextMessage.getText()).toString(),
                         this.currentChatName, modelCurrentUser).addOnFailureListener(this.onFailureListener());
                 this.inputTextMessage.setText("");
-            }else {
-                //send a message with text and image
-                this.uploadPhotoInFirebaseAndSendAMessage(Objects.requireNonNull(inputTextMessage.getText()).toString());
-                this.inputTextMessage.setText("");
-                this.imagePreview.setImageDrawable(null);
             }
-
         }
     }
 
@@ -162,34 +146,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
             }
         });
     }
-    //Upload a picture in Firebase and send a message
-    private void uploadPhotoInFirebaseAndSendAMessage(final String message){
-        String uuid = UUID.randomUUID().toString();//GENERATE UNIQUE STRING
-        //Upload to CGS
-        StorageReference mImageRef = FirebaseStorage.getInstance().getReference(uuid);
-        UploadTask uploadTask = mImageRef.putFile(this.uriImageSelected);
 
-        Task<Uri> uriTask = uploadTask.continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-            @Override
-            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                if (task.isSuccessful()){
-                    throw Objects.requireNonNull(task.getException());
-                }
-                return mImageRef.getDownloadUrl();
-            }
-        }) .addOnCompleteListener(new OnCompleteListener<Uri>() {
-            @Override
-            public void onComplete(@NonNull Task<Uri> task) {
-                if (task.isSuccessful()){
-                    Uri downloadUri = task.getResult();
-                    MessageHelper.createMessageWithImageForChat(Objects.requireNonNull(downloadUri).toString(), message,currentChatName, modelCurrentUser).addOnFailureListener(onFailureListener());
-                }else{
-                    Log.e("chat", "Error on complete:"+ task.getException());
-                }
-            }
-        });
-
-    }
 
     // --------------------
     // UI

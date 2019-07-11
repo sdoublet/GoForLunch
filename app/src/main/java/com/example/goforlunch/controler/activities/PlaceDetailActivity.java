@@ -8,12 +8,14 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -23,15 +25,19 @@ import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Firebase.LikeHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
-import com.example.goforlunch.model.Like;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
+import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.utils.PlaceStreams;
+import com.example.goforlunch.views.recyclerViews.ClientAdapter;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +49,6 @@ public class PlaceDetailActivity extends BaseActivity {
 
     public static final String PLACEDETAILRESTO = "resto_place_id";
     public static final String PHOTO = "photo";
-    // @BindView(R.id.toolbar)
-    // Toolbar toolbar;
     @BindView(R.id.floating_button)
     FloatingActionButton floatingButton;
     @BindView(R.id.detail_resto_name)
@@ -63,9 +67,12 @@ public class PlaceDetailActivity extends BaseActivity {
     ProgressBar progressbar;
     @BindView(R.id.star)
     Button like;
+    @BindView(R.id.noWorker)
+    TextView noWorker;
     private String restoPlaceId;
     private Disposable disposable;
     private Result placeDetailResult;
+    private ClientAdapter adapter;
     private User user;
 
     @Override
@@ -78,6 +85,8 @@ public class PlaceDetailActivity extends BaseActivity {
         Log.e("test", restoPlaceId);
         executeHttpRequestWithRetrofit(restoPlaceId);
         //for test
+
+        configureRecyclerView();
         UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -154,35 +163,56 @@ public class PlaceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.star)
     public void addLike() {
+        if (like.getText().equals("LIKE")) {
+            like.setText("YOU LIKE");
+            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        Log.e("like", "deja présent " + placeDetailResult.getName());
+                        LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                            @Override
+                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                long likes = (long) documentSnapshot.get("mLike");
+                                Log.e("like", String.valueOf(likes));
 
+                            }
+                        });
+                        Log.e("like", " ca fait " + like);
+                        LikeHelper.updateLike(placeDetailResult.getPlaceId(), 10);
 
-        LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()){
-                    Log.e("like", "deja présent " + placeDetailResult.getName());
+                    } else {
+                        Log.e("like", "pas présent " + placeDetailResult.getName());
+                        LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
 
+                    }
 
-
-                    Log.e("like", " ca fait " + like);
-                    LikeHelper.updateLike(placeDetailResult.getPlaceId(), 10);
-
-                }else {
-                    Log.e("like", "pas présent " + placeDetailResult.getName());
-                    LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
 
                 }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+
+                }
+            });
 
 
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
+        }
+    }
 
-            }
-        });
-
-
+    @OnClick(R.id.star)
+    public void dislike() {
+        if (like.getText().equals("YOU LIKE")) {
+            like.setText("LIKE");
+            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if (documentSnapshot.exists()) {
+                        LikeHelper.updateLike(placeDetailResult.getPlaceId(), -1);
+                    }
+                }
+            });
+        }
     }
 
     //-----------------------
@@ -325,6 +355,26 @@ public class PlaceDetailActivity extends BaseActivity {
     //--------------------
     //Display RecyclerView
     //--------------------
+    private void configureRecyclerView() {
 
+        UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                List<User> users = new ArrayList<>();
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                        users.add(snapshot.toObject(User.class));
+                        adapter = new ClientAdapter(users, Glide.with(getApplicationContext()));
+                        Log.e("rvDetail", String.valueOf(users.size()));
+                        userRecyclerView.addItemDecoration(new Divider(getBaseContext(), LinearLayout.VERTICAL));
+                        userRecyclerView.setAdapter(adapter);
+                        userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
+                        noWorker.setVisibility(View.GONE);
+                    }
+                }
+            }
+        });
+
+    }
 
 }

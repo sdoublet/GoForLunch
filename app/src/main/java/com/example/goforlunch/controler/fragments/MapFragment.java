@@ -266,6 +266,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onResume() {
         super.onResume();
         mapView.onResume();
+        if (mGoogleMap != null) {
+            this.displayCurrentLocation(mGoogleMap);
+        }
+
     }
 
 
@@ -273,6 +277,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onPause() {
         super.onPause();
         mapView.onPause();
+
     }
 
     @Override

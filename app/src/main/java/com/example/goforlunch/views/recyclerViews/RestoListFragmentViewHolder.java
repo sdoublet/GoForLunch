@@ -80,6 +80,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
             @Override
             public void onComplete() {
+
             }
         });
     }
