@@ -5,23 +5,21 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
-import com.example.goforlunch.model.Api.Firebase.UserHelper;
-import com.google.firebase.firestore.Query;
+
 
 public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
-//        PlaceDetailActivity placeDetail = new PlaceDetailActivity();
-//        placeDetail.updateRestaurantId(null);
-//        placeDetail.updateRestaurantName(null);
-
+       PlaceDetailActivity placeDetail = new PlaceDetailActivity();
+       placeDetail.updateRestaurantId(null);
+       placeDetail.updateRestaurantName(null);
+  //          delete();
 
         Log.e("alarm", "alarm receive");
 
     }
-    private void delete(){
-        Query allUser = UserHelper.getAllUsers();
-        allUser.
-    }
+
 }

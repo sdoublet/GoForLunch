@@ -25,6 +25,7 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.crashlytics.android.Crashlytics;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.fragments.ChatFragment;
@@ -312,8 +313,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void deleteBooking() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 17);
-        calendar.set(Calendar.MINUTE, 50);
+        calendar.set(Calendar.HOUR_OF_DAY, 18);
+        calendar.set(Calendar.MINUTE, 22);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
@@ -328,6 +329,12 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+       
     }
 }
 

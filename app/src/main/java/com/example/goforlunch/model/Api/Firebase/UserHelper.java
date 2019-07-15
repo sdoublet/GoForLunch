@@ -56,14 +56,14 @@ public class UserHelper {
         return UserHelper.getUsersCollection().document(uid).update("mRestaurantName", restaurantName);
     }
 
-    public static Task<Void>updateLike(String uid,   Boolean like){
-        return UserHelper.getUsersCollection().document(uid).update("mLike", like);
-    }
+
 
     //---DELETE---
     public static Task<Void> deleteUser(String uid){
         return UserHelper.getUsersCollection().document(uid).delete();
     }
+
+
 
 
 
