@@ -78,7 +78,8 @@ public class PlaceDetailActivity extends BaseActivity {
     private long likes;
     public static final String[] perms = {Manifest.permission.CALL_PHONE};
     public static final int REQUEST_PERMISSION_CODE = 100;
-    public static final String PREF_BOOKING = "Mybooking";
+    public static final String PREF_BOOKING = "myBooking";
+    public static final String PREF_LIKE = "likes";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,14 +88,14 @@ public class PlaceDetailActivity extends BaseActivity {
         configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
         Log.e("test", restoPlaceId);
+       // restorePrefLike();
         executeHttpRequestWithRetrofit(restoPlaceId);
         configureRecyclerView();
         displayLikes();
+        restorePrefBooking();
 
-        restorePref();
 
     }
-
 
 
     @Override
@@ -184,6 +185,10 @@ public class PlaceDetailActivity extends BaseActivity {
                     LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot1 -> {
 
                         like.setText(getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
+                       // SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
+                       // SharedPreferences.Editor editor = sharedPreferences.edit();
+                       // editor.putString("liked", getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
+                       // editor.apply();
                         Log.e("like", String.valueOf(likes));
 
                     });
@@ -195,6 +200,12 @@ public class PlaceDetailActivity extends BaseActivity {
                 } else {
                     Log.e("like", "pas présent " + placeDetailResult.getName());
                     LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
+                    like.setText(getString(R.string.LIKE) + "(1)");
+                   //SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
+                   //SharedPreferences.Editor editor = sharedPreferences.edit();
+                   //editor.putString("liked", getString(R.string.LIKE) + "(1)");
+                   //editor.apply();
+
                 }
             }).addOnFailureListener(e -> {
 
@@ -215,6 +226,10 @@ public class PlaceDetailActivity extends BaseActivity {
                     int newLike = (int) (likes - 1);
                     LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
                     like.setText(getString(R.string.ToLike) + "(" + newLike + ")");
+//                    SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
+//                    SharedPreferences.Editor editor = sharedPreferences.edit();
+//                    editor.putString("liked", getString(R.string.ToLike) + "(" + newLike + ")");
+//                    editor.apply();
                 }
             });
         }
@@ -335,12 +350,6 @@ public class PlaceDetailActivity extends BaseActivity {
             }
 
 
-
-
-
-
-
-
         } else {
             restoName.setText(getString(R.string.NoName));
         }
@@ -377,7 +386,7 @@ public class PlaceDetailActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void displayLikes() {
         LikeHelper.getRestoLiked(restoPlaceId).addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.get("mLike") != null) {
+            if (documentSnapshot.get("mLike") != null ) {
                 like.setText(getString(R.string.ToLike) + "(" + documentSnapshot.get("mLike") + ")");
             } else {
                 like.setText(getString(R.string.ToLike) + "(0)");
@@ -389,11 +398,11 @@ public class PlaceDetailActivity extends BaseActivity {
     //------------------------
     //RESTORE PREFERENCES
     //------------------------
-    private void restorePref() {
+    private void restorePrefBooking() {
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
         String booked = sharedPreferences.getString("booked", null);
-        if (booked!=null && booked.equals(restoPlaceId)){
-            Log.e("pref", booked + " yes"+restoPlaceId+" " + booked);
+        if (booked != null && booked.equals(restoPlaceId)) {
+            Log.e("pref", booked + " yes" + restoPlaceId + " " + booked);
             Drawable drawable = getResources().getDrawable(R.drawable.check_circle).mutate();
             drawable.setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
             floatingButton.setImageDrawable(drawable);
@@ -401,4 +410,14 @@ public class PlaceDetailActivity extends BaseActivity {
         }
     }
 
+    private void restorePrefLike() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
+        String liked = sharedPreferences.getString("liked", null);
+        if (liked != null) {
+            like.setText(liked);
+            Log.e("liked", liked);
+        } else {
+            Log.e("liked", "nothing");
+        }
+    }
 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.appcompat.app.ActionBar;
@@ -31,7 +32,7 @@ public class SettingActivity extends BaseActivity {
     private static final int UPDATE_USERNAME = 30;
     private static final int UPDATE_EMAIL = 40;
     //private static final int SIGN_OUT_TASK = 10;
-    public static final String RADIUS_PREF=  "radiusPref";
+    public static final String RADIUS_PREF = "radiusPref";
     public static final String SHARE_PREF = "sharePref";
 
     @BindView(R.id.toolbar)
@@ -44,8 +45,11 @@ public class SettingActivity extends BaseActivity {
     ProgressBar progressBar;
     @BindView(R.id.radius)
     EditText radiusEditText;
+    @BindView(R.id.notification_switch)
+    Switch notificationSwitch;
 
     private SharedPreferences.Editor editor;
+
     @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +62,8 @@ public class SettingActivity extends BaseActivity {
         editor = sharedPreferences.edit();
         String radius = sharedPreferences.getString(RADIUS_PREF, "1000");
         radiusEditText.setText(radius);
+        boolean notifSwitch= sharedPreferences.getBoolean("notificationSwitch", false);
+        notificationSwitch.setChecked(notifSwitch);
 
 
     }
@@ -104,6 +110,18 @@ public class SettingActivity extends BaseActivity {
     public void onClickUpdatePreferences() {
         updateRadius();
         Log.e("button", "button checked");
+    }
+
+    @OnClick(R.id.notification_switch)
+    public void activateNotification() {
+        if (!notificationSwitch.isActivated()) {
+            notificationSwitch.setChecked(true);
+            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, 0);
+            editor = sharedPreferences.edit();
+            editor.putBoolean("notificationSwitch", true);
+            editor.apply();
+        }
+
     }
 
 
@@ -173,8 +191,8 @@ public class SettingActivity extends BaseActivity {
         hideProgressBar();
 
 
-
     }
+
 
     private void launchLoginActivity() {
         Intent intent = new Intent(this, LoginActivity.class);
@@ -186,7 +204,7 @@ public class SettingActivity extends BaseActivity {
         startActivity(intent);
     }
 
-    private void hideProgressBar(){
+    private void hideProgressBar() {
         new Handler().postDelayed(() -> {
             progressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), "Apply changed", Toast.LENGTH_SHORT).show();
