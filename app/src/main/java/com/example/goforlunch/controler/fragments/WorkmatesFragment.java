@@ -2,10 +2,8 @@ package com.example.goforlunch.controler.fragments;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -88,17 +86,14 @@ public class WorkmatesFragment extends Fragment {
 
     private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(recyclerView, R.layout.row_workmates)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        User user = adapter.getItem(position);
-                        if (user.getmRestaurantId() != null) {
-                            Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
-                            intent.putExtra("resto_place_id", user.getmRestaurantId());
-                            startActivity(intent);
-                        }else {
-                            Toast.makeText(getContext(), user.getUsername()+ " n'a pas encore choisit",Toast.LENGTH_SHORT).show();
-                        }
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    User user = adapter.getItem(position);
+                    if (user.getmRestaurantId() != null) {
+                        Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+                        intent.putExtra("resto_place_id", user.getmRestaurantId());
+                        startActivity(intent);
+                    }else {
+                        Toast.makeText(getContext(), user.getUsername()+ " n'a pas encore choisit",Toast.LENGTH_SHORT).show();
                     }
                 });
     }

@@ -1,7 +1,9 @@
 package com.example.goforlunch.controler.activities;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
@@ -16,7 +18,6 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -32,11 +33,8 @@ import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.example.goforlunch.views.recyclerViews.ClientAdapter;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,7 +49,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class PlaceDetailActivity extends BaseActivity {
 
     public static final String PLACEDETAILRESTO = "resto_place_id";
-    public static final String PHOTO = "photo";
+    //public static final String PHOTO = "photo";
     @BindView(R.id.floating_button)
     FloatingActionButton floatingButton;
     @BindView(R.id.detail_resto_name)
@@ -80,6 +78,7 @@ public class PlaceDetailActivity extends BaseActivity {
     private long likes;
     public static final String[] perms = {Manifest.permission.CALL_PHONE};
     public static final int REQUEST_PERMISSION_CODE = 100;
+    public static final String PREF_BOOKING = "Mybooking";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,7 +91,11 @@ public class PlaceDetailActivity extends BaseActivity {
         configureRecyclerView();
         displayLikes();
 
+        restorePref();
+
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -115,6 +118,11 @@ public class PlaceDetailActivity extends BaseActivity {
             floatingButton.setActivated(true);
             updateRestaurantName(placeDetailResult.getName());
             updateRestaurantId(restoPlaceId);
+            SharedPreferences preferences = getSharedPreferences(PREF_BOOKING, 0);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("booked", restoPlaceId);
+            editor.apply();
+            Log.e("pref", preferences.getString("booked", null));
 
 
         } else {
@@ -124,6 +132,12 @@ public class PlaceDetailActivity extends BaseActivity {
             floatingButton.setActivated(false);
             updateRestaurantName(null);
             updateRestaurantId(null);
+            SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.clear();
+            editor.apply();
+            Log.e("pref", "null");
+
         }
     }
 
@@ -154,63 +168,53 @@ public class PlaceDetailActivity extends BaseActivity {
                 intentCall.setData(Uri.parse("tel:" + "0622611305"));
                 startActivity(intentCall);
             }
-        }else {
+        } else {
             EasyPermissions.requestPermissions(this, "This app need your permission to work", REQUEST_PERMISSION_CODE, perms);
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @OnClick(R.id.star)
     public void addLike() {
         if (like.getText().length() < 10) {
             Log.e("lenght", String.valueOf(like.getText().length()));
-            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        Log.e("like", "deja présent " + placeDetailResult.getName());
-                        LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                            @Override
-                            public void onSuccess(DocumentSnapshot documentSnapshot) {
+            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    Log.e("like", "deja présent " + placeDetailResult.getName());
+                    LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot1 -> {
 
-                                like.setText("YOU LIKE" + "(" + documentSnapshot.get("mLike") + ")");
-                                Log.e("like", String.valueOf(likes));
+                        like.setText(getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
+                        Log.e("like", String.valueOf(likes));
 
-                            }
-                        });
-                        likes = (long) documentSnapshot.get("mLike");
-                        int newLike = (int) (likes + 1);
-                        Log.e("like", " ca fait " + likes);
-                        LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
+                    });
+                    likes = (long) documentSnapshot.get("mLike");
+                    int newLike = (int) (likes + 1);
+                    Log.e("like", " ca fait " + likes);
+                    LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
 
-                    } else {
-                        Log.e("like", "pas présent " + placeDetailResult.getName());
-                        LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
-                    }
+                } else {
+                    Log.e("like", "pas présent " + placeDetailResult.getName());
+                    LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+            }).addOnFailureListener(e -> {
 
-                }
             });
 
 
         }
     }
 
+    @SuppressLint("SetTextI18n")
     @OnClick(R.id.star)
     public void dislike() {
         if (like.getText().length() > 10) {
 
-            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if (documentSnapshot.exists()) {
-                        likes = (long) documentSnapshot.get("mLike");
-                        int newLike = (int) (likes - 1);
-                        LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
-                        like.setText("LIKE " + "(" + newLike + ")");
-                    }
+            LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot -> {
+                if (documentSnapshot.exists()) {
+                    likes = (long) documentSnapshot.get("mLike");
+                    int newLike = (int) (likes - 1);
+                    LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
+                    like.setText(getString(R.string.ToLike) + "(" + newLike + ")");
                 }
             });
         }
@@ -258,27 +262,21 @@ public class PlaceDetailActivity extends BaseActivity {
 
 
     public void updateRestaurantName(String restoName) {
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
 
-                user = documentSnapshot.toObject(User.class);
-                UserHelper.updateRestaurantName(getCurrentUser().getUid(), restoName);
+            user = documentSnapshot.toObject(User.class);
+            UserHelper.updateRestaurantName(getCurrentUser().getUid(), restoName);
 
 
-            }
         });
     }
 
     public void updateRestaurantId(String restoId) {
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                user = documentSnapshot.toObject(User.class);
-                UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoId);
-                DataHolder.getInstance().setRestaurantId(restoPlaceId);
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
+            user = documentSnapshot.toObject(User.class);
+            UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoId);
+            DataHolder.getInstance().setRestaurantId(restoPlaceId);
 
-            }
         });
     }
 
@@ -337,9 +335,16 @@ public class PlaceDetailActivity extends BaseActivity {
             }
 
 
+
+
+
+
+
+
         } else {
-            restoName.setText("No name");
+            restoName.setText(getString(R.string.NoName));
         }
+
 
     }
 
@@ -349,20 +354,17 @@ public class PlaceDetailActivity extends BaseActivity {
     //--------------------
     private void configureRecyclerView() {
 
-        UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                List<User> users = new ArrayList<>();
-                if (!queryDocumentSnapshots.isEmpty()) {
-                    for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
-                        users.add(snapshot.toObject(User.class));
-                        adapter = new ClientAdapter(users, Glide.with(getApplicationContext()));
-                        Log.e("rvDetail", String.valueOf(users.size()));
-                        userRecyclerView.addItemDecoration(new Divider(getBaseContext(), LinearLayout.VERTICAL));
-                        userRecyclerView.setAdapter(adapter);
-                        userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
-                        noWorker.setVisibility(View.GONE);
-                    }
+        UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(queryDocumentSnapshots -> {
+            List<User> users = new ArrayList<>();
+            if (!queryDocumentSnapshots.isEmpty()) {
+                for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
+                    users.add(snapshot.toObject(User.class));
+                    adapter = new ClientAdapter(users, Glide.with(getApplicationContext()));
+                    Log.e("rvDetail", String.valueOf(users.size()));
+                    userRecyclerView.addItemDecoration(new Divider(getBaseContext(), LinearLayout.VERTICAL));
+                    userRecyclerView.setAdapter(adapter);
+                    userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
+                    noWorker.setVisibility(View.GONE);
                 }
             }
         });
@@ -372,18 +374,31 @@ public class PlaceDetailActivity extends BaseActivity {
     //---------------------
     //Display Likes
     //---------------------
+    @SuppressLint("SetTextI18n")
     private void displayLikes() {
-        LikeHelper.getRestoLiked(restoPlaceId).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.get("mLike") != null) {
-                    like.setText("LIKE " + "(" + documentSnapshot.get("mLike") + ")");
-                } else {
-                    like.setText("LIKE " + "(0)");
-                }
+        LikeHelper.getRestoLiked(restoPlaceId).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.get("mLike") != null) {
+                like.setText(getString(R.string.ToLike) + "(" + documentSnapshot.get("mLike") + ")");
+            } else {
+                like.setText(getString(R.string.ToLike) + "(0)");
             }
         });
 
+    }
+
+    //------------------------
+    //RESTORE PREFERENCES
+    //------------------------
+    private void restorePref() {
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
+        String booked = sharedPreferences.getString("booked", null);
+        if (booked!=null && booked.equals(restoPlaceId)){
+            Log.e("pref", booked + " yes"+restoPlaceId+" " + booked);
+            Drawable drawable = getResources().getDrawable(R.drawable.check_circle).mutate();
+            drawable.setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
+            floatingButton.setImageDrawable(drawable);
+            floatingButton.setActivated(true);
+        }
     }
 
 }

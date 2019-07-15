@@ -25,17 +25,18 @@ import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.crashlytics.android.Crashlytics;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
-import com.example.goforlunch.utils.AlertReceiver;
+import com.example.goforlunch.utils.AlertReceiverBooking;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -63,7 +64,7 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-    private static final int SIGN_OUT_TASK = 100;
+
 
     @BindView(R.id.toolbar)
     Toolbar toolbar;
@@ -87,6 +88,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final int FRAGMENT_WORKMATES = 2;
     public static final int FRAGMENT_CHAT = 3;
     public static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+
     public static final String PLACEIDRESTO = "resto_place_id";
 
     @Override
@@ -192,6 +194,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         if (requestCode == AUTOCOMPLETE_REQUEST_CODE) {
             if (resultCode == RESULT_OK) {
                 Place place = Autocomplete.getPlaceFromIntent(data);
+                Intent intent = new Intent(this, PlaceDetailActivity.class);
+                intent.putExtra(PLACEIDRESTO, place.getId());
+                startActivity(intent);
                 Log.i("tag", "Place: " + place.getName() + ", " + place.getId());
             } else if (resultCode == AutocompleteActivity.RESULT_ERROR) {
                 // TODO: Handle the error.
@@ -199,6 +204,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 Log.i("tag", status.getStatusMessage());
             } else if (resultCode == RESULT_CANCELED) {
                 // The user canceled the operation.
+                Log.e("TAG", "operation canceled");
             }
         }
     }
@@ -261,21 +267,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void signOutFromFirebase() {
         AuthUI.getInstance()
                 .signOut(this)
-                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted(SIGN_OUT_TASK));
+                .addOnSuccessListener(this, this.updateUIAfterRESTRequestsCompleted());
     }
 
 
     // Create onCompleteListener called after tasks ended
-    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted(final int origin) {
+    private OnSuccessListener<Void> updateUIAfterRESTRequestsCompleted() {
         return aVoid -> {
-            switch (origin) {
-                case SIGN_OUT_TASK:
-                    finish();
-                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                    startActivity(intent);
-                    break;
-
-            }
+            finish();
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
         };
     }
 
@@ -325,7 +326,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void startAlarm(Calendar calendar) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        Intent intent = new Intent(this, AlertReceiver.class);
+        Intent intent = new Intent(this, AlertReceiverBooking.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);

@@ -6,7 +6,6 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
@@ -35,9 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    protected Boolean isCurrentLogged(){
-        return (this.getCurrentUser()!=null);
-    }
+
 
 
     // --------------------
@@ -45,12 +42,7 @@ public abstract class BaseActivity extends AppCompatActivity {
     // --------------------
 
     protected OnFailureListener onFailureListener(){
-        return new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getApplicationContext(), getString(R.string.error_uknown_error), Toast.LENGTH_LONG).show();
-            }
-        };
+        return e -> Toast.makeText(getApplicationContext(), getString(R.string.error_uknown_error), Toast.LENGTH_LONG).show();
     }
 
     //------------------

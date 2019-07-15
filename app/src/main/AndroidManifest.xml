@@ -58,7 +58,7 @@
             </intent-filter>
         </service>
 
-        <receiver android:name=".utils.AlertReceiver"
+        <receiver android:name=".utils.AlertReceiverBooking"
             android:enabled="true"/>
     </application>
 

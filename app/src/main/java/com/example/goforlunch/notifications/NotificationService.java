@@ -1,6 +1,5 @@
 package com.example.goforlunch.notifications;
 
-import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -14,15 +13,12 @@ import android.util.Log;
 import androidx.core.app.NotificationCompat;
 
 import com.example.goforlunch.R;
-import com.example.goforlunch.controler.activities.BaseActivity;
 import com.example.goforlunch.controler.activities.MainActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
@@ -45,11 +41,11 @@ public class NotificationService extends FirebaseMessagingService  {
             checkIfUserBooking();
             String message = "Bonjour " + getCurrentUser().getDisplayName() +" " + remoteMessage.getNotification().getBody() + " " + DataHolder.getInstance().getRestoName()  ;
             Log.e("TAG", message);
-            sendVisualNotificaiton(message);
+            sendVisualNotification(message);
         }
     }
 
-    public void sendVisualNotificaiton(String messageBody) {
+    public void sendVisualNotification(String messageBody) {
 
         // Create an intent that will be shown when user will click on the Notification
         Intent intent = new Intent(this, MainActivity.class);
@@ -94,18 +90,15 @@ public class NotificationService extends FirebaseMessagingService  {
 
     private void checkIfUserBooking(){
 
-        UserHelper.getUser(DataHolder.getInstance().getUserUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                User user = documentSnapshot.toObject(User.class);
-               // if (user!=null&&user.getmRestaurantName()!=null){
-                   restoName = user.getmRestaurantName();
-                   DataHolder.getInstance().setRestoName(restoName);
-                    Log.e("notif", restoName);
-                }
-           // }
-        });
+        // }
+        UserHelper.getUser(DataHolder.getInstance().getUserUid()).addOnSuccessListener(documentSnapshot -> {
+            User user = documentSnapshot.toObject(User.class);
+           // if (user!=null&&user.getmRestaurantName()!=null){
+            assert user != null;
+            restoName = user.getmRestaurantName();
+               DataHolder.getInstance().setRestoName(restoName);
+                Log.e("notif", restoName);
+            });
 
 
     }

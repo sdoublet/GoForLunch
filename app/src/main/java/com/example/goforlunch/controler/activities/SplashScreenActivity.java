@@ -19,13 +19,10 @@ public class SplashScreenActivity extends AppCompatActivity {
 
         //Redirect to LoginActivity after 3 sec
         //handler post delayed
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(intent);
+            finish();
         }, SPLASH_SCREEN_TIMEOUT);
     }
 }

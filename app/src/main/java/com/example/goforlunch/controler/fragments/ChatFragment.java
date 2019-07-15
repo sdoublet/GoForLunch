@@ -1,10 +1,8 @@
 package com.example.goforlunch.controler.fragments;
 
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -28,22 +26,13 @@ import com.example.goforlunch.model.Message;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.views.recyclerViews.ChatAdapter;
 import com.firebase.ui.firestore.FirestoreRecyclerOptions;
-import com.google.android.gms.tasks.Continuation;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.Query;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 
 import java.util.Objects;
-import java.util.UUID;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -92,14 +81,14 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
 
         View view;
         view = inflater.inflate(R.layout.fragment_chat, container, false);
         ButterKnife.bind(this, view);
-        configureRecyclerView(CHAT_NAME_RESTAURANT);
+        configureRecyclerView();
         getCurrentUserFromFirestore();
         return view;
     }
@@ -111,9 +100,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
         return FirebaseAuth.getInstance().getCurrentUser();
     }
 
-    protected Boolean isCurrentUserLogged() {
-        return (this.getCurrentUser() != null);
-    }
+
 
     //-------------
     //ACTION
@@ -139,12 +126,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     //--------------
     //Get current user
     private void getCurrentUserFromFirestore() {
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                modelCurrentUser = documentSnapshot.toObject(User.class);
-            }
-        });
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> modelCurrentUser = documentSnapshot.toObject(User.class));
     }
 
 
@@ -152,9 +134,9 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     // UI
     // --------------------
     //  Configure RecyclerView with a Query
-    private void configureRecyclerView(String chatName) {
+    private void configureRecyclerView() {
         //Track current chat name
-        this.currentChatName = chatName;
+        this.currentChatName = ChatFragment.CHAT_NAME_RESTAURANT;
         //Configure Adapter & RecyclerView
         this.chatAdapter = new ChatAdapter(generateOptionsForAdapter(MessageHelper.getAllMessageForChat(this.currentChatName)), Glide.with(this), this, this.getCurrentUser().getUid(), this);
 
@@ -200,12 +182,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     //ERROR HANDLER
     //------------------
     private OnFailureListener onFailureListener() {
-        return new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Toast.makeText(getContext(), "An error is coming", Toast.LENGTH_SHORT).show();
-            }
-        };
+        return e -> Toast.makeText(getContext(), "An error is coming", Toast.LENGTH_SHORT).show();
     }
 
 

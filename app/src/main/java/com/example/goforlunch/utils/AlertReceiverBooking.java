@@ -9,7 +9,7 @@ import android.util.Log;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 
 
-public class AlertReceiver extends BroadcastReceiver {
+public class AlertReceiverBooking extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
        PlaceDetailActivity placeDetail = new PlaceDetailActivity();

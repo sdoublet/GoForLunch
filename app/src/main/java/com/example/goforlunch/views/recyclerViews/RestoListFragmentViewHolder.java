@@ -220,12 +220,9 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void displayWormates(String restoId){
-        UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                String workmates = String.valueOf(queryDocumentSnapshots.size());
-                numberOfPerson.setText("("+workmates+")");
-            }
+        UserHelper.getRestoId(restoId).addOnSuccessListener(queryDocumentSnapshots -> {
+            String workmates = String.valueOf(queryDocumentSnapshots.size());
+            numberOfPerson.setText("("+workmates+")");
         });
     }
 

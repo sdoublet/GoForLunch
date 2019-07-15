@@ -1,6 +1,6 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">GoForLunch</string>
-    <string name="go4lunch">GO4LUNCH</string>
+    <string name="go4lunch" translatable="false">GO4LUNCH</string>
     <string name="connection">Connection</string>
 
     <!-- FACEBOOK PURPOSE -->
@@ -39,8 +39,11 @@
     <string name="type_your_message">Type your message</string>
     <string name="send">SEND</string>
     <string name="eating">is eating at</string>
-    <string name="AppTitle">GoForLunch</string>
+    <string name="AppTitle" translatable="false">GoForLunch</string>
     <string name="Reminder">Reminder for your choice</string>
+    <string name="LIKE">YOU LIKE</string>
+    <string name="ToLike">LIKE</string>
+    <string name="NoName">No name</string>
 
 
 </resources>

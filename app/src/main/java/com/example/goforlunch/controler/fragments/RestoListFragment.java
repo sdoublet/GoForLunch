@@ -41,7 +41,6 @@ public class RestoListFragment extends Fragment {
     @BindView(R.id.recycler_resto)
     RecyclerView recyclerView;
 
-    private DistanceMatrix distanceMatrix;
 
     //for test
     private List<ResultNearbySearch> searchList = new ArrayList<>();
@@ -72,7 +71,7 @@ public class RestoListFragment extends Fragment {
         httpRequestWithRetrofit2(myPosition);
         //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
-        configureonClickRecyclerView();
+        configureOnClickRecyclerView();
 
 
         return view;
@@ -137,16 +136,13 @@ public class RestoListFragment extends Fragment {
 
     }
 
-    private void configureonClickRecyclerView() {
+    private void configureOnClickRecyclerView() {
         ItemClickSupport.addTo(recyclerView, R.layout.row_resto_list)
-                .setOnItemClickListener(new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        ResultNearbySearch result = adapter.getRestaurant(position);
-                        Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
-                        intent.putExtra("resto_place_id", result.getPlaceId());
-                        startActivity(intent);
-                    }
+                .setOnItemClickListener((recyclerView, position, v) -> {
+                    ResultNearbySearch result = adapter.getRestaurant(position);
+                    Intent intent = new Intent(getActivity(), PlaceDetailActivity.class);
+                    intent.putExtra("resto_place_id", result.getPlaceId());
+                    startActivity(intent);
                 });
 
     }

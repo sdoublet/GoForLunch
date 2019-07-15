@@ -1,11 +1,11 @@
 package com.example.goforlunch.controler.activities;
 
+import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -30,7 +30,7 @@ public class SettingActivity extends BaseActivity {
     private static final int DELETE_USER_TASK = 20;
     private static final int UPDATE_USERNAME = 30;
     private static final int UPDATE_EMAIL = 40;
-    private static final int SIGN_OUT_TASK = 10;
+    //private static final int SIGN_OUT_TASK = 10;
     public static final String RADIUS_PREF=  "radiusPref";
     public static final String SHARE_PREF = "sharePref";
 
@@ -46,6 +46,7 @@ public class SettingActivity extends BaseActivity {
     EditText radiusEditText;
 
     private SharedPreferences.Editor editor;
+    @SuppressLint("CommitPrefEdits")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -102,7 +103,7 @@ public class SettingActivity extends BaseActivity {
     @OnClick(R.id.update_preferences)
     public void onClickUpdatePreferences() {
         updateRadius();
-        Log.e("button", "butoon checked");
+        Log.e("button", "button checked");
     }
 
 
@@ -186,13 +187,10 @@ public class SettingActivity extends BaseActivity {
     }
 
     private void hideProgressBar(){
-        new Handler().postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                progressBar.setVisibility(View.INVISIBLE);
-                Toast.makeText(getApplicationContext(), "Apply changed", Toast.LENGTH_SHORT).show();
-                finish();
-            }
+        new Handler().postDelayed(() -> {
+            progressBar.setVisibility(View.INVISIBLE);
+            Toast.makeText(getApplicationContext(), "Apply changed", Toast.LENGTH_SHORT).show();
+            finish();
         }, 2000);
 
     }

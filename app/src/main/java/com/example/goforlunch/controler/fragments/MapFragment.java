@@ -40,9 +40,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,7 +122,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-    private void displayCurrentLocation(GoogleMap googleMap) {
+    public void displayCurrentLocation(GoogleMap googleMap) {
         mGoogleMap = googleMap;
         if (ContextCompat.checkSelfPermission(Objects.requireNonNull(getContext()), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ContextCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             return;
@@ -224,26 +222,23 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
                     int finalI = i;
 
-                    UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            myProgreeBar.setVisibility(View.GONE);
-                            if (task.isSuccessful()) {
-                                Log.e("size", "success " + searchList.get(finalI).getPlaceId());
-                                marker = mGoogleMap.addMarker(new MarkerOptions()
-                                        .position(new LatLng(searchList.get(finalI).getGeometry().getLocation().getLat(),
-                                                searchList.get(finalI).getGeometry().getLocation().getLng()))
-                                        .title(searchList.get(finalI).getName()));
-                                marker.setTag(searchList.get(finalI).getPlaceId());
-                                if (Objects.requireNonNull(task.getResult()).isEmpty()) {
-                                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker));
+                    UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(task -> {
+                        myProgreeBar.setVisibility(View.GONE);
+                        if (task.isSuccessful()) {
+                            Log.e("size", "success " + searchList.get(finalI).getPlaceId());
+                            marker = mGoogleMap.addMarker(new MarkerOptions()
+                                    .position(new LatLng(searchList.get(finalI).getGeometry().getLocation().getLat(),
+                                            searchList.get(finalI).getGeometry().getLocation().getLng()))
+                                    .title(searchList.get(finalI).getName()));
+                            marker.setTag(searchList.get(finalI).getPlaceId());
+                            if (Objects.requireNonNull(task.getResult()).isEmpty()) {
+                                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.red_marker));
 
-                                } else {
-                                    marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker));
-
-                                }
+                            } else {
+                                marker.setIcon(BitmapDescriptorFactory.fromResource(R.drawable.green_marker));
 
                             }
+
                         }
                     });
 
