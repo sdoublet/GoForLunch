@@ -57,7 +57,7 @@ dependencies {
     // FACEBOOK
     implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
     // EASYPERMISSIONS
-    implementation 'pub.devrel:easypermissions:2.0.1'
+    implementation 'pub.devrel:easypermissions:3.0.0'
     // GSON
     implementation 'com.google.code.gson:gson:2.8.5'
     // RETROFIT

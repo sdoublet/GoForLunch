@@ -5,7 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
 

@@ -1,11 +1,10 @@
 package com.example.goforlunch.controler.activities;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
-import android.content.Context;
+import android.Manifest;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -29,7 +28,6 @@ import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Firebase.LikeHelper;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
-import com.example.goforlunch.utils.AlertReceiver;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.Divider;
 import com.example.goforlunch.utils.PlaceStreams;
@@ -41,7 +39,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -49,6 +46,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
+import pub.devrel.easypermissions.EasyPermissions;
 
 public class PlaceDetailActivity extends BaseActivity {
 
@@ -80,6 +78,8 @@ public class PlaceDetailActivity extends BaseActivity {
     private ClientAdapter adapter;
     private User user;
     private long likes;
+    public static final String[] perms = {Manifest.permission.CALL_PHONE};
+    public static final int REQUEST_PERMISSION_CODE = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -146,16 +146,22 @@ public class PlaceDetailActivity extends BaseActivity {
     @OnClick(R.id.image_phone)
     public void callRestaurant() {
         // TODO: 07/06/2019 get permission with easypermission
-        String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
-        Log.e("phone", phoneNumber);
-//        Intent intentCall = new Intent(Intent.ACTION_CALL);
-//        intentCall.setData(Uri.parse("tel:"+ phoneNumber));
-//        startActivity(intentCall);
+        if (EasyPermissions.hasPermissions(getApplicationContext(), perms)) {
+            if (placeDetailResult.getFormattedPhoneNumber() != null) {
+                String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
+                Log.e("phone", phoneNumber);
+                Intent intentCall = new Intent(Intent.ACTION_CALL);
+                intentCall.setData(Uri.parse("tel:" + "0622611305"));
+                startActivity(intentCall);
+            }
+        }else {
+            EasyPermissions.requestPermissions(this, "This app need your permission to work", REQUEST_PERMISSION_CODE, perms);
+        }
     }
 
     @OnClick(R.id.star)
     public void addLike() {
-        if (like.getText().length()<10) {
+        if (like.getText().length() < 10) {
             Log.e("lenght", String.valueOf(like.getText().length()));
             LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -166,7 +172,7 @@ public class PlaceDetailActivity extends BaseActivity {
                             @Override
                             public void onSuccess(DocumentSnapshot documentSnapshot) {
 
-                                like.setText("YOU LIKE" + "("+documentSnapshot.get("mLike")+")");
+                                like.setText("YOU LIKE" + "(" + documentSnapshot.get("mLike") + ")");
                                 Log.e("like", String.valueOf(likes));
 
                             }
@@ -194,7 +200,7 @@ public class PlaceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.star)
     public void dislike() {
-        if (like.getText().length()>10) {
+        if (like.getText().length() > 10) {
 
             LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                 @Override
@@ -203,7 +209,7 @@ public class PlaceDetailActivity extends BaseActivity {
                         likes = (long) documentSnapshot.get("mLike");
                         int newLike = (int) (likes - 1);
                         LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
-                        like.setText("LIKE "+"("+newLike+")");
+                        like.setText("LIKE " + "(" + newLike + ")");
                     }
                 }
             });
@@ -275,7 +281,6 @@ public class PlaceDetailActivity extends BaseActivity {
             }
         });
     }
-
 
 
     //------------------
@@ -373,7 +378,7 @@ public class PlaceDetailActivity extends BaseActivity {
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if (documentSnapshot.get("mLike") != null) {
                     like.setText("LIKE " + "(" + documentSnapshot.get("mLike") + ")");
-                }else {
+                } else {
                     like.setText("LIKE " + "(0)");
                 }
             }
