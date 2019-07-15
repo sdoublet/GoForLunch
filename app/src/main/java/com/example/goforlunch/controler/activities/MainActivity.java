@@ -5,6 +5,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -35,8 +36,6 @@ import com.example.goforlunch.utils.AlertReceiverBooking;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.common.api.Status;
-import com.google.android.gms.maps.CameraUpdateFactory;
-import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
@@ -64,8 +63,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
-
-
     @BindView(R.id.toolbar)
     Toolbar toolbar;
     @BindView(R.id.drawer_layout_activity_main)
@@ -74,6 +71,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     BottomNavigationView bottomNavigationView;
     @BindView(R.id.nav_view)
     NavigationView navigationView;
+    private String restoIdPref;
 
 
     protected FirebaseUser getCurrentUser() {
@@ -88,6 +86,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final int FRAGMENT_WORKMATES = 2;
     public static final int FRAGMENT_CHAT = 3;
     public static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    public static final String PREF_BOOKING = "Mybooking";
 
     public static final String PLACEIDRESTO = "resto_place_id";
 
@@ -106,6 +105,8 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         navigationView.setNavigationItemSelectedListener(this);
         DataHolder.getInstance().setUserUid(getCurrentUser().getUid());
         Log.e("userId", DataHolder.getInstance().getUserUid());
+        SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
+        restoIdPref = sharedPreferences.getString("booked", null);
 
     }
 
@@ -232,6 +233,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     Intent intent1 = new Intent(this, PlaceDetailActivity.class);
                     intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
                     startActivity(intent1);
+                } else if (restoIdPref != null) {
+                    Intent intent1 = new Intent(this, PlaceDetailActivity.class);
+                    intent1.putExtra("resto_place_id", restoIdPref);
+                    startActivity(intent1);
+
                 }
         }
         drawerLayout.closeDrawer(GravityCompat.START);
