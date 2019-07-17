@@ -17,10 +17,14 @@ import com.example.goforlunch.controler.activities.MainActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
 import com.example.goforlunch.utils.DataHolder;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
+
+
 
 
 public class NotificationService extends FirebaseMessagingService  {
@@ -39,7 +43,7 @@ public class NotificationService extends FirebaseMessagingService  {
         if (remoteMessage.getNotification() != null) {
             //Get message sent by firebase
             checkIfUserBooking();
-            String message = "Bonjour " + getCurrentUser().getDisplayName() +" " + remoteMessage.getNotification().getBody() + " " + DataHolder.getInstance().getRestoName()  ;
+            String message =   remoteMessage.getNotification().getBody() + getCurrentUser().getDisplayName()    ;
             Log.e("TAG", message);
             sendVisualNotification(message);
         }
@@ -55,6 +59,10 @@ public class NotificationService extends FirebaseMessagingService  {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(getString(R.string.AppTitle));
         inboxStyle.addLine(messageBody);
+        inboxStyle.addLine("vous avez choisit de manger");
+        inboxStyle.addLine(" au restaurant ");
+        inboxStyle.addLine(""+DataHolder.getInstance().getRestoName());
+        inboxStyle.addLine("avec" );
 
 
         //Build a notification object

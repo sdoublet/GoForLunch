@@ -361,7 +361,7 @@ public class PlaceDetailActivity extends BaseActivity {
     //--------------------
     //Display RecyclerView
     //--------------------
-    private void configureRecyclerView() {
+    private void configureRecyclerView( ) {
 
         UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(queryDocumentSnapshots -> {
             List<User> users = new ArrayList<>();
@@ -369,7 +369,7 @@ public class PlaceDetailActivity extends BaseActivity {
                 for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                     users.add(snapshot.toObject(User.class));
                     adapter = new ClientAdapter(users, Glide.with(getApplicationContext()));
-                    Log.e("rvDetail", String.valueOf(users.size()));
+                    Log.e("rvDetail", String.valueOf(users.size()) );
                     userRecyclerView.addItemDecoration(new Divider(getBaseContext(), LinearLayout.VERTICAL));
                     userRecyclerView.setAdapter(adapter);
                     userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
