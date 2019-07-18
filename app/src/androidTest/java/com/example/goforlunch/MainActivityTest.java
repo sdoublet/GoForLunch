@@ -31,7 +31,7 @@ public class MainActivityTest {
     }
 
     @Test
-    public void navigaitonDrawerClose(){
+    public void navigationDrawerClose(){
         onView(withContentDescription(R.string.navigation_drawer_open)).perform(click());
         Espresso.pressBack();
         onView(withId(R.id.nav_view)).check(matches((not(isDisplayed()))));
@@ -42,4 +42,16 @@ public class MainActivityTest {
         onView(withId(R.id.drawer_layout_activity_main)).perform(DrawerActions.open());
         onView(withId(R.id.nav_view)).perform(NavigationViewActions.navigateTo(R.id.setting));
     }
+
+    @Test
+    public void checkBottomViewItem(){
+        onView(withId(R.id.list_view)).check(matches(isDisplayed()));
+        onView(withId(R.id.chat)).perform(click());
+        onView(withId(R.id.chat)).check(matches(isDisplayed()));
+        onView(withId(R.id.map_view)).perform(click());
+        onView(withId(R.id.workmates)).perform(click());
+        onView(withId(R.id.workmates)).check(matches(isDisplayed()));
+
+    }
+
 }

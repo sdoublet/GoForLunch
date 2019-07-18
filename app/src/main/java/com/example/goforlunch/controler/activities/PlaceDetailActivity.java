@@ -89,6 +89,7 @@ public class PlaceDetailActivity extends BaseActivity {
         configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
         Log.e("test", restoPlaceId);
+
        // restorePrefLike();
         executeHttpRequestWithRetrofit(restoPlaceId);
         configureRecyclerView();
