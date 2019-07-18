@@ -18,6 +18,7 @@ import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
+import com.example.goforlunch.utils.ConvertDate;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -157,22 +158,22 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
                 if (placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() == day) {
                     if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
                         Log.e("close", restau + " hour<openhour");
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
                     } else if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour > openHour && currentHour < closeHour) {
                         Log.e("close", restau + " hour>open<close");
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
                     } else if (currentHour > closeHour) {
                         Log.e("close", restau + " ever close");
                         restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>"));
                     } else if (placeDetail.getResult().getOpeningHours().getOpenNow()) {
-                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
+                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
                         Log.e("open", restau);
                     }
 
                 } else if (placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
                     Log.e("new", restau);
                     try {
-                        restoOpening.setText("open, close at " + placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime());
+                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime(), Locale.getDefault().getLanguage())));
                     } catch (ArrayIndexOutOfBoundsException e) {
                         //
                     }
@@ -201,23 +202,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-    //Convert Date by language
-    private String convertDate(String date, String language) {
-        int hour = Integer.parseInt(date.substring(0, 2));
-        String mn = date.substring(2);
-        if (language.equals("English")) {
-            if (hour > 12) {
-                return (hour - 12) + "." + mn + "pm";
-            } else if (hour == 12) {
-                return "12" + "." + mn + "pm";
-            } else if (hour == 0) {
-                return "12" + "." + mn + "am";
-            } else {
-                return hour + "." + mn + "am";
-            }
-        } else
-            return hour + "h" + mn;
-    }
+
 
     private void displayWormates(String restoId){
         UserHelper.getRestoId(restoId).addOnSuccessListener(queryDocumentSnapshots -> {
