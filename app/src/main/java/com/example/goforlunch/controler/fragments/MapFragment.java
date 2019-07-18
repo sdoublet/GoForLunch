@@ -59,6 +59,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private static final float DEFAULT_ZOOM = 12f;
     private static final String POI_TYPE = "restaurant";
+    public static final String API_KEY = BuildConfig.GOOGLE_MAPS_API_KEY;
     @BindView(R.id.map_view)
     MapView mapView;
     @BindView(R.id.my_progree_bar)
@@ -185,7 +186,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
 
 
         int rad = Integer.parseInt(DataHolder.getInstance().getRadius());//replace by sharepref
-        this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, POI_TYPE, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
+        this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, POI_TYPE, API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
                 displayMarker(nearbyPlaces.getResults());

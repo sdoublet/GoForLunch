@@ -94,7 +94,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         restoName.setText(placeDetail.getResult().getName());
         //---Photo---
         if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
-            glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
+            glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" +BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
             Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
 
         } else {

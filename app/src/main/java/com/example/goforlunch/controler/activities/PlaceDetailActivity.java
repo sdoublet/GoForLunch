@@ -80,6 +80,7 @@ public class PlaceDetailActivity extends BaseActivity {
     public static final int REQUEST_PERMISSION_CODE = 100;
     public static final String PREF_BOOKING = "myBooking";
     public static final String PREF_LIKE = "likes";
+    public static final String API_KEY = BuildConfig.GOOGLE_MAPS_API_KEY;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,6 +125,8 @@ public class PlaceDetailActivity extends BaseActivity {
             editor.putString("booked", restoPlaceId);
             editor.apply();
             Log.e("pref", preferences.getString("booked", null));
+
+            configureRecyclerView();
 
 
         } else {
@@ -239,7 +242,7 @@ public class PlaceDetailActivity extends BaseActivity {
     //HTTP REQUEST
     //-----------------------
     public void executeHttpRequestWithRetrofit(String placeId) {
-        this.disposable = PlaceStreams.streamFetchPlaceDetails(placeId, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(newObserver());
+        this.disposable = PlaceStreams.streamFetchPlaceDetails(placeId, API_KEY).subscribeWith(newObserver());
 
     }
 
@@ -312,7 +315,7 @@ public class PlaceDetailActivity extends BaseActivity {
             //-------------------------
             if (results.getResult().getPhotos() != null) {
                 String restoPhoto = results.getResult().getPhotos().get(0).getPhotoReference();
-                String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + restoPhoto + "&key=" + BuildConfig.GOOGLE_MAPS_API_KEY;
+                String photoUrl = "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&photoreference=" + restoPhoto + "&key=" + API_KEY;
                 Glide.with(getBaseContext()).load(photoUrl).into(photoResto);
             } else {
                 photoResto.setImageResource(R.drawable.serveur);
@@ -420,4 +423,6 @@ public class PlaceDetailActivity extends BaseActivity {
             Log.e("liked", "nothing");
         }
     }
+
+
 }
