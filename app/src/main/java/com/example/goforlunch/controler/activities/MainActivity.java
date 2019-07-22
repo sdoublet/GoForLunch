@@ -32,6 +32,7 @@ import com.example.goforlunch.controler.fragments.ChatFragment;
 import com.example.goforlunch.controler.fragments.MapFragment;
 import com.example.goforlunch.controler.fragments.RestoListFragment;
 import com.example.goforlunch.controler.fragments.WorkmatesFragment;
+import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.utils.AlertReceiverBooking;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
@@ -49,6 +50,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -230,16 +232,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
             case R.id.your_lunch:
-                if (DataHolder.getInstance().getRestaurantId() != null) {
-                    Intent intent1 = new Intent(this, PlaceDetailActivity.class);
-                    intent1.putExtra("resto_place_id", DataHolder.getInstance().getRestaurantId());// TODO: 28/06/2019 prevoir sharepref
-                    startActivity(intent1);
-                } else if (restoIdPref != null) {
-                    Intent intent1 = new Intent(this, PlaceDetailActivity.class);
-                    intent1.putExtra("resto_place_id", restoIdPref);
-                    startActivity(intent1);
+                UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                      if (documentSnapshot.exists()){
+                        String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
+                          Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                          intent1.putExtra("resto_place_id", restoId);// TODO: 28/06/2019 prevoir sharepref
+                          startActivity(intent1);
+                      }
+                    }
+                });
 
-                }
         }
         drawerLayout.closeDrawer(GravityCompat.START);
         return true;
