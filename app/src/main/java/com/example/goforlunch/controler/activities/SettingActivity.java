@@ -1,13 +1,17 @@
 package com.example.goforlunch.controler.activities;
 
 import android.annotation.SuppressLint;
+import android.app.AlarmManager;
 import android.app.AlertDialog;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -18,9 +22,12 @@ import androidx.appcompat.widget.Toolbar;
 
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
+import com.example.goforlunch.notifications.AlertReceiver;
 import com.example.goforlunch.utils.DataHolder;
 import com.firebase.ui.auth.AuthUI;
 import com.google.android.gms.tasks.OnSuccessListener;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -31,6 +38,7 @@ public class SettingActivity extends BaseActivity {
     private static final int DELETE_USER_TASK = 20;
     private static final int UPDATE_USERNAME = 30;
     private static final int UPDATE_EMAIL = 40;
+    public static final int ALARM_CODE = 100;
     //private static final int SIGN_OUT_TASK = 10;
     public static final String RADIUS_PREF = "radiusPref";
     public static final String SHARE_PREF = "sharePref";
@@ -48,7 +56,8 @@ public class SettingActivity extends BaseActivity {
     @BindView(R.id.notification_switch)
     Switch notificationSwitch;
 
-    private SharedPreferences.Editor editor;
+    SharedPreferences mSharePreferences;
+    SharedPreferences.Editor editor;
 
     @SuppressLint("CommitPrefEdits")
     @Override
@@ -58,12 +67,12 @@ public class SettingActivity extends BaseActivity {
         ButterKnife.bind(this);
         this.configureToolbar();
         this.configureStatusBar();
-        SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
-        editor = sharedPreferences.edit();
-        String radius = sharedPreferences.getString(RADIUS_PREF, "1000");
+        this.onClickSwitch();
+        mSharePreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+        String radius = mSharePreferences.getString(RADIUS_PREF, "1000");
         radiusEditText.setText(radius);
-        boolean notifSwitch= sharedPreferences.getBoolean("notificationSwitch", false);
-        notificationSwitch.setChecked(notifSwitch);
+        notificationSwitch.setChecked(mSharePreferences.getBoolean("notificationSwitch", false));
+
 
 
     }
@@ -112,18 +121,30 @@ public class SettingActivity extends BaseActivity {
         Log.e("button", "button checked");
     }
 
-    @OnClick(R.id.notification_switch)
-    public void activateNotification() {
-        if (!notificationSwitch.isActivated()) {
-            notificationSwitch.setChecked(true);
-            SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, 0);
-            editor = sharedPreferences.edit();
-            editor.putBoolean("notificationSwitch", true);
-            editor.apply();
-        }
 
+    private void onClickSwitch(){
+        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    //notificationSwitch.setChecked(true);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("notificationSwitch", true);
+                    editor.apply();
+                    setCalendarTime();
+                }else {
+                    //notificationSwitch.setChecked(false);
+                    SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+                    editor = sharedPreferences.edit();
+                    editor.putBoolean("notificationSwitch", false);
+                    editor.apply();
+                    cancelAlarm();
+                    Log.e("alarm", "alarm canceled");
+                }
+            }
+        });
     }
-
 
     //--------------------
     //REST REQUEST
@@ -211,5 +232,33 @@ public class SettingActivity extends BaseActivity {
             finish();
         }, 2000);
 
+    }
+
+    private void setCalendarTime() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
+        calendar.set(Calendar.MINUTE, 52);
+        calendar.set(Calendar.SECOND, 30);
+
+        if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
+            calendar.add(Calendar.DAY_OF_YEAR, 1);
+        }
+
+        setAlarm(calendar);
+    }
+
+    private void setAlarm(Calendar calendar) {
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(this, AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), ALARM_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+        Log.e("alarm", "alarm set");
+    }
+
+    private void cancelAlarm(){
+        AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(getApplicationContext(), AlertReceiver.class);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), ALARM_CODE, intent, 0);
+        alarmManager.cancel(pendingIntent);
     }
 }
