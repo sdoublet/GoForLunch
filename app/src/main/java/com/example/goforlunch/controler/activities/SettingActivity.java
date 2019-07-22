@@ -72,6 +72,9 @@ public class SettingActivity extends BaseActivity {
         String radius = mSharePreferences.getString(RADIUS_PREF, "1000");
         radiusEditText.setText(radius);
         notificationSwitch.setChecked(mSharePreferences.getBoolean("notificationSwitch", false));
+        if (notificationSwitch.isChecked()) {
+            setCalendarTime();
+        }
 
 
 
@@ -123,25 +126,20 @@ public class SettingActivity extends BaseActivity {
 
 
     private void onClickSwitch(){
-        notificationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
-                    //notificationSwitch.setChecked(true);
-                    SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("notificationSwitch", true);
-                    editor.apply();
-                    setCalendarTime();
-                }else {
-                    //notificationSwitch.setChecked(false);
-                    SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
-                    editor = sharedPreferences.edit();
-                    editor.putBoolean("notificationSwitch", false);
-                    editor.apply();
-                    cancelAlarm();
-                    Log.e("alarm", "alarm canceled");
-                }
+        notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (isChecked){
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("notificationSwitch", true);
+                editor.apply();
+                setCalendarTime();
+            }else {
+                SharedPreferences sharedPreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
+                editor = sharedPreferences.edit();
+                editor.putBoolean("notificationSwitch", false);
+                editor.apply();
+                cancelAlarm();
+                Log.e("alarm", "alarm canceled");
             }
         });
     }
@@ -236,8 +234,8 @@ public class SettingActivity extends BaseActivity {
 
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 52);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 25);
         calendar.set(Calendar.SECOND, 30);
 
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {

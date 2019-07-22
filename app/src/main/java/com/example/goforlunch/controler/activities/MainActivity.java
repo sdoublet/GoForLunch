@@ -321,13 +321,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     private void deleteBooking() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 18);
-        calendar.set(Calendar.MINUTE, 22);
+        calendar.set(Calendar.HOUR_OF_DAY, 13);
+        calendar.set(Calendar.MINUTE, 29);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
         startAlarm(calendar);
-        Log.e("alarm", "alarm set");
+        Log.e("alarm", "alarm setting");
 
     }
 

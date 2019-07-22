@@ -60,6 +60,8 @@
 
         <receiver android:name=".utils.AlertReceiverBooking"
             android:enabled="true"/>
+        <receiver android:name=".notifications.AlertReceiver"
+            android:enabled="true"/>
     </application>
 
 </manifest>

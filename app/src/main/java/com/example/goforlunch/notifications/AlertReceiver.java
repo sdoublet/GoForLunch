@@ -11,7 +11,6 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.util.Log;
 
-import androidx.annotation.NonNull;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
@@ -19,40 +18,95 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.MainActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
-import com.example.goforlunch.utils.DataHolder;
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+
 public class AlertReceiver extends BroadcastReceiver {
-    private static final String CHANNEL_ID ="CHANNEL_ID" ;
-    private static final String NOTIFICATION_TAG ="GOFORLUNCH" ;
+    private static final String CHANNEL_ID = "CHANNEL_ID";
+    private static final String NOTIFICATION_TAG = "GOFORLUNCH";
     private static final int NOTIFICATION_ID = 10;
+    private String restoId;
+    private String restoName;
+    private String name;
+    private List<String> userList;
+
+    private FirebaseUser getCurrentUser() {
+        return FirebaseAuth.getInstance().getCurrentUser();
+    }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        sendVisualNotification(context );
+        checkBooking(context);
         Log.e("alarm", "onReceive success");
     }
-    public void sendVisualNotification(Context context) {
-        // Create an intent that will be shown when user will click on the Notification
+
+    public void checkBooking(Context context) {
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+            @Override
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                if (documentSnapshot.exists()) {
+                    User user = documentSnapshot.toObject(User.class);
+                    assert user != null;
+                    restoId = user.getmRestaurantId();
+                    restoName = user.getmRestaurantName();
+                    name = user.getUsername();
+
+                    Log.e("data", getCurrentUser().getUid() + user.getUsername() + user.getmRestaurantName());
+                    UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            userList = new ArrayList<>();
+                            if (!queryDocumentSnapshots.isEmpty()){
+                                   for (int i=0; i<queryDocumentSnapshots.size(); i++){
+                                       String client = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("username")).toString();
+                                       userList.add(client);
+                                       if (client.equals(getCurrentUser().getDisplayName())){
+                                           userList.remove(client);
+                                       }
+                                    }
+                                sendVisualNotification(context, name, restoName, userList);
+                                Log.e("data", userList.toString());
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
+
+    public void sendVisualNotification(Context context, String name, String restoName, List<String> userList) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
         // Create a style for the notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
-        inboxStyle.setBigContentTitle(""+R.string.AppTitle);
+        inboxStyle.setBigContentTitle(context.getString(R.string.AppTitle));
+        inboxStyle.addLine("Bonjour " + name);
         inboxStyle.addLine("vous avez choisit de manger");
         inboxStyle.addLine(" au restaurant ");
-        inboxStyle.addLine(""+ DataHolder.getInstance().getRestoName());
-        inboxStyle.addLine("avec " );
+        inboxStyle.addLine(restoName);
+        StringBuilder stringBuilder = new StringBuilder();
+        for (int i=0; i<userList.size(); i++){
+            stringBuilder.append(userList.get(i));
+            if (!(i==userList.size()-1)){
+                stringBuilder.append(", ");
+            }
+        }
+        inboxStyle.addLine("avec " + stringBuilder);
 
         //Build a notification object
         NotificationCompat.Builder notificationBuilder =
                 new NotificationCompat.Builder(context, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_local_dining_black_24dp)
-                        .setContentTitle(""+ R.string.app_name)
-                        .setContentText(""+(R.string.Reminder))
+                        .setContentTitle(context.getString(R.string.app_name))
+                        .setContentText(context.getString(R.string.Reminder))
                         .setAutoCancel(true)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentIntent(pendingIntent)
@@ -60,24 +114,6 @@ public class AlertReceiver extends BroadcastReceiver {
 
         NotificationManagerCompat notificationManagerCompat = NotificationManagerCompat.from(context);
         notificationManagerCompat.notify(NOTIFICATION_TAG, NOTIFICATION_ID, notificationBuilder.build());
-
-        UserHelper.getRestoId(DataHolder.getInstance().getRestaurantId()).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                queryDocumentSnapshots.toObjects(User.class);
-                User user = new User();
-                Log.e("user", user.getUsername());
-
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                Log.e("alarm", "listener failed");
-            }
-        });
-
-
-
 
 
         // Support version >=Android 8
@@ -87,12 +123,11 @@ public class AlertReceiver extends BroadcastReceiver {
             NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID, channelName, importance);
             mChannel.enableLights(true);
             mChannel.setLightColor(Color.RED);
-            mChannel.setVibrationPattern(new long[]{100,200,300,400,500,400,300,200,100});
+            mChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 100});
             //Add the notification to the notification manager and show it
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(mChannel);
         }
-
 
 
     }
