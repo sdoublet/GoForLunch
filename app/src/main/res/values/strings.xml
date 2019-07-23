@@ -44,6 +44,7 @@
     <string name="LIKE">YOU LIKE</string>
     <string name="ToLike">LIKE</string>
     <string name="NoName">No name</string>
+    <string name="administrator_notif">Message from Go4Lunch</string>
 
 
 </resources>

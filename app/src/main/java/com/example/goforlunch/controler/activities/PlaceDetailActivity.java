@@ -127,7 +127,7 @@ public class PlaceDetailActivity extends BaseActivity {
             editor.apply();
             Log.e("pref", preferences.getString("booked", null));
 
-            configureRecyclerView();
+
 
 
         } else {
@@ -164,7 +164,6 @@ public class PlaceDetailActivity extends BaseActivity {
 
     @OnClick(R.id.image_phone)
     public void callRestaurant() {
-        // TODO: 07/06/2019 get permission with easypermission
         if (EasyPermissions.hasPermissions(getApplicationContext(), perms)) {
             if (placeDetailResult.getFormattedPhoneNumber() != null) {
                 String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
@@ -189,10 +188,7 @@ public class PlaceDetailActivity extends BaseActivity {
                     LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot1 -> {
 
                         like.setText(getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
-                       // SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
-                       // SharedPreferences.Editor editor = sharedPreferences.edit();
-                       // editor.putString("liked", getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
-                       // editor.apply();
+
                         Log.e("like", String.valueOf(likes));
 
                     });
@@ -205,10 +201,7 @@ public class PlaceDetailActivity extends BaseActivity {
                     Log.e("like", "pas présent " + placeDetailResult.getName());
                     LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
                     like.setText(getString(R.string.LIKE) + "(1)");
-                   //SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
-                   //SharedPreferences.Editor editor = sharedPreferences.edit();
-                   //editor.putString("liked", getString(R.string.LIKE) + "(1)");
-                   //editor.apply();
+
 
                 }
             }).addOnFailureListener(e -> {
@@ -230,10 +223,7 @@ public class PlaceDetailActivity extends BaseActivity {
                     int newLike = (int) (likes - 1);
                     LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
                     like.setText(getString(R.string.ToLike) + "(" + newLike + ")");
-//                    SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
-//                    SharedPreferences.Editor editor = sharedPreferences.edit();
-//                    editor.putString("liked", getString(R.string.ToLike) + "(" + newLike + ")");
-//                    editor.apply();
+//
                 }
             });
         }
@@ -295,7 +285,7 @@ public class PlaceDetailActivity extends BaseActivity {
             user = documentSnapshot.toObject(User.class);
             UserHelper.updateRestaurantId(getCurrentUser().getUid(), restoId);
             DataHolder.getInstance().setRestaurantId(restoPlaceId);
-
+            configureRecyclerView();
         });
     }
 
@@ -414,16 +404,7 @@ public class PlaceDetailActivity extends BaseActivity {
         }
     }
 
-    private void restorePrefLike() {
-        SharedPreferences sharedPreferences = getSharedPreferences(PREF_LIKE, 0);
-        String liked = sharedPreferences.getString("liked", null);
-        if (liked != null) {
-            like.setText(liked);
-            Log.e("liked", liked);
-        } else {
-            Log.e("liked", "nothing");
-        }
-    }
+
 
 
 }

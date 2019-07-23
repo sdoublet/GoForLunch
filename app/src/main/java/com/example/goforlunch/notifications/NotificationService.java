@@ -59,10 +59,6 @@ public class NotificationService extends FirebaseMessagingService  {
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(getString(R.string.AppTitle));
         inboxStyle.addLine(messageBody);
-        inboxStyle.addLine("vous avez choisit de manger");
-        inboxStyle.addLine(" au restaurant ");
-        inboxStyle.addLine(""+DataHolder.getInstance().getRestoName());
-        inboxStyle.addLine("avec" );
 
 
         //Build a notification object
@@ -70,7 +66,7 @@ public class NotificationService extends FirebaseMessagingService  {
                 new NotificationCompat.Builder(this, CHANNEL_ID)
                         .setSmallIcon(R.drawable.ic_local_dining_black_24dp)
                         .setContentTitle(getString(R.string.app_name))
-                        .setContentText(getString(R.string.Reminder))
+                        .setContentText(this.getString(R.string.administrator_notif))
                         .setAutoCancel(true)
                         .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                         .setContentIntent(pendingIntent)

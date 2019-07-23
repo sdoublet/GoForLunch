@@ -235,12 +235,14 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
-                      if (documentSnapshot.exists()){
-                        String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
-                          Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-                          intent1.putExtra("resto_place_id", restoId);// TODO: 28/06/2019 prevoir sharepref
-                          startActivity(intent1);
-                      }
+                        if (documentSnapshot.exists()) {
+                            String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
+                            if (!restoId.isEmpty()) {
+                                Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                                intent1.putExtra("resto_place_id", restoId);
+                                startActivity(intent1);
+                            }
+                        }
                     }
                 });
 

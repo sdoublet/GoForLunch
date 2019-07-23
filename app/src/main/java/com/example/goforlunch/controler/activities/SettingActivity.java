@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Switch;
@@ -234,7 +233,7 @@ public class SettingActivity extends BaseActivity {
 
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
         calendar.set(Calendar.MINUTE, 25);
         calendar.set(Calendar.SECOND, 30);
 
