@@ -36,9 +36,10 @@
             tools:ignore="ContentDescription" />
 
         <ImageView
+            android:id="@+id/setting_photo"
             android:layout_width="110dp"
             android:layout_height="110dp"
-            android:src="@drawable/photoseb"
+            android:src="@drawable/avatar2"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"
 

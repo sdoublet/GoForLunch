@@ -12,6 +12,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Switch;
 import android.widget.Toast;
@@ -19,6 +20,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.example.goforlunch.R;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.notifications.AlertReceiver;
@@ -54,6 +56,8 @@ public class SettingActivity extends BaseActivity {
     EditText radiusEditText;
     @BindView(R.id.notification_switch)
     Switch notificationSwitch;
+    @BindView(R.id.setting_photo)
+    ImageView settingPhoto;
 
     SharedPreferences mSharePreferences;
     SharedPreferences.Editor editor;
@@ -65,6 +69,7 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         this.configureToolbar();
+        this.displayphoto();
         this.configureStatusBar();
         this.onClickSwitch();
         mSharePreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
@@ -84,6 +89,10 @@ public class SettingActivity extends BaseActivity {
         return R.layout.activity_setting;
     }
 
+    //------------
+    //UI
+    //------------
+
     private void configureToolbar() {
         setSupportActionBar(toolbar);
         ActionBar actionBar = getSupportActionBar();
@@ -91,6 +100,14 @@ public class SettingActivity extends BaseActivity {
         actionBar.setTitle(R.string.title_toolbar_setting);
         actionBar.setDisplayHomeAsUpEnabled(true);
 
+    }
+
+    private void displayphoto(){
+        if (getCurrentUser().getPhotoUrl()!=null){
+            Glide.with(this)
+                    .load(this.getCurrentUser().getPhotoUrl())
+                    .into(settingPhoto);
+        }
     }
 
     //-------------
@@ -230,6 +247,10 @@ public class SettingActivity extends BaseActivity {
         }, 2000);
 
     }
+
+    //-----------------------------
+    //SET ALARM FOR NOTIFICATION
+    //-----------------------------
 
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
