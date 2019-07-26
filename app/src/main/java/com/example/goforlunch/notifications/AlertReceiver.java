@@ -44,9 +44,10 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         checkBooking(context);
-        Log.e("alarm", "onReceive success");
+
     }
 
+    // User concern by notification
     public void checkBooking(Context context) {
         UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
@@ -57,30 +58,31 @@ public class AlertReceiver extends BroadcastReceiver {
                     restoId = user.getmRestaurantId();
                     restoName = user.getmRestaurantName();
                     name = user.getUsername();
-
-                    Log.e("data", getCurrentUser().getUid() + user.getUsername() + user.getmRestaurantName());
-                    UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            userList = new ArrayList<>();
-                            if (!queryDocumentSnapshots.isEmpty()){
-                                   for (int i=0; i<queryDocumentSnapshots.size(); i++){
-                                       String client = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("username")).toString();
-                                       userList.add(client);
-                                       if (client.equals(getCurrentUser().getDisplayName())){
-                                           userList.remove(client);
-                                       }
+                    if (restoId != null) {
+                        UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                            @Override
+                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                                userList = new ArrayList<>();
+                                if (!queryDocumentSnapshots.isEmpty()) {
+                                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                                        String client = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("username")).toString();
+                                        userList.add(client);
+                                        if (client.equals(getCurrentUser().getDisplayName())) {
+                                            userList.remove(client);
+                                        }
                                     }
-                                sendVisualNotification(context, name, restoName, userList);
-                                Log.e("data", userList.toString());
+                                    sendVisualNotification(context, name, restoName, userList);
+                                    Log.e("data", userList.toString());
+                                }
                             }
-                        }
-                    });
+                        });
+                    }
                 }
             }
         });
     }
 
+    // Content of notification
     public void sendVisualNotification(Context context, String name, String restoName, List<String> userList) {
         Intent intent = new Intent(context, MainActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_ONE_SHOT);
@@ -93,9 +95,9 @@ public class AlertReceiver extends BroadcastReceiver {
         inboxStyle.addLine(" au restaurant ");
         inboxStyle.addLine(restoName);
         StringBuilder stringBuilder = new StringBuilder();
-        for (int i=0; i<userList.size(); i++){
+        for (int i = 0; i < userList.size(); i++) {
             stringBuilder.append(userList.get(i));
-            if (!(i==userList.size()-1)){
+            if (!(i == userList.size() - 1)) {
                 stringBuilder.append(", ");
             }
         }
