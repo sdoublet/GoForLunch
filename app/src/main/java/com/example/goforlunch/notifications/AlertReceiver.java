@@ -44,7 +44,7 @@ public class AlertReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         checkBooking(context);
-
+        Log.e("notification", "ok");
     }
 
     // User concern by notification
