@@ -237,6 +237,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
                             String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
+                            Log.e("restoId", restoId);
                             if (!restoId.isEmpty()) {
                                 Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
                                 intent1.putExtra("resto_place_id", restoId);
@@ -310,7 +311,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
             //Get email and username from Firebase
             String email = TextUtils.isEmpty(this.getCurrentUser().getEmail()) ?
                     getString(R.string.info_no_email_found) : this.getCurrentUser().getEmail();
-// TODO: 27/06/2019 change displayname by username in users collection
+
 
             String userName = TextUtils.isEmpty(this.getCurrentUser().getDisplayName()) ?
                     getString(R.string.info_no_username_found) : this.getCurrentUser().getDisplayName();
@@ -323,12 +324,13 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     }
-
-    // Delete booking
+    //------------------------
+    // Delete booking each day
+    //------------------------
     private void deleteBooking() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 13);
-        calendar.set(Calendar.MINUTE, 29);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 10);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
