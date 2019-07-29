@@ -57,16 +57,15 @@ import static android.content.ContentValues.TAG;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleMap.OnMarkerClickListener {
 
-    private static final int PERMISSIONS_REQUEST_ACCESS_FINE_LOCATION = 0;
     private static final float DEFAULT_ZOOM = 12f;
     private static final String POI_TYPE = "restaurant";
     private static final String API_KEY = BuildConfig.GOOGLE_MAPS_API_KEY;
-    public static final String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
+    private static final String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION};
     private static final int REQUEST_CODE = 1234;
     @BindView(R.id.map_view)
     MapView mapView;
     @BindView(R.id.my_progree_bar)
-    ProgressBar myProgreeBar;
+    ProgressBar myProgressBar;
 
 
     private GoogleMap mGoogleMap;
@@ -75,7 +74,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private String lat;
     private String lng;
     private Disposable disposable;
-    private boolean mLocationPermissionGranted = false;
     private List<ResultNearbySearch> searchList = new ArrayList<>();
 
     public static Fragment newInstance() {
@@ -221,7 +219,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     int finalI = i;
 
                     UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(task -> {
-                        myProgreeBar.setVisibility(View.GONE);
+                        myProgressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
                             Log.e("size", "success " + searchList.get(finalI).getPlaceId());
                             marker = mGoogleMap.addMarker(new MarkerOptions()

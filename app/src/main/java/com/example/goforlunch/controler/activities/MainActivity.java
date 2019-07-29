@@ -306,6 +306,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewProfile);
+            }else {
+                Glide.with(this)
+                        .load(R.drawable.avatar2)
+                        .apply(RequestOptions.circleCropTransform())
+                        .into(imageViewProfile);
             }
 
             //Get email and username from Firebase
