@@ -89,7 +89,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final int FRAGMENT_CHAT = 3;
     public static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     public static final String PREF_BOOKING = "Mybooking";
-    public static final String API_KEY = BuildConfig.GOOGLE_MAPS_API_KEY;
+    public static final String API_KEY = BuildConfig.google_maps_api_key;
 
     public static final String PLACEIDRESTO = "resto_place_id";
 

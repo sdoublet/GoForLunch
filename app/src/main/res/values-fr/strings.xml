@@ -25,7 +25,7 @@
     <string name="check_to_receive_a_notification_at_12h00">Notification à 12h00</string>
     <string name="update_your_preferences">Mettre à jour les paramètres</string>
     <string name="delete_profile">Supprimer profil</string>
-    <string name="hasnt_decided_yet">%s n\'a pas encore choisit</string>
+    <string name="hasnt_decided_yet">%s n\'a pas encore choisi</string>
     <string name="there_is_no_message_in_this_chat_yet">Ce chat ne contient pour le moment aucun message…</string>
     <string name="type_your_message">Composer votre message</string>
     <string name="send">ENVOYER</string>

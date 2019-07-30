@@ -14,6 +14,8 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
+import com.example.goforlunch.model.Api.Details.OpeningHours;
+import com.example.goforlunch.model.Api.Details.Period;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
@@ -21,9 +23,6 @@ import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.ConvertDate;
 import com.example.goforlunch.utils.DataHolder;
 import com.example.goforlunch.utils.PlaceStreams;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.Calendar;
 import java.util.Locale;
@@ -67,7 +66,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             rating.setRating((float) ratingResult);
         } else rating.setVisibility(View.INVISIBLE);
 
-        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<PlaceDetail>() {
+        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<PlaceDetail>() {
             @Override
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
@@ -95,7 +94,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         restoName.setText(placeDetail.getResult().getName());
         //---Photo---
         if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
-            glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" +BuildConfig.GOOGLE_MAPS_API_KEY).into(restoPhoto);
+            glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.google_maps_api_key).into(restoPhoto);
             Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
 
         } else {
@@ -106,7 +105,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         String lng = String.valueOf(placeDetail.getResult().getGeometry().getLocation().getLng());
         String destination = lat + "," + lng;
 
-        PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.GOOGLE_MAPS_API_KEY).subscribeWith(new DisposableObserver<DistanceMatrix>() {
+        PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<DistanceMatrix>() {
             @Override
             public void onNext(DistanceMatrix distanceMatrix) {
                 distance(distanceMatrix);
@@ -139,48 +138,49 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         Log.e("date", day + " " + hours + ":" + min);
         Log.e("time", currentTime);
 
-// TODO: 21/06/2019 add closing soon if closing hour is less than 30mn and add close if resto is close today
-// TODO: 21/06/2019 add 24/24 if getday==0 and close=0000
+
         if (placeDetail.getResult().getOpeningHours() != null) {
             String restau = placeDetail.getResult().getName();// just for log
-            for (int i = 0; i < placeDetail.getResult().getOpeningHours().getPeriods().size(); i++) {
-                Log.e("opening", restau + " " + placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() + " " +
-                        placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime() + " " +
-                        placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime() + " " +
-                        placeDetail.getResult().getOpeningHours().getOpenNow());
+            OpeningHours openingHours = placeDetail.getResult().getOpeningHours();
+            for (int i = 0; i < openingHours.getPeriods().size(); i++) {
+                // Log.e("opening", restau + " " + placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() + " " +
+                //         placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime() + " " +
+                //         placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime() + " " +
+                //         placeDetail.getResult().getOpeningHours().getOpenNow());
+                Period period = openingHours.getPeriods().get(i);
+                if (period.getOpen() != null && period.getClose() != null) {
+                    String closeHours = period.getClose().getTime();
+                    String openHours = period.getOpen().getTime();
 
-                String closeHours = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime();
-                String openHours = placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime();
+                    int openHour = Integer.parseInt(openHours);
+                    int closeHour = Integer.parseInt(closeHours);
 
-                int openHour = Integer.parseInt(openHours);
-                int closeHour = Integer.parseInt(closeHours);
+                    if (period.getOpen().getDay() == day) {
+                        if (!openingHours.getOpenNow() && currentHour < openHour) {
+                            Log.e("close", restau + " hour<openhour");
+                            restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                        } else if (!openingHours.getOpenNow() && currentHour > openHour && currentHour < closeHour) {
+                            Log.e("close", restau + " hour>open<close");
+                            restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
+                        } else if (currentHour > closeHour) {
+                            Log.e("close", restau + " ever close");
+                            restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>"));
+                        } else if (openingHours.getOpenNow()) {
+                            restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
+                            Log.e("open", restau);
+                        }
 
-                if (placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() == day) {
-                    if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
-                        Log.e("close", restau + " hour<openhour");
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
-                    } else if (!placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour > openHour && currentHour < closeHour) {
-                        Log.e("close", restau + " hour>open<close");
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
-                    } else if (currentHour > closeHour) {
-                        Log.e("close", restau + " ever close");
-                        restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>"));
-                    } else if (placeDetail.getResult().getOpeningHours().getOpenNow()) {
-                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
-                        Log.e("open", restau);
-                    }
-
-                } else if (placeDetail.getResult().getOpeningHours().getOpenNow() && currentHour < openHour) {
-                    Log.e("new", restau);
-                    try {
-                        restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime(), Locale.getDefault().getLanguage())));
-                    } catch (ArrayIndexOutOfBoundsException e) {
-                        //
-                    }
-                }else Log.e("newclose", restau);
+                    } else if (openingHours.getOpenNow() && currentHour < openHour) {
+                        Log.e("new", restau);
+                        try {
+                            restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime(), Locale.getDefault().getLanguage())));
+                        } catch (ArrayIndexOutOfBoundsException e) {
+                            //
+                        }
+                    } else Log.e("newclose", restau);
 
                 }
-
+            }
 
 
         } else restoOpening.setText("no information");
@@ -202,12 +202,10 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     }
 
 
-
-
-    private void displayWormates(String restoId){
+    private void displayWormates(String restoId) {
         UserHelper.getRestoId(restoId).addOnSuccessListener(queryDocumentSnapshots -> {
             String workmates = String.valueOf(queryDocumentSnapshots.size());
-            numberOfPerson.setText("("+workmates+")");
+            numberOfPerson.setText("(" + workmates + ")");
         });
     }
 

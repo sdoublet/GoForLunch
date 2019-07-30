@@ -80,7 +80,7 @@ public class PlaceDetailActivity extends BaseActivity {
     public static final int REQUEST_PERMISSION_CODE = 100;
     public static final String PREF_BOOKING = "myBooking";
     public static final String PREF_LIKE = "likes";
-    public static final String API_KEY = BuildConfig.GOOGLE_MAPS_API_KEY;
+    public static final String API_KEY = BuildConfig.google_maps_api_key;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

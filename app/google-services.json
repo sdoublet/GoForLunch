@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "295879445682-h45p15t839qvrm3ks4jrmg3nr8s7fho5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.goforlunch",
+            "certificate_hash": "14133493aa93c05c65416b2060fa77f6eadc6961"
+          }
+        },
+        {
           "client_id": "295879445682-03slbmoqh220vp4nf92l6672q6i45mo1.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {

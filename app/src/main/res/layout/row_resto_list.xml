@@ -9,13 +9,18 @@
 
     <TextView
         android:id="@+id/resto_name"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:maxWidth="200dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:ellipsize="end"
+        android:maxWidth="200dp"
+        android:maxLines="1"
         android:text="Name fkfkfkfkkfkfkfkfkfkfkfkfkfkfkfkfk"
-        android:textStyle="bold" app:layout_constraintStart_toStartOf="parent"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toStartOf="@+id/resto_distance"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
@@ -23,6 +28,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:maxWidth="200dp"
+        android:ellipsize="end"
+        android:maxLines="1"
         android:layout_marginStart="8dp"
         android:text="this is my address fffffffffffffffffff"
         app:layout_constraintBottom_toTopOf="@+id/resto_opening_time"

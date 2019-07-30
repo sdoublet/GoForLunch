@@ -254,8 +254,8 @@ public class SettingActivity extends BaseActivity {
 
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
-        calendar.set(Calendar.MINUTE, 12);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 30);
 
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
