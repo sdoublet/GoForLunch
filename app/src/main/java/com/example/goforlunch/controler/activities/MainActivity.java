@@ -1,6 +1,7 @@
 package com.example.goforlunch.controler.activities;
 
 
+import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -63,6 +64,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
+
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -91,7 +93,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final int AUTOCOMPLETE_REQUEST_CODE = 1;
     public static final String PREF_BOOKING = "Mybooking";
     public static final String API_KEY = BuildConfig.google_maps_api_key;
-
     public static final String PLACEIDRESTO = "resto_place_id";
 
     @Override
@@ -245,7 +246,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                                     intent1.putExtra("resto_place_id", restoId);
                                     startActivity(intent1);
                                 }
-                            }else {
+                            } else {
                                 Toast.makeText(getApplicationContext(), getString(R.string.choose_restaurant), Toast.LENGTH_SHORT).show();
                             }
                         }
@@ -357,6 +358,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
+
 
     @Override
     protected void onResume() {

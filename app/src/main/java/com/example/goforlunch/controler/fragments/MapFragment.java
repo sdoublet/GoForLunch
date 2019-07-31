@@ -124,7 +124,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
     }
 
-    @AfterPermissionGranted(REQUEST_CODE)
+
     @SuppressLint("MissingPermission")
     private void displayCurrentLocation(GoogleMap googleMap) {
         mGoogleMap = googleMap;
@@ -139,7 +139,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     assert currentLocation != null;
                     mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
                     //test
-                   // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.638104, 3.054934), DEFAULT_ZOOM));
+                    // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.638104, 3.054934), DEFAULT_ZOOM));
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     //test
@@ -149,7 +149,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     marker = mGoogleMap.addMarker(markerOptions);
                     httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
                     //test
-                   // httpRequestWithRetrofit("50.638104, 3.054934");
+                    // httpRequestWithRetrofit("50.638104, 3.054934");
                     lat = String.valueOf(currentLocation.getLatitude());
                     lng = String.valueOf(currentLocation.getLongitude());
                     DataHolder.getInstance().setCurrentLat(currentLocation.getLatitude());
@@ -171,14 +171,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     }
 
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-
-        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
-
-    }
 
     //--------------------------------
     //HTTP REQUEST WITH RETROFIT
