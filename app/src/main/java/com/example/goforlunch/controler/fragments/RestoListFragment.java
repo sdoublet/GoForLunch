@@ -70,7 +70,7 @@ public class RestoListFragment extends Fragment {
        // httpRequestWithRetrofit2(myPosition);
         //httpRequestWithRetrofit2(myPosition);
         //test
-        httpRequestWithRetrofit2(newPosition);
+        httpRequestWithRetrofit2(myPosition);
         //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
         configureOnClickRecyclerView();

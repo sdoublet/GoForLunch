@@ -35,5 +35,6 @@
     <string name="ToLike">LIKE</string>
     <string name="NoName">No name</string>
     <string name="administrator_notif">Message de Go4Lunch</string>
+    <string name="choose_restaurant">Vous n\'avez pas encore choisi de restaurant</string>
 
 </resources>

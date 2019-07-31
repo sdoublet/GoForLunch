@@ -36,7 +36,7 @@ public class WebViewRestaurant extends AppCompatActivity {
         assert actionBar != null;
         actionBar.setTitle("Website");
         toolbar.setTitleTextColor(ContextCompat.getColor(this, R.color.white));
-        actionBar.setDisplayHomeAsUpEnabled(true);
+       // actionBar.setDisplayHomeAsUpEnabled(true);
 
     }
 

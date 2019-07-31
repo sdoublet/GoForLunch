@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -236,12 +237,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) {
                         if (documentSnapshot.exists()) {
-                            String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
-                            Log.e("restoId", restoId);
-                            if (!restoId.isEmpty()) {
-                                Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-                                intent1.putExtra("resto_place_id", restoId);
-                                startActivity(intent1);
+                            if (documentSnapshot.get("mRestaurantId") != null) {
+                                String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
+                                Log.e("restoId", "salut");
+                                if (!restoId.isEmpty()) {
+                                    Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                                    intent1.putExtra("resto_place_id", restoId);
+                                    startActivity(intent1);
+                                }
+                            }else {
+                                Toast.makeText(getApplicationContext(), getString(R.string.choose_restaurant), Toast.LENGTH_SHORT).show();
                             }
                         }
                     }
@@ -306,7 +311,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                         .load(this.getCurrentUser().getPhotoUrl())
                         .apply(RequestOptions.circleCropTransform())
                         .into(imageViewProfile);
-            }else {
+            } else {
                 Glide.with(this)
                         .load(R.drawable.avatar2)
                         .apply(RequestOptions.circleCropTransform())
@@ -329,6 +334,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
 
     }
+
     //------------------------
     // Delete booking each day
     //------------------------
@@ -349,7 +355,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         Intent intent = new Intent(this, AlertReceiverBooking.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
 
-        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),AlarmManager.INTERVAL_DAY, pendingIntent);
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
 
     @Override

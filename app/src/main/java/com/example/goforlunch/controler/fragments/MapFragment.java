@@ -137,19 +137,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     // Set the map's camera position to the current location of the device.
                     Location currentLocation = (Location) task.getResult();
                     assert currentLocation != null;
-                   // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
+                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
                     //test
-                    mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.638104, 3.054934), DEFAULT_ZOOM));
+                   // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.638104, 3.054934), DEFAULT_ZOOM));
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
                     //test
-                    markerOptions.position(new LatLng(50.638104, 3.054934));
+                    //markerOptions.position(new LatLng(50.638104, 3.054934));
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     markerOptions.title("My position");
                     marker = mGoogleMap.addMarker(markerOptions);
                     httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
                     //test
-                    httpRequestWithRetrofit("50.638104, 3.054934");
+                   // httpRequestWithRetrofit("50.638104, 3.054934");
                     lat = String.valueOf(currentLocation.getLatitude());
                     lng = String.valueOf(currentLocation.getLongitude());
                     DataHolder.getInstance().setCurrentLat(currentLocation.getLatitude());

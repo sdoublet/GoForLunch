@@ -22,6 +22,7 @@ public class RestoListFragmentAdapter extends RecyclerView.Adapter<RestoListFrag
     RequestManager glide;
 
 
+
     public RestoListFragmentAdapter(Context context, List<ResultNearbySearch> restoList, RequestManager glide) {
         this.restoList = restoList;
         this.glide = glide;

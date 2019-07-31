@@ -29,6 +29,7 @@ import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.reactivex.disposables.Disposable;
 import io.reactivex.observers.DisposableObserver;
 
 public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
@@ -50,6 +51,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     private static final String BASE_URL = "https://maps.googleapis.com/maps/api/place/photo";
     private static final int MAX_WIDTH = 75;
     private static final int MAX_HEIGHT = 75;
+    private Disposable disposable;
 
 
     RestoListFragmentViewHolder(@NonNull View itemView) {
@@ -66,7 +68,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             rating.setRating((float) ratingResult);
         } else rating.setVisibility(View.INVISIBLE);
 
-        PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<PlaceDetail>() {
+        disposable = PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<PlaceDetail>() {
             @Override
             public void onNext(PlaceDetail placeDetail) {
                 Log.e("placeDetail", placeDetail.getResult().getName());
@@ -105,7 +107,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         String lng = String.valueOf(placeDetail.getResult().getGeometry().getLocation().getLng());
         String destination = lat + "," + lng;
 
-        PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<DistanceMatrix>() {
+       disposable = PlaceStreams.streamfetchDistanceMatrix(DataHolder.getInstance().getCurrentPosiiton(), destination, BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<DistanceMatrix>() {
             @Override
             public void onNext(DistanceMatrix distanceMatrix) {
                 distance(distanceMatrix);
@@ -208,6 +210,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             numberOfPerson.setText("(" + workmates + ")");
         });
     }
+
 
 
 }
