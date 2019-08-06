@@ -41,7 +41,7 @@
     <string name="eating">is eating at</string>
     <string name="AppTitle" translatable="false">GoForLunch</string>
     <string name="Reminder">Reminder for your choice</string>
-    <string name="LIKE">YOU LIKE</string>
+    <string name="LIKE">YOU LIKED</string>
     <string name="ToLike">LIKE</string>
     <string name="NoName">No name</string>
     <string name="administrator_notif">Message from Go4Lunch</string>

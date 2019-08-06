@@ -1,5 +1,6 @@
 package com.example.goforlunch.controler.fragments;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -93,7 +94,7 @@ public class WorkmatesFragment extends Fragment {
                         intent.putExtra("resto_place_id", user.getmRestaurantId());
                         startActivity(intent);
                     }else {
-                        Toast.makeText(getContext(), user.getUsername()+ " n'a pas encore choisit",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), user.getUsername()+ " " + this.getString(R.string.hasnt_decided_yet),Toast.LENGTH_SHORT).show();
                     }
                 });
     }

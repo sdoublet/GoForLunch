@@ -169,7 +169,7 @@ public class PlaceDetailActivity extends BaseActivity {
                 String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
                 Log.e("phone", phoneNumber);
                 Intent intentCall = new Intent(Intent.ACTION_CALL);
-                intentCall.setData(Uri.parse("tel:" + "0622611305"));
+                intentCall.setData(Uri.parse("tel:" + phoneNumber));
                 startActivity(intentCall);
             }
         } else {
@@ -223,7 +223,7 @@ public class PlaceDetailActivity extends BaseActivity {
                     int newLike = (int) (likes - 1);
                     LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
                     like.setText(getString(R.string.ToLike) + "(" + newLike + ")");
-//
+
                 }
             });
         }
