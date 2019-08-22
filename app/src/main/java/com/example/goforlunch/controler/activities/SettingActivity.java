@@ -69,7 +69,7 @@ public class SettingActivity extends BaseActivity {
         setContentView(R.layout.activity_setting);
         ButterKnife.bind(this);
         this.configureToolbar();
-        this.displayphoto();
+        this.displayPhoto();
         this.configureStatusBar();
         this.onClickSwitch();
         mSharePreferences = getSharedPreferences(SHARE_PREF, MODE_PRIVATE);
@@ -102,7 +102,7 @@ public class SettingActivity extends BaseActivity {
 
     }
 
-    private void displayphoto(){
+    private void displayPhoto(){
         if (getCurrentUser().getPhotoUrl()!=null){
             Glide.with(this)
                     .load(this.getCurrentUser().getPhotoUrl())
@@ -254,7 +254,7 @@ public class SettingActivity extends BaseActivity {
 
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
+        calendar.set(Calendar.HOUR_OF_DAY, 12);
         calendar.set(Calendar.MINUTE, 30);
         calendar.set(Calendar.SECOND, 30);
 

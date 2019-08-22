@@ -1,6 +1,7 @@
 package com.example.goforlunch.controler.activities;
 
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -39,6 +40,7 @@ public class LoginActivity extends BaseActivity {
         return R.layout.activity_login;
     }
 
+    //Launch activity and send a welcome back message
     private void startApp() {
         if (getCurrentUser()!=null){
             this.launchMainActivity();
@@ -62,6 +64,8 @@ public class LoginActivity extends BaseActivity {
         this.handleResponseAfterSignIn(requestCode, resultCode, data);
     }
 
+
+    // Auth methods
     private void startSignInActivity() {
         startActivityForResult(AuthUI.getInstance()
                         .createSignInIntentBuilder()
@@ -76,22 +80,24 @@ public class LoginActivity extends BaseActivity {
                         .build(),
                 RC_SIGN_IN);
     }
+
+
     //show snack bar with a message
 
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
         if (requestCode == RC_SIGN_IN) {
             if (resultCode == RESULT_OK) {
-                Toast.makeText(this, "Authentification réussie", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.success_auth), Toast.LENGTH_LONG).show();
                 launchMainActivity();
                 this.createUserInFirestore();
                 // TODO: 07/05/2019   mettre intent vers mainactivity
             } else if (response == null) {
-                Toast.makeText(this, "Authentificaiton annulée", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.cancelled_auth), Toast.LENGTH_LONG).show();
             } else if (Objects.requireNonNull(response.getError()).getErrorCode() == ErrorCodes.NO_NETWORK) {
-                Toast.makeText(this, "Aucune connexion internet", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.no_connection), Toast.LENGTH_LONG).show();
             } else if (response.getError().getErrorCode() == ErrorCodes.UNKNOWN_ERROR) {
-                Toast.makeText(this, "Une érreur s'est produite", Toast.LENGTH_LONG).show();
+                Toast.makeText(this, getString(R.string.error_happened), Toast.LENGTH_LONG).show();
             }
         }
     }

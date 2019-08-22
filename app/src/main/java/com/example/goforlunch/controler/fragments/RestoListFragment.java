@@ -18,7 +18,6 @@ import com.bumptech.glide.Glide;
 import com.example.goforlunch.BuildConfig;
 import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.PlaceDetailActivity;
-import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 import com.example.goforlunch.utils.DataHolder;
@@ -65,13 +64,13 @@ public class RestoListFragment extends Fragment {
 
 
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
-        String newPosition = "50.638104, 3.054934";
+        //String newPosition = "50.638104, 3.054934";
         Log.e("data", ""+myPosition);
        // httpRequestWithRetrofit2(myPosition);
         //httpRequestWithRetrofit2(myPosition);
         //test
         httpRequestWithRetrofit2(myPosition);
-        //  httpRequestDistancematrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
+        //  httpRequestDistanceMatrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
         configureOnClickRecyclerView();
 
@@ -86,7 +85,7 @@ public class RestoListFragment extends Fragment {
     //HTTP REQUEST WITH RETROFIT
     //--------------------------------
     private void httpRequestWithRetrofit2(String location) {
-        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());//replace by sharepref
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
         this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, "restaurant", BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
@@ -108,9 +107,7 @@ public class RestoListFragment extends Fragment {
 
     private void updateUII(List<ResultNearbySearch> resultNearbySearches) {
         searchList.clear();
-        // TODO: 25/06/2019 trier avec comparator par field
-        // TODO: 25/06/2019 fair ela requete avec for sur *resto
-        // TODO: 25/06/2019 mettre la distance dans un champs nearbysearch
+
 
         searchList.addAll(resultNearbySearches);
         if (searchList.size() != 0) {

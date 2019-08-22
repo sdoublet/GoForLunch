@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.RequestManager;
 import com.example.goforlunch.R;
-import com.example.goforlunch.model.Api.Details.Result;
 import com.example.goforlunch.model.Api.Nearby.ResultNearbySearch;
 
 import java.util.List;
@@ -19,7 +18,7 @@ import java.util.List;
 public class RestoListFragmentAdapter extends RecyclerView.Adapter<RestoListFragmentViewHolder> {
 
     private List<ResultNearbySearch> restoList;
-    RequestManager glide;
+    private RequestManager glide;
 
 
 

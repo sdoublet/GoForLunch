@@ -127,7 +127,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         });
 
         //OpeningHours
-        int[] daysPeriods = {0, 1, 2, 3, 4, 5, 6};
+
         Calendar calendar = Calendar.getInstance();
         int day = calendar.get(Calendar.DAY_OF_WEEK) - 1;
         int hours = calendar.get(Calendar.HOUR_OF_DAY);

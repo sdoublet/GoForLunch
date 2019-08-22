@@ -18,11 +18,8 @@ import com.example.goforlunch.R;
 import com.example.goforlunch.controler.activities.MainActivity;
 import com.example.goforlunch.model.Api.Firebase.UserHelper;
 import com.example.goforlunch.model.User;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,34 +46,28 @@ public class AlertReceiver extends BroadcastReceiver {
 
     // User concern by notification
     public void checkBooking(Context context) {
-        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-            @Override
-            public void onSuccess(DocumentSnapshot documentSnapshot) {
-                if (documentSnapshot.exists()) {
-                    User user = documentSnapshot.toObject(User.class);
-                    assert user != null;
-                    restoId = user.getmRestaurantId();
-                    restoName = user.getmRestaurantName();
-                    name = user.getUsername();
-                    if (restoId != null) {
-                        UserHelper.getRestoId(restoId).addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                            @Override
-                            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                userList = new ArrayList<>();
-                                if (!queryDocumentSnapshots.isEmpty()) {
-                                    for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
-                                        String client = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("username")).toString();
-                                        userList.add(client);
-                                        if (client.equals(getCurrentUser().getDisplayName())) {
-                                            userList.remove(client);
-                                        }
-                                    }
-                                    sendVisualNotification(context, name, restoName, userList);
-                                    Log.e("data", userList.toString());
+        UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
+            if (documentSnapshot.exists()) {
+                User user = documentSnapshot.toObject(User.class);
+                assert user != null;
+                restoId = user.getmRestaurantId();
+                restoName = user.getmRestaurantName();
+                name = user.getUsername();
+                if (restoId != null) {
+                    UserHelper.getRestoId(restoId).addOnSuccessListener(queryDocumentSnapshots -> {
+                        userList = new ArrayList<>();
+                        if (!queryDocumentSnapshots.isEmpty()) {
+                            for (int i = 0; i < queryDocumentSnapshots.size(); i++) {
+                                String client = Objects.requireNonNull(queryDocumentSnapshots.getDocuments().get(i).get("username")).toString();
+                                userList.add(client);
+                                if (client.equals(getCurrentUser().getDisplayName())) {
+                                    userList.remove(client);
                                 }
                             }
-                        });
-                    }
+                            sendVisualNotification(context, name, restoName, userList);
+                            Log.e("data", userList.toString());
+                        }
+                    });
                 }
             }
         });
@@ -90,9 +81,9 @@ public class AlertReceiver extends BroadcastReceiver {
         // Create a style for the notification
         NotificationCompat.InboxStyle inboxStyle = new NotificationCompat.InboxStyle();
         inboxStyle.setBigContentTitle(context.getString(R.string.AppTitle));
-        inboxStyle.addLine("Bonjour " + name);
-        inboxStyle.addLine("vous avez choisit de manger");
-        inboxStyle.addLine(" au restaurant ");
+        inboxStyle.addLine(context.getString(R.string.Hi) + name);
+        inboxStyle.addLine(context.getString(R.string.choose_eating));
+        inboxStyle.addLine(context.getString(R.string.restaurant));
         inboxStyle.addLine(restoName);
         StringBuilder stringBuilder = new StringBuilder();
         for (int i = 0; i < userList.size(); i++) {

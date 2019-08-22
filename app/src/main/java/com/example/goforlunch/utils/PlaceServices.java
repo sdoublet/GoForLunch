@@ -1,6 +1,6 @@
 package com.example.goforlunch.utils;
 
-import com.example.goforlunch.model.Api.Autocomplete.Prediction;
+//import com.example.goforlunch.model.Api.Autocomplete.Prediction;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
@@ -23,11 +23,11 @@ public interface PlaceServices {
     Observable<PlaceDetail> getPlaceDetails(@Query("placeid") String placeId,
                                             @Query("key") String key);
 
-    @GET("maps/api/place/autocomplete/json?")
-    Observable<Prediction> getPrediction(@Query("input") String input,
-                                         @Query("location") String location,
-                                         @Query("radius") int radius,
-                                         @Query("key") String key);
+//    @GET("maps/api/place/autocomplete/json?")
+//    Observable<Prediction> getPrediction(@Query("input") String input,
+//                                         @Query("location") String location,
+//                                         @Query("radius") int radius,
+//                                         @Query("key") String key);
 
     @GET("maps/api/distancematrix/json?")
     Observable<DistanceMatrix> getDistance(@Query("origins") String originLatLng,

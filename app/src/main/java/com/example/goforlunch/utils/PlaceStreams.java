@@ -1,7 +1,7 @@
 package com.example.goforlunch.utils;
 
 
-import com.example.goforlunch.model.Api.Autocomplete.Prediction;
+//import com.example.goforlunch.model.Api.Autocomplete.Prediction;
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;

@@ -36,5 +36,12 @@
     <string name="NoName">No name</string>
     <string name="administrator_notif">Message de Go4Lunch</string>
     <string name="choose_restaurant">Vous n\'avez pas encore choisi de restaurant</string>
+    <string name="success_auth">Authentification réussie</string>
+    <string name="cancelled_auth">Authentificaiton annulée</string>
+    <string name="no_connection">Aucune connexion internet</string>
+    <string name="error_happened">Une érreur s\'est produite</string>
+    <string name="Hi">Bonjour</string>
+    <string name="choose_eating">vous avez choisi de manger</string>
+    <string name="restaurant">au restaurant</string>
 
 </resources>

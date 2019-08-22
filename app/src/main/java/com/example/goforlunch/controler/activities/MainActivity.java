@@ -1,7 +1,6 @@
 package com.example.goforlunch.controler.activities;
 
 
-import android.Manifest;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -52,7 +51,6 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentSnapshot;
 
 import java.util.Arrays;
 import java.util.Calendar;
@@ -234,21 +232,18 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                 startActivity(intent);
                 break;
             case R.id.your_lunch:
-                UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if (documentSnapshot.exists()) {
-                            if (documentSnapshot.get("mRestaurantId") != null) {
-                                String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
-                                Log.e("restoId", "salut");
-                                if (!restoId.isEmpty()) {
-                                    Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
-                                    intent1.putExtra("resto_place_id", restoId);
-                                    startActivity(intent1);
-                                }
-                            } else {
-                                Toast.makeText(getApplicationContext(), getString(R.string.choose_restaurant), Toast.LENGTH_SHORT).show();
+                UserHelper.getUser(getCurrentUser().getUid()).addOnSuccessListener(documentSnapshot -> {
+                    if (documentSnapshot.exists()) {
+                        if (documentSnapshot.get("mRestaurantId") != null) {
+                            String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
+                            Log.e("restoId", "salut");
+                            if (!restoId.isEmpty()) {
+                                Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
+                                intent1.putExtra("resto_place_id", restoId);
+                                startActivity(intent1);
                             }
+                        } else {
+                            Toast.makeText(getApplicationContext(), getString(R.string.choose_restaurant), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
