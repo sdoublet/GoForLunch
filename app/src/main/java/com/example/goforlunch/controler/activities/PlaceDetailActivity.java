@@ -49,7 +49,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 public class PlaceDetailActivity extends BaseActivity {
 
     public static final String PLACEDETAILRESTO = "resto_place_id";
-    //public static final String PHOTO = "photo";
+
     @BindView(R.id.floating_button)
     FloatingActionButton floatingButton;
     @BindView(R.id.detail_resto_name)

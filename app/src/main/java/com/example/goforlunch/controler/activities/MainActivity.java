@@ -89,6 +89,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     public static final int FRAGMENT_WORKMATES = 2;
     public static final int FRAGMENT_CHAT = 3;
     public static final int AUTOCOMPLETE_REQUEST_CODE = 1;
+    public static final int ALARM_REQUEST_CODE = 10;
     public static final String PREF_BOOKING = "Mybooking";
     public static final String API_KEY = BuildConfig.google_maps_api_key;
     public static final String PLACEIDRESTO = "resto_place_id";
@@ -336,7 +337,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     //------------------------
     private void deleteBooking() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.HOUR_OF_DAY, 11);
         calendar.set(Calendar.MINUTE, 10);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
@@ -346,10 +347,11 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
 
     }
 
+    // Alarm to delete booking
     private void startAlarm(Calendar calendar) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiverBooking.class);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 1, intent, 0);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(this, ALARM_REQUEST_CODE, intent, 0);
 
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
     }
