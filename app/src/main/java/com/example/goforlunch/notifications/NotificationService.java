@@ -25,7 +25,9 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 
-
+//---------------------------------------
+//CLASS TO RECEIVE MESSAGE FROM FIREBASE
+//---------------------------------------
 
 public class NotificationService extends FirebaseMessagingService  {
 
@@ -94,14 +96,13 @@ public class NotificationService extends FirebaseMessagingService  {
 
     private void checkIfUserBooking(){
 
-        // }
         UserHelper.getUser(DataHolder.getInstance().getUserUid()).addOnSuccessListener(documentSnapshot -> {
             User user = documentSnapshot.toObject(User.class);
-           // if (user!=null&&user.getmRestaurantName()!=null){
+
             assert user != null;
             restoName = user.getmRestaurantName();
                DataHolder.getInstance().setRestoName(restoName);
-                Log.e("notif", restoName);
+
             });
 
 

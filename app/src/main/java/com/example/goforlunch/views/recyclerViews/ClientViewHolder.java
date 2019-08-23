@@ -35,7 +35,7 @@ public class ClientViewHolder extends RecyclerView.ViewHolder {
 
         if (user != null) {
             textView.setText(user.getUsername() + " is joining!");
-            Log.e("holder", user.getUsername());
+
         }
     }
 }

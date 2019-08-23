@@ -48,6 +48,8 @@ public abstract class BaseActivity extends AppCompatActivity {
     //------------------
     //UI
     //------------------
+
+    //Set color for status bar
     protected void configureStatusBar() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             Window window = getWindow();

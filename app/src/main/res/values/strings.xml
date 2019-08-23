@@ -53,6 +53,13 @@
     <string name="Hi">Hi</string>
     <string name="choose_eating">you choose  to eat</string>
     <string name="restaurant">at the restaurant</string>
+    <string name="delete_message">are you sure ?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="choose_this_restaurant">You choose this restaurant</string>
+    <string name="make_choice">Make your choice</string>
+    <string name="delete_profile_msg">your profile was deleted</string>
+    <string name="no_information">no information</string>
 
 
 </resources>

@@ -14,13 +14,19 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.goforlunch.R;
 
+
+//---------------------------------------
+// DIVIDER  DECORATION BETWEEN ITEMS
+//---------------------------------------
+
+
 public class Divider extends RecyclerView.ItemDecoration {
 
     private Drawable mDivider;
     private int mOrientation;
 
     /**
-     * Method to add a divider between two articles in recyclerView
+     * Method to add a divider between two items in recyclerView
      * @param context current
      * @param orientation must be vertical
      */

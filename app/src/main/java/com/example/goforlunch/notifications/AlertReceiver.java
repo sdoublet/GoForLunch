@@ -25,6 +25,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+
+//-------------------------------
+//    TO RECEIVE NOTIFICATION
+//-------------------------------
+
+
 public class AlertReceiver extends BroadcastReceiver {
     private static final String CHANNEL_ID = "CHANNEL_ID";
     private static final String NOTIFICATION_TAG = "GOFORLUNCH";

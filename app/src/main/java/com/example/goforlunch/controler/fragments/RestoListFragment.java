@@ -58,19 +58,8 @@ public class RestoListFragment extends Fragment {
         View view;
         view = inflater.inflate(R.layout.fragment_resto_list, container, false);
         ButterKnife.bind(this, view);
-
-
-        // httpRequestDistancematrix(DataHolder.getInstance().getCurrentPosiiton(), String.valueOf(DataHolder.getInstance().getStringList()));
-
-
         String myPosition = DataHolder.getInstance().getCurrentPosiiton();
-        //String newPosition = "50.638104, 3.054934";
-        Log.e("data", ""+myPosition);
-       // httpRequestWithRetrofit2(myPosition);
-        //httpRequestWithRetrofit2(myPosition);
-        //test
         httpRequestWithRetrofit2(myPosition);
-        //  httpRequestDistanceMatrix(myPosition, String.valueOf(DataHolder.getInstance().getStringList()));
         configureRecyclerView();
         configureOnClickRecyclerView();
 
@@ -121,14 +110,15 @@ public class RestoListFragment extends Fragment {
 
         }
 
-        Log.e("rv", String.valueOf(searchList.size()));
         adapter.notifyDataSetChanged();
     }
 
+    //---------------------------
+    // RECYCLER VIEW
+    //--------------------------
     private void configureRecyclerView() {
         this.searchList = new ArrayList<>();
         adapter = new RestoListFragmentAdapter(getContext(), searchList, Glide.with(this));
-        Log.e("rv", String.valueOf(searchList.size()));
         recyclerView.addItemDecoration(new Divider(getContext(), LinearLayoutManager.VERTICAL));
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));

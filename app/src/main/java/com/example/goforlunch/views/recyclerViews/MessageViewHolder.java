@@ -100,10 +100,10 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
                 this.imageViewSent.setVisibility(View.GONE);
             }
 
-            //Update Mesage Bibble Color Background
+            //Update Message Bible Color Background
             ((GradientDrawable)textMessageContainer.getBackground()).setColor(isCurrentUser ? colorCurrentUser : colorRemoteUser);
 
-            //Update all views alignement depending is current user or not
+            //Update all views alignment depending is current user or not
             this.updateDesignDependingUser(isCurrentUser);
         }
 
@@ -121,7 +121,7 @@ public class MessageViewHolder extends RecyclerView.ViewHolder {
         paramsLayoutContent.addRule(isSender ? RelativeLayout.LEFT_OF : RelativeLayout.RIGHT_OF, R.id.activity_chat_item_profile_container);
         this.messageContainer.setLayoutParams(paramsLayoutContent);
 
-        // CARDVIEW IMAGE SEND
+        // CARD VIEW IMAGE SEND
         RelativeLayout.LayoutParams paramsImageView = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
         paramsImageView.addRule(isSender ? RelativeLayout.ALIGN_LEFT : RelativeLayout.ALIGN_RIGHT, R.id.activity_mentor_chat_item_message_container_text_message_container);
         this.cardViewImageSent.setLayoutParams(paramsImageView);

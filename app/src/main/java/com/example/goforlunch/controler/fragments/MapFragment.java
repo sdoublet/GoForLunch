@@ -106,7 +106,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     public void onMapReady(GoogleMap googleMap) {
 
         MapsInitializer.initialize(Objects.requireNonNull(getContext()));
-        //its running
         displayCurrentLocation(googleMap);
         try {
             // Customise the styling of the base map using a JSON object defined
@@ -137,18 +136,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     Location currentLocation = (Location) task.getResult();
                     assert currentLocation != null;
                     mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()), DEFAULT_ZOOM));
-                    //test
-                    // mGoogleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(new LatLng(50.638104, 3.054934), DEFAULT_ZOOM));
                     MarkerOptions markerOptions = new MarkerOptions();
                     markerOptions.position(new LatLng(currentLocation.getLatitude(), currentLocation.getLongitude()));
-                    //test
-                    //markerOptions.position(new LatLng(50.638104, 3.054934));
                     markerOptions.icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE));
                     markerOptions.title("My position");
                     marker = mGoogleMap.addMarker(markerOptions);
                     httpRequestWithRetrofit((currentLocation.getLatitude()) + "," + (currentLocation.getLongitude()));
-                    //test
-                    // httpRequestWithRetrofit("50.638104, 3.054934");
                     lat = String.valueOf(currentLocation.getLatitude());
                     lng = String.valueOf(currentLocation.getLongitude());
                     DataHolder.getInstance().setCurrentLat(currentLocation.getLatitude());
@@ -177,7 +170,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
     private void httpRequestWithRetrofit(String location) {
 
 
-        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());//replace by sharepref
+        int rad = Integer.parseInt(DataHolder.getInstance().getRadius());
         this.disposable = PlaceStreams.streamFetchNearbySearch(location, rad, POI_TYPE, API_KEY).subscribeWith(new DisposableObserver<NearbyPlaces>() {
             @Override
             public void onNext(NearbyPlaces nearbyPlaces) {
@@ -209,16 +202,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
             for (int i = 0; i < searchList.size(); i++) {
                 if (searchList.get(i) != null) {
 
-                    Log.e("tag", String.valueOf(DataHolder.getInstance().getStringList()));
-
-                    Log.e("map", String.valueOf(searchList.size()));
-
                     int finalI = i;
 
                     UserHelper.getRestoId(searchList.get(i).getPlaceId()).addOnCompleteListener(task -> {
                         myProgressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Log.e("size", "success " + searchList.get(finalI).getPlaceId());
                             marker = mGoogleMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(searchList.get(finalI).getGeometry().getLocation().getLat(),
                                             searchList.get(finalI).getGeometry().getLocation().getLng()))
@@ -236,7 +224,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
                     });
 
                 } else {
-                    Log.e("Marker", "search list is null!");//anything
+                    Log.e("Marker", "search list is null!");
                 }
 
             }
@@ -249,8 +237,24 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         if (this.disposable != null && !this.disposable.isDisposed()) this.disposable.dispose();
     }
 
+// Launch PaceDetailActivity with click on marker
+    @Override
+    public boolean onMarkerClick(Marker marker) {
+
+        String ref = (String) marker.getTag();
+        if (ref != null) {
+            Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
+            intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
+            startActivity(intent);
+        }
+        return false;
+
+
+    }
+
 
     @Override
+
     public void onResume() {
         super.onResume();
         mapView.onResume();
@@ -259,7 +263,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         }
 
     }
-
 
     @Override
     public void onPause() {
@@ -274,25 +277,4 @@ public class MapFragment extends Fragment implements OnMapReadyCallback, GoogleM
         mapView.onDestroy();
         this.disposeWhenDestroy();
     }
-
-    @Override
-    public boolean onMarkerClick(Marker marker) {
-
-        String ref = (String) marker.getTag();
-        Log.e("nearby", marker.getId());
-        Log.e("nearby", marker.getTitle());
-
-
-        if (ref != null) {
-            Log.e("nearby", ref);
-            Intent intent = new Intent(MapFragment.this.getActivity(), PlaceDetailActivity.class);
-            intent.putExtra(PlaceDetailActivity.PLACEDETAILRESTO, ref);
-            startActivity(intent);
-        }
-        return false;
-
-
-    }
-
-
 }

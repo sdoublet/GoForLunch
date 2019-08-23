@@ -1,5 +1,6 @@
 package com.example.goforlunch.views.recyclerViews;
 
+import android.content.Context;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -54,6 +55,7 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
     private Disposable disposable;
 
 
+
     RestoListFragmentViewHolder(@NonNull View itemView) {
         super(itemView);
         ButterKnife.bind(this, itemView);
@@ -71,7 +73,6 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         disposable = PlaceStreams.streamFetchPlaceDetails(restaurantDetail.getPlaceId(), BuildConfig.google_maps_api_key).subscribeWith(new DisposableObserver<PlaceDetail>() {
             @Override
             public void onNext(PlaceDetail placeDetail) {
-                Log.e("placeDetail", placeDetail.getResult().getName());
                 displayDetail(placeDetail);
                 displayWormates(restaurantDetail.getPlaceId());
             }
@@ -97,7 +98,6 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         //---Photo---
         if (placeDetail.getResult().getPhotos() != null && !placeDetail.getResult().getPhotos().isEmpty()) {
             glide.load(BASE_URL + "?maxwigth=" + MAX_WIDTH + "&maxheight=" + MAX_HEIGHT + "&photoreference=" + placeDetail.getResult().getPhotos().get(0).getPhotoReference() + "&key=" + BuildConfig.google_maps_api_key).into(restoPhoto);
-            Log.e("photo", placeDetail.getResult().getPhotos().get(0).getPhotoReference());
 
         } else {
             restoPhoto.setImageResource(R.drawable.serveur);
@@ -111,8 +111,6 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
             @Override
             public void onNext(DistanceMatrix distanceMatrix) {
                 distance(distanceMatrix);
-
-
             }
 
             @Override
@@ -137,18 +135,11 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
         }
         String currentTime = hours + "" + min;
         int currentHour = Integer.parseInt(currentTime);
-        Log.e("date", day + " " + hours + ":" + min);
-        Log.e("time", currentTime);
-
 
         if (placeDetail.getResult().getOpeningHours() != null) {
             String restau = placeDetail.getResult().getName();// just for log
             OpeningHours openingHours = placeDetail.getResult().getOpeningHours();
             for (int i = 0; i < openingHours.getPeriods().size(); i++) {
-                // Log.e("opening", restau + " " + placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getDay() + " " +
-                //         placeDetail.getResult().getOpeningHours().getPeriods().get(i).getOpen().getTime() + " " +
-                //         placeDetail.getResult().getOpeningHours().getPeriods().get(i).getClose().getTime() + " " +
-                //         placeDetail.getResult().getOpeningHours().getOpenNow());
                 Period period = openingHours.getPeriods().get(i);
                 if (period.getOpen() != null && period.getClose() != null) {
                     String closeHours = period.getClose().getTime();
@@ -159,33 +150,28 @@ public class RestoListFragmentViewHolder extends RecyclerView.ViewHolder {
 
                     if (period.getOpen().getDay() == day) {
                         if (!openingHours.getOpenNow() && currentHour < openHour) {
-                            Log.e("close", restau + " hour<openhour");
                             restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
                         } else if (!openingHours.getOpenNow() && currentHour > openHour && currentHour < closeHour) {
-                            Log.e("close", restau + " hour>open<close");
                             restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>" + ", opening at " + ConvertDate.convertDate(String.valueOf(openHour), Locale.getDefault().getLanguage())));
                         } else if (currentHour > closeHour) {
-                            Log.e("close", restau + " ever close");
                             restoOpening.setText(Html.fromHtml("<font color=\"#ff0000\">" + "Close" + "</font>"));
                         } else if (openingHours.getOpenNow()) {
                             restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(String.valueOf(closeHour), Locale.getDefault().getLanguage())));
-                            Log.e("open", restau);
                         }
 
                     } else if (openingHours.getOpenNow() && currentHour < openHour) {
-                        Log.e("new", restau);
                         try {
                             restoOpening.setText(Html.fromHtml("<b><font color=\"#008000\">" + "Open" + "</font></b>" + ", close at " + ConvertDate.convertDate(placeDetail.getResult().getOpeningHours().getPeriods().get(i - 1).getClose().getTime(), Locale.getDefault().getLanguage())));
                         } catch (ArrayIndexOutOfBoundsException e) {
                             //
                         }
-                    } else Log.e("newclose", restau);
+                    }
 
                 }
             }
 
 
-        } else restoOpening.setText("no information");
+        } else restoOpening.setText(R.string.no_information);
     }
 
 

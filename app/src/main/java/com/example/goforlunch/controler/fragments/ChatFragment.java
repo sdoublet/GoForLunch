@@ -106,6 +106,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
     //ACTION
     //-------------
 
+    // send message and profile photo if exist
     @OnClick(R.id.chat_send_button)
     void onClickMessageSend() {
         if (!TextUtils.isEmpty(inputTextMessage.getText()) && modelCurrentUser != null) {
@@ -174,7 +175,7 @@ public class ChatFragment extends Fragment implements ChatAdapter.Listener {
 
     @Override
     public void onDataChanged() {
-        // 7 - Show TextView in case RecyclerView is empty
+        // Show TextView in case RecyclerView is empty
         chatIsEmpty.setVisibility(this.chatAdapter.getItemCount() == 0 ? View.VISIBLE : View.GONE);
     }
 

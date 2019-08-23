@@ -23,11 +23,6 @@ public interface PlaceServices {
     Observable<PlaceDetail> getPlaceDetails(@Query("placeid") String placeId,
                                             @Query("key") String key);
 
-//    @GET("maps/api/place/autocomplete/json?")
-//    Observable<Prediction> getPrediction(@Query("input") String input,
-//                                         @Query("location") String location,
-//                                         @Query("radius") int radius,
-//                                         @Query("key") String key);
 
     @GET("maps/api/distancematrix/json?")
     Observable<DistanceMatrix> getDistance(@Query("origins") String originLatLng,

@@ -40,7 +40,6 @@ public class SettingActivity extends BaseActivity {
     private static final int UPDATE_USERNAME = 30;
     private static final int UPDATE_EMAIL = 40;
     public static final int ALARM_CODE = 100;
-    //private static final int SIGN_OUT_TASK = 10;
     public static final String RADIUS_PREF = "radiusPref";
     public static final String SHARE_PREF = "sharePref";
 
@@ -114,19 +113,21 @@ public class SettingActivity extends BaseActivity {
     //ACTION
     //-------------
 
+    // Delete user profile after verification message
     @OnClick(R.id.delete_profile)
     public void onClickDeleteButton() {
 
         new AlertDialog.Builder(this)
-                .setMessage("are you sure")
-                .setPositiveButton("yes", (dialog, which) -> {
+                .setMessage(getString(R.string.delete_message))
+                .setPositiveButton(getString(R.string.yes), (dialog, which) -> {
                     progressBar.setVisibility(View.VISIBLE);
                     deleteUserFromFirebase();
                 })
-                .setNegativeButton("no", null)
+                .setNegativeButton(getString(R.string.no), null)
                 .show();
     }
 
+    // Update profile only for Firebase but not for UI
     @OnClick(R.id.update_button)
     public void onClickUpdateButton() {
         progressBar.setVisibility(View.VISIBLE);
@@ -134,13 +135,14 @@ public class SettingActivity extends BaseActivity {
 
     }
 
+    // Update radius
     @OnClick(R.id.update_preferences)
     public void onClickUpdatePreferences() {
         updateRadius();
-        Log.e("button", "button checked");
+
     }
 
-
+    // Notification switch
     private void onClickSwitch(){
         notificationSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (isChecked){
@@ -155,7 +157,6 @@ public class SettingActivity extends BaseActivity {
                 editor.putBoolean("notificationSwitch", false);
                 editor.apply();
                 cancelAlarm();
-                Log.e("alarm", "alarm canceled");
             }
         });
     }
@@ -164,10 +165,9 @@ public class SettingActivity extends BaseActivity {
     //REST REQUEST
     //--------------------
 
-
     private void deleteUserFromFirebase() {
         if (this.getCurrentUser() != null) {
-            // We also delete user from firestore storage
+            // We also delete user from Firestore storage
             UserHelper.deleteUser(this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener());
 
             AuthUI.getInstance()
@@ -183,7 +183,7 @@ public class SettingActivity extends BaseActivity {
         if (this.getCurrentUser() != null) {
             if (!username.isEmpty()) {
                 UserHelper.updateUser(username, this.getCurrentUser().getUid()).addOnFailureListener(this.onFailureListener()).addOnSuccessListener(this.updateUIAfterRESTRequestsCompleted(UPDATE_USERNAME));
-                Log.e("name", username);
+
             }
             if (this.getCurrentUser() != null) {
                 if (!email.isEmpty()) {
@@ -199,7 +199,7 @@ public class SettingActivity extends BaseActivity {
             switch (origin) {
                 case DELETE_USER_TASK:
                     progressBar.setVisibility(View.INVISIBLE);
-                    Toast.makeText(this, "your profile was deleted", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, getString(R.string.delete_profile_msg), Toast.LENGTH_LONG).show();
                     finish();
                     launchLoginActivity();
                     break;
@@ -252,10 +252,11 @@ public class SettingActivity extends BaseActivity {
     //SET ALARM FOR NOTIFICATION
     //-----------------------------
 
+    //set alarm to 12h
     private void setCalendarTime() {
         Calendar calendar = Calendar.getInstance();
         calendar.set(Calendar.HOUR_OF_DAY, 12);
-        calendar.set(Calendar.MINUTE, 30);
+        calendar.set(Calendar.MINUTE, 1);
         calendar.set(Calendar.SECOND, 30);
 
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
@@ -265,12 +266,13 @@ public class SettingActivity extends BaseActivity {
         setAlarm(calendar);
     }
 
+    // set repeating interval day and RTC_WAKEUP mode - Intent AlertReceiver
     private void setAlarm(Calendar calendar) {
         AlarmManager alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         Intent intent = new Intent(this, AlertReceiver.class);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), ALARM_CODE, intent, PendingIntent.FLAG_UPDATE_CURRENT);
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
-        Log.e("alarm", "alarm set");
+
     }
 
     private void cancelAlarm(){

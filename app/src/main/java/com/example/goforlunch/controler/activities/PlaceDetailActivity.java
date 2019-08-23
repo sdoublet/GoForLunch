@@ -79,7 +79,6 @@ public class PlaceDetailActivity extends BaseActivity {
     public static final String[] perms = {Manifest.permission.CALL_PHONE};
     public static final int REQUEST_PERMISSION_CODE = 100;
     public static final String PREF_BOOKING = "myBooking";
-    public static final String PREF_LIKE = "likes";
     public static final String API_KEY = BuildConfig.google_maps_api_key;
 
     @Override
@@ -88,9 +87,6 @@ public class PlaceDetailActivity extends BaseActivity {
         ButterKnife.bind(this);
         configureStatusBar();
         restoPlaceId = getIntent().getStringExtra(PLACEDETAILRESTO);
-        Log.e("test", restoPlaceId);
-
-       // restorePrefLike();
         executeHttpRequestWithRetrofit(restoPlaceId);
         configureRecyclerView();
         displayLikes();
@@ -111,12 +107,19 @@ public class PlaceDetailActivity extends BaseActivity {
         return R.layout.activity_place_detail;
     }
 
+
+    //------------------
+    //ACTION
+    //------------------
+
+
+    //Floating Button to select restaurant
     @OnClick(R.id.floating_button)
     public void OnclickFloatingActionButton() {
         if (!floatingButton.isActivated()) {
             Drawable drawable = getResources().getDrawable(R.drawable.check_circle).mutate();
             drawable.setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
-            Toast.makeText(getBaseContext(), "You choose this restaurant", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getString(R.string.choose_this_restaurant), Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
             updateRestaurantName(placeDetailResult.getName());
@@ -125,14 +128,11 @@ public class PlaceDetailActivity extends BaseActivity {
             SharedPreferences.Editor editor = preferences.edit();
             editor.putString("booked", restoPlaceId);
             editor.apply();
-            Log.e("pref", preferences.getString("booked", null));
-
-
 
 
         } else {
             Drawable drawable = getResources().getDrawable(R.drawable.add_circle).mutate();
-            Toast.makeText(getBaseContext(), "Make your choice", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getBaseContext(), getString(R.string.make_choice), Toast.LENGTH_SHORT).show();
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(false);
             updateRestaurantName(null);
@@ -141,16 +141,12 @@ public class PlaceDetailActivity extends BaseActivity {
             SharedPreferences.Editor editor = sharedPreferences.edit();
             editor.clear();
             editor.apply();
-            Log.e("pref", "null");
 
         }
     }
 
 
-    //------------------
-    //ACTION
-    //------------------
-
+    //Launch web site if exist
     @OnClick(R.id.website_button)
     public void launchWebViewActivity() {
         Intent intent = new Intent(this, WebViewRestaurant.class);
@@ -162,12 +158,13 @@ public class PlaceDetailActivity extends BaseActivity {
         }
     }
 
+
+    //Call restaurant
     @OnClick(R.id.image_phone)
     public void callRestaurant() {
         if (EasyPermissions.hasPermissions(getApplicationContext(), perms)) {
             if (placeDetailResult.getFormattedPhoneNumber() != null) {
                 String phoneNumber = placeDetailResult.getFormattedPhoneNumber();
-                Log.e("phone", phoneNumber);
                 Intent intentCall = new Intent(Intent.ACTION_CALL);
                 intentCall.setData(Uri.parse("tel:" + phoneNumber));
                 startActivity(intentCall);
@@ -177,28 +174,22 @@ public class PlaceDetailActivity extends BaseActivity {
         }
     }
 
+    //Like and dislike
     @SuppressLint("SetTextI18n")
     @OnClick(R.id.star)
     public void addLike() {
         if (like.getText().length() < 10) {
-            Log.e("lenght", String.valueOf(like.getText().length()));
             LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot -> {
                 if (documentSnapshot.exists()) {
-                    Log.e("like", "deja présent " + placeDetailResult.getName());
                     LikeHelper.getRestoLiked(placeDetailResult.getPlaceId()).addOnSuccessListener(documentSnapshot1 -> {
-
                         like.setText(getString(R.string.LIKE) + "(" + documentSnapshot1.get("mLike") + ")");
-
-                        Log.e("like", String.valueOf(likes));
-
                     });
                     likes = (long) documentSnapshot.get("mLike");
                     int newLike = (int) (likes + 1);
-                    Log.e("like", " ca fait " + likes);
                     LikeHelper.updateLike(placeDetailResult.getPlaceId(), newLike);
 
                 } else {
-                    Log.e("like", "pas présent " + placeDetailResult.getName());
+
                     LikeHelper.createLike(placeDetailResult.getPlaceId(), 1);
                     like.setText(getString(R.string.LIKE) + "(1)");
 
@@ -320,8 +311,7 @@ public class PlaceDetailActivity extends BaseActivity {
                 double rating = results.getResult().getRating();
                 double ratingResult = (rating / 5) * 3;
                 restoRating.setRating((float) ratingResult);
-                Log.e("rating", String.valueOf(rating));
-                Log.e("rating", String.valueOf(ratingResult));
+
             } else restoRating.setVisibility(View.GONE);
 
 
@@ -355,7 +345,7 @@ public class PlaceDetailActivity extends BaseActivity {
     //--------------------
     //Display RecyclerView
     //--------------------
-    private void configureRecyclerView( ) {
+    private void configureRecyclerView() {
 
         UserHelper.getRestoId(restoPlaceId).addOnSuccessListener(queryDocumentSnapshots -> {
             List<User> users = new ArrayList<>();
@@ -363,7 +353,6 @@ public class PlaceDetailActivity extends BaseActivity {
                 for (DocumentSnapshot snapshot : queryDocumentSnapshots) {
                     users.add(snapshot.toObject(User.class));
                     adapter = new ClientAdapter(users, Glide.with(getApplicationContext()));
-                    Log.e("rvDetail", String.valueOf(users.size()) );
                     userRecyclerView.addItemDecoration(new Divider(getBaseContext(), LinearLayout.VERTICAL));
                     userRecyclerView.setAdapter(adapter);
                     userRecyclerView.setLayoutManager(new LinearLayoutManager(getApplication()));
@@ -380,7 +369,7 @@ public class PlaceDetailActivity extends BaseActivity {
     @SuppressLint("SetTextI18n")
     private void displayLikes() {
         LikeHelper.getRestoLiked(restoPlaceId).addOnSuccessListener(documentSnapshot -> {
-            if (documentSnapshot.get("mLike") != null ) {
+            if (documentSnapshot.get("mLike") != null) {
                 like.setText(getString(R.string.ToLike) + "(" + documentSnapshot.get("mLike") + ")");
             } else {
                 like.setText(getString(R.string.ToLike) + "(0)");
@@ -396,15 +385,12 @@ public class PlaceDetailActivity extends BaseActivity {
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
         String booked = sharedPreferences.getString("booked", null);
         if (booked != null && booked.equals(restoPlaceId)) {
-            Log.e("pref", booked + " yes" + restoPlaceId + " " + booked);
             Drawable drawable = getResources().getDrawable(R.drawable.check_circle).mutate();
             drawable.setColorFilter(getResources().getColor(R.color.green), PorterDuff.Mode.SRC_ATOP);
             floatingButton.setImageDrawable(drawable);
             floatingButton.setActivated(true);
         }
     }
-
-
 
 
 }

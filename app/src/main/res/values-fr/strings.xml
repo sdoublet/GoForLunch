@@ -43,5 +43,12 @@
     <string name="Hi">Bonjour</string>
     <string name="choose_eating">vous avez choisi de manger</string>
     <string name="restaurant">au restaurant</string>
+    <string name="delete_message">Etes vous sûrs ?</string>
+    <string name="yes">Oui</string>
+    <string name="no">Non</string>
+    <string name="choose_this_restaurant">Vous avez choisi ce restaurant</string>
+    <string name="make_choice">Faites votre choix</string>
+    <string name="delete_profile_msg">Votre profile à été supprimé</string>
+    <string name="no_information">Pas d\'information</string>
 
 </resources>

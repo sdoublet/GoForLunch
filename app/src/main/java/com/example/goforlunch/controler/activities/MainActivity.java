@@ -62,7 +62,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-
 public class MainActivity extends BaseActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
@@ -108,7 +107,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         this.deleteBooking();
         navigationView.setNavigationItemSelectedListener(this);
         DataHolder.getInstance().setUserUid(getCurrentUser().getUid());
-        Log.e("userId", DataHolder.getInstance().getUserUid());
         SharedPreferences sharedPreferences = getSharedPreferences(PREF_BOOKING, 0);
         restoIdPref = sharedPreferences.getString("booked", null);
 
@@ -142,8 +140,9 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
         fragmentTransaction.commit();
     }
 
+    //----------------
     // CONFIGURATION
-
+    //----------------
 
     private void configureToolbar() {
         setSupportActionBar(toolbar);
@@ -155,7 +154,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     private void configureDrawerLayout() {
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         toggle.syncState();
-        //updateUIWhenCreating();
+
     }
 
     //search bar
@@ -237,7 +236,6 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
                     if (documentSnapshot.exists()) {
                         if (documentSnapshot.get("mRestaurantId") != null) {
                             String restoId = Objects.requireNonNull(documentSnapshot.get("mRestaurantId")).toString();
-                            Log.e("restoId", "salut");
                             if (!restoId.isEmpty()) {
                                 Intent intent1 = new Intent(getApplicationContext(), PlaceDetailActivity.class);
                                 intent1.putExtra("resto_place_id", restoId);
@@ -279,7 +277,7 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     //---------------------
     //REST REQUESTS
     //---------------------
-    // Create http requests (SignOut & delete)
+    // Create http requests (SignOut)
     private void signOutFromFirebase() {
         AuthUI.getInstance()
                 .signOut(this)
@@ -335,16 +333,16 @@ public class MainActivity extends BaseActivity implements NavigationView.OnNavig
     //------------------------
     // Delete booking each day
     //------------------------
+
+    // Set alarm at 3:30 pm
     private void deleteBooking() {
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 11);
-        calendar.set(Calendar.MINUTE, 10);
+        calendar.set(Calendar.HOUR_OF_DAY, 15);
+        calendar.set(Calendar.MINUTE, 30);
         if (calendar.getTimeInMillis() < System.currentTimeMillis()) {
             calendar.add(Calendar.DAY_OF_YEAR, 1);
         }
         startAlarm(calendar);
-        Log.e("alarm", "alarm setting");
-
     }
 
     // Alarm to delete booking

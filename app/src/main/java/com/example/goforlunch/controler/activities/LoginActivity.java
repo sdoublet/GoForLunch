@@ -1,7 +1,6 @@
 package com.example.goforlunch.controler.activities;
 
 
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
@@ -65,15 +64,15 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    // Auth methods
+    // Sign-in methods
     private void startSignInActivity() {
         startActivityForResult(AuthUI.getInstance()
                         .createSignInIntentBuilder()
                         .setTheme(R.style.LoginTheme)
                         .setAvailableProviders(
-                                Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(),
-                                        new AuthUI.IdpConfig.EmailBuilder().build(),
-                                        new AuthUI.IdpConfig.FacebookBuilder().build())
+                                Arrays.asList(new AuthUI.IdpConfig.GoogleBuilder().build(), //By google
+                                        new AuthUI.IdpConfig.EmailBuilder().build(), // By mail
+                                        new AuthUI.IdpConfig.FacebookBuilder().build()) //By Facebook
                         )
                         .setLogo(R.drawable.meal_v3_final)
                         .setIsSmartLockEnabled(false, true)
@@ -82,8 +81,7 @@ public class LoginActivity extends BaseActivity {
     }
 
 
-    //show snack bar with a message
-
+    //show snack bar with a message after sign-in
     private void handleResponseAfterSignIn(int requestCode, int resultCode, Intent data) {
         IdpResponse response = IdpResponse.fromResultIntent(data);
         if (requestCode == RC_SIGN_IN) {
@@ -91,7 +89,6 @@ public class LoginActivity extends BaseActivity {
                 Toast.makeText(this, getString(R.string.success_auth), Toast.LENGTH_LONG).show();
                 launchMainActivity();
                 this.createUserInFirestore();
-                // TODO: 07/05/2019   mettre intent vers mainactivity
             } else if (response == null) {
                 Toast.makeText(this, getString(R.string.cancelled_auth), Toast.LENGTH_LONG).show();
             } else if (Objects.requireNonNull(response.getError()).getErrorCode() == ErrorCodes.NO_NETWORK) {
@@ -111,7 +108,7 @@ public class LoginActivity extends BaseActivity {
     //REST REQUEST
     //--------------------
 
-    //   http request that create user in firestore
+    // http request that create user in firestore
     private void createUserInFirestore(){
         if (getCurrentUser()!=null){
             String urlPicture = (this.getCurrentUser().getPhotoUrl()!=null)? this.getCurrentUser().getPhotoUrl().toString() : null;

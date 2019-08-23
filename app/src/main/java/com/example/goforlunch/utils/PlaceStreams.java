@@ -1,7 +1,7 @@
 package com.example.goforlunch.utils;
 
 
-//import com.example.goforlunch.model.Api.Autocomplete.Prediction;
+
 import com.example.goforlunch.model.Api.Details.PlaceDetail;
 import com.example.goforlunch.model.Api.Distance.DistanceMatrix;
 import com.example.goforlunch.model.Api.Nearby.NearbyPlaces;
@@ -32,14 +32,6 @@ public class PlaceStreams {
                 .timeout(10, TimeUnit.SECONDS);
     }
 
-
-
-//    public static Observable<Prediction> streamFetchPrediction(String input, String location, int radius, String key){
-//        return placeservices.getPrediction(input, location, radius, key)
-//                .subscribeOn(Schedulers.io())
-//                .observeOn(AndroidSchedulers.mainThread())
-//                .timeout(10, TimeUnit.SECONDS);
-//    }
 
     public static Observable<DistanceMatrix> streamfetchDistanceMatrix(String origins, String destinations, String key){
         return placeservices.getDistance(origins, destinations, key)
